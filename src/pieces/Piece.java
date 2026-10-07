@@ -120,8 +120,7 @@ public abstract class Piece {
      * @return {@code true} if the piece may land there
      */
     protected boolean canMoveTo(Board board, Position target) {
-        // TODO(Dev 1): target.isOnBoard() && (board.isEmpty(target) || isOpponent(board.getPiece(target))).
-        return false;
+        return target.isOnBoard() && (board.isEmpty(target) || isOpponent(board.getPiece(target)));
     }
 
     /**
