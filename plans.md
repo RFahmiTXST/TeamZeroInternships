@@ -13,7 +13,10 @@ Scope: board foundations only; team requirements remain in `TODO.md`.
 - M0 local onboarding is complete. Team-wide M0 is recorded in TODO.md; other
   teammates' local onboarding has not been independently verified.
 - The four Dev 2 M1 methods are implemented and locally verified. Dev 1's helpers and Dev 4's test harness are
-  not implemented in this baseline. No PR or merge has been performed.
+  not implemented in this baseline. PR #2 is open; no merge has been performed.
+- Commits: `c3c5b37` (context setup), `6f9bcc9` (M1 implementation).
+- Branch pushed to origin. PR: https://github.com/RFahmiTXST/TeamZeroInternships/pull/2
+  targeting main; teammate review and Dev 1's M1 merge are pending.
 
 ## Steps
 
@@ -23,8 +26,9 @@ Scope: board foundations only; team requirements remain in `TODO.md`.
   and `Board.isEmpty()` with accurate Javadoc, preserving public signatures.
 - [x] 3. Verify M1 behavior, update Abid's TODO checkboxes, and prepare a concise
   PR description and reviewable diff. Make small meaningful commits when requested.
-- [ ] 4. Open the M1 PR when requested; get one teammate review and merge after
-  Dev 1. Record PR/merge status separately from local completion.
+- [x] 4a. Commit, push, and open the M1 PR against main (PR #2).
+- [ ] 4b. Get one teammate review and merge after Dev 1. Record PR/merge status
+  separately from local completion.
 
 ## M1 decisions and acceptance checks
 
@@ -63,9 +67,9 @@ Diff reviewed: four required methods match the contracts, signatures are unchang
 and no other developer's source files were modified. Abid's Phase A checkboxes in
 TODO.md are complete locally. Team M1 remains incomplete.
 
-Next: commit the context setup and board implementation in separate meaningful
-commits, push `dev2/board-core`, and open a PR using the text below when requested.
-Get one teammate review and merge after Dev 1. No commits, pushes, PRs, or merges yet.
+Next: wait for one teammate review and Dev 1's M1 merge; address review feedback
+when requested. Do not merge before those requirements are satisfied. After the
+PR merges, update local main and begin M2 on a new branch when requested.
 
 ## Prepared PR
 
