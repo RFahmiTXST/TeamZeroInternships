@@ -79,7 +79,8 @@ public abstract class Piece {
      * @param newPosition the square the piece now stands on
      */
     public void move(Position newPosition) {
-        // TODO(Dev 1): set position = newPosition and moved = true.
+        this.position = newPosition;
+        this.moved = true;
     }
 
     /**
