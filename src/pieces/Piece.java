@@ -90,8 +90,7 @@ public abstract class Piece {
      * @return {@code true} if {@code other} is not {@code null} and has a different color
      */
     public boolean isOpponent(Piece other) {
-        // TODO(Dev 1)
-        return false;
+        return other != null && other.getColor() != color;
     }
 
     /**
