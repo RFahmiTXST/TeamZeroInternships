@@ -13,7 +13,7 @@ package board;
  * <p>The constructor does not reject off-board values, so move generators can build a candidate
  * square first and then call {@link #isOnBoard()} to discard it.
  *
- * <p>Owner: Developer 1.
+ * <p>Owner: Developer 2.
  */
 public final class Position {
 
@@ -71,7 +71,7 @@ public final class Position {
      */
     @Override
     public String toString() {
-        // TODO(Dev 1): build the file letter from the column ('A' + column) and the rank from the row
+        // TODO(Dev 2): build the file letter from the column ('A' + column) and the rank from the row
         //  (row + 1). Expected: new Position(1, 4) -> "E2", (0, 0) -> "A1", (7, 7) -> "H8".
         return "(" + row + "," + column + ")";
     }

@@ -15,10 +15,10 @@
 
 | Team Member | Role | Defensive Line in Interviews | Application Status | Fuel Source |
 | :--- | :--- | :--- | :--- | :--- |
-| **Rayed Fahmi** | Lead Architect | *"I know array indexing, so I know 0."* | Under Review (Forever) | Cold Brew |
-| **Abid Ahnaf Khan** | Bug Hunter | *"I can fix bugs, just not HR's hiring algorithm."* | Ghosted x50 | Espresso |
-| **Sabid Mahmud** | Data Structures Wizard | *"Graph traversal algorithms can't find my offer letter."* | Recruiter Screened | Energy Drinks |
-| **Towsif Hassan** | UI / Docs Alchemist | *"My resume formatting is pixel-perfect, I promise."* | Applied 2m ago | Matcha |
+| **Rayed Fahmi** | **Dev 1**: Core Piece Architecture | *"I know array indexing, so I know 0."* | Under Review (Forever) | Cold Brew |
+| **Abid Ahnaf Khan** | **Dev 2**: Board Infrastructure & Display | *"I can fix bugs, just not HR's hiring algorithm."* | Ghosted x50 | Espresso |
+| **Sabid Mahmud** | **Dev 3**: Game Flow & Input Validation | *"Graph traversal algorithms can't find my offer letter."* | Recruiter Screened | Energy Drinks |
+| **Towsif Hassan** | **Dev 4**: Special Pieces, QA & Project Management | *"My resume formatting is pixel-perfect, I promise."* | Applied 2m ago | Matcha |
 
 ---
 
@@ -29,6 +29,15 @@ and moves are typed in standard notation such as `E2 E4`.
 
 * 📋 **Team to-do list & merge checkpoints:** [`TODO.md`](TODO.md)
 * 📚 **Generated Javadoc:** [`docs/`](docs/) (open `docs/index.html` after generating)
+
+### Who owns what
+
+| Dev | Name | Focus | Files owned |
+| :---: | :--- | :--- | :--- |
+| **1** | **Rayed Fahmi** | Abstract `Piece` blueprint and the Rook, Bishop, Knight and Queen moves | `pieces/Piece.java`, `pieces/Color.java`, `Rook`, `Bishop`, `Knight`, `Queen` |
+| **2** | **Abid Ahnaf Khan** | 8x8 board, starting setup, ASCII display with A-H / 1-8 labels | `board/Board.java`, `board/Position.java` |
+| **3** | **Sabid Mahmud** | Console game loop, turn handling, parsing and validating moves like `E2 E4` | `core/Game.java`, `core/Player.java`, `core/Move.java`, `ui/ConsoleUI.java`, `utils/Utils.java` |
+| **4** | **Towsif Hassan** | Pawn and King moves, castling and promotion, testing, Javadoc, GitHub management | `pieces/Pawn.java`, `pieces/King.java`, `test/`, `docs/`, `README.md` |
 
 ### Project structure
 

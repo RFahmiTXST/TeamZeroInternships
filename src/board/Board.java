@@ -17,7 +17,7 @@ import java.util.List;
  * <p>A new {@code Board} is empty. Call {@link #initialize()} to set up the starting position.
  * An empty board is handy in tests, where you can place pieces with {@link #setPiece(Position, Piece)}.
  *
- * <p>Owner: Developer 1.
+ * <p>Owner: Developer 2.
  */
 public class Board {
 
@@ -44,7 +44,7 @@ public class Board {
      * <p>White occupies ranks 1-2 and Black ranks 7-8. Queens start on the D file and kings on the E file.
      */
     public void initialize() {
-        // TODO(Dev 1): clear squares and capturedPieces, then place:
+        // TODO(Dev 2): clear squares and capturedPieces, then place:
         //  row 0: white R N B Q K B N R   row 1: white pawns
         //  row 6: black pawns             row 7: black R N B Q K B N R
         //  Build each piece with its own Position, e.g. new Rook(Color.WHITE, new Position(0, 0)).
@@ -57,7 +57,7 @@ public class Board {
      * @return the piece there, or {@code null} if the square is empty or off the board
      */
     public Piece getPiece(Position position) {
-        // TODO(Dev 1): return squares[row][column]; return null when !position.isOnBoard().
+        // TODO(Dev 2): return squares[row][column]; return null when !position.isOnBoard().
         return null;
     }
 
@@ -71,7 +71,7 @@ public class Board {
      * @param piece    the piece to place, or {@code null} to clear the square
      */
     public void setPiece(Position position, Piece piece) {
-        // TODO(Dev 1): store the piece in squares[row][column].
+        // TODO(Dev 2): store the piece in squares[row][column].
     }
 
     /**
@@ -81,7 +81,7 @@ public class Board {
      * @return {@code true} if the square is on the board and empty
      */
     public boolean isEmpty(Position position) {
-        // TODO(Dev 1): on the board and getPiece(position) == null.
+        // TODO(Dev 2): on the board and getPiece(position) == null.
         return false;
     }
 
@@ -97,7 +97,7 @@ public class Board {
      * @throws IllegalArgumentException if {@code from} is empty
      */
     public Piece movePiece(Position from, Position to) {
-        // TODO(Dev 1): look up the moving piece (throw if null), remember the piece on 'to' as
+        // TODO(Dev 2): look up the moving piece (throw if null), remember the piece on 'to' as
         //  captured (add it to capturedPieces), put the moving piece on 'to', clear 'from',
         //  call piece.move(to), and return the captured piece.
         return null;
@@ -120,7 +120,7 @@ public class Board {
      */
     public List<Piece> getPieces(Color color) {
         List<Piece> result = new ArrayList<>();
-        // TODO(Dev 1): scan all 64 squares and add every non-null piece of the given color.
+        // TODO(Dev 2): scan all 64 squares and add every non-null piece of the given color.
         return result;
     }
 
@@ -133,7 +133,7 @@ public class Board {
      * @return {@code true} if that side's king is in check
      */
     public boolean isCheck(Color color) {
-        // TODO(Dev 1 + Dev 4, stretch): find the king, then see whether any opponent piece's
+        // TODO(Dev 2 + Dev 4, stretch): find the king, then see whether any opponent piece's
         //  possibleMoves(this) contains the king's position.
         return false;
     }
@@ -174,7 +174,7 @@ public class Board {
      * @return the board drawing, with one line per rank
      */
     public String render() {
-        // TODO(Dev 1): use a StringBuilder. Header "   A  B  C  D  E  F  G  H", then for row 7 down to 0:
+        // TODO(Dev 2): use a StringBuilder. Header "   A  B  C  D  E  F  G  H", then for row 7 down to 0:
         //  (row + 1) + " " + each cell + " ". A square is dark when (row + column) % 2 == 0 (A1 is dark).
         //  Returning a String (instead of printing directly) lets us test the output exactly.
         return "[Board.render() is not implemented yet]";

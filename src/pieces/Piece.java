@@ -18,7 +18,7 @@ import java.util.List;
  * Here it takes the {@link Board}, because a piece cannot tell which squares are blocked or
  * capturable without seeing the board.
  *
- * <p>Owner: Developer 2. Pawn and King are owned by Developer 4.
+ * <p>Owner: Developer 1. Pawn and King are owned by Developer 4.
  */
 public abstract class Piece {
 
@@ -79,7 +79,7 @@ public abstract class Piece {
      * @param newPosition the square the piece now stands on
      */
     public void move(Position newPosition) {
-        // TODO(Dev 2): set position = newPosition and moved = true.
+        // TODO(Dev 1): set position = newPosition and moved = true.
     }
 
     /**
@@ -89,7 +89,7 @@ public abstract class Piece {
      * @return {@code true} if {@code other} is not {@code null} and has a different color
      */
     public boolean isOpponent(Piece other) {
-        // TODO(Dev 2)
+        // TODO(Dev 1)
         return false;
     }
 
@@ -120,7 +120,7 @@ public abstract class Piece {
      * @return {@code true} if the piece may land there
      */
     protected boolean canMoveTo(Board board, Position target) {
-        // TODO(Dev 2): target.isOnBoard() && (board.isEmpty(target) || isOpponent(board.getPiece(target))).
+        // TODO(Dev 1): target.isOnBoard() && (board.isEmpty(target) || isOpponent(board.getPiece(target))).
         return false;
     }
 
@@ -135,7 +135,7 @@ public abstract class Piece {
      */
     protected List<Position> slide(Board board, int[][] directions) {
         List<Position> moves = new ArrayList<>();
-        // TODO(Dev 2): for each {dRow, dCol}: step from position until off the board; add empty squares;
+        // TODO(Dev 1): for each {dRow, dCol}: step from position until off the board; add empty squares;
         //  on an occupied square add it only if it is an opponent's, then stop that direction.
         return moves;
     }
@@ -147,7 +147,7 @@ public abstract class Piece {
      */
     @Override
     public String toString() {
-        // TODO(Dev 2): return "" + color.getPrefix() + getSymbol();
+        // TODO(Dev 1): return "" + color.getPrefix() + getSymbol();
         return "??";
     }
 }

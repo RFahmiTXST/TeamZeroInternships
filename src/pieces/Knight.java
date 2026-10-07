@@ -12,7 +12,7 @@ import java.util.List;
  *
  * <p>Text representation: "wN" (white) / "bN" (black).
  *
- * <p>Owner: Developer 2.
+ * <p>Owner: Developer 1.
  */
 public class Knight extends Piece {
 
@@ -32,7 +32,7 @@ public class Knight extends Piece {
     @Override
     public List<Position> possibleMoves(Board board) {
         List<Position> moves = new ArrayList<>();
-        // TODO(Dev 2): try the 8 L-shaped offsets ({2, 1}, {1, 2}, ...) and keep each square
+        // TODO(Dev 1): try the 8 L-shaped offsets ({2, 1}, {1, 2}, ...) and keep each square
         //  where canMoveTo(board, target) is true.
         return moves;
     }

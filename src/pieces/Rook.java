@@ -11,7 +11,7 @@ import java.util.List;
  *
  * <p>Text representation: "wR" (white) / "bR" (black).
  *
- * <p>Owner: Developer 2.
+ * <p>Owner: Developer 1.
  */
 public class Rook extends Piece {
 
@@ -31,7 +31,7 @@ public class Rook extends Piece {
     @Override
     public List<Position> possibleMoves(Board board) {
         List<Position> moves = new ArrayList<>();
-        // TODO(Dev 2): declare the 4 orthogonal directions and return slide(board, DIRECTIONS).
+        // TODO(Dev 1): declare the 4 orthogonal directions and return slide(board, DIRECTIONS).
         return moves;
     }
 

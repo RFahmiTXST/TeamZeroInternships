@@ -141,7 +141,7 @@ public class Move {
      */
     @Override
     public String toString() {
-        // TODO(Dev 3): format according to type (depends on Position.toString() from Dev 1).
+        // TODO(Dev 3): format according to type (depends on Position.toString() from Dev 2).
         return type + " " + from + " -> " + to;
     }
 }

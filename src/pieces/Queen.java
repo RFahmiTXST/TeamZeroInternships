@@ -12,7 +12,7 @@ import java.util.List;
  *
  * <p>Text representation: "wQ" (white) / "bQ" (black).
  *
- * <p>Owner: Developer 2.
+ * <p>Owner: Developer 1.
  */
 public class Queen extends Piece {
 
@@ -32,7 +32,7 @@ public class Queen extends Piece {
     @Override
     public List<Position> possibleMoves(Board board) {
         List<Position> moves = new ArrayList<>();
-        // TODO(Dev 2): declare all 8 directions and return slide(board, DIRECTIONS).
+        // TODO(Dev 1): declare all 8 directions and return slide(board, DIRECTIONS).
         return moves;
     }
 

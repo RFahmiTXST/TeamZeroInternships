@@ -3,7 +3,7 @@ package pieces;
 /**
  * The two sides in a chess game.
  *
- * <p>Owner: Developer 2.
+ * <p>Owner: Developer 1.
  */
 public enum Color {
 

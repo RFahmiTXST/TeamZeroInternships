@@ -9,7 +9,7 @@ import java.util.Scanner;
  * All console input and output for the game. Keeping {@code System.in} and {@code System.out} in one
  * class keeps {@link core.Game} simple and lets tests feed in moves from a string.
  *
- * <p>Owner: Developer 3. {@link Board#display()} itself belongs to Developer 1.
+ * <p>Owner: Developer 3. {@link Board#display()} itself belongs to Developer 2.
  */
 public class ConsoleUI {
 
