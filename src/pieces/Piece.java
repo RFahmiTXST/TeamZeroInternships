@@ -79,7 +79,8 @@ public abstract class Piece {
      * @param newPosition the square the piece now stands on
      */
     public void move(Position newPosition) {
-        // TODO(Dev 1): set position = newPosition and moved = true.
+        this.position = newPosition;
+        this.moved = true;
     }
 
     /**
@@ -89,8 +90,7 @@ public abstract class Piece {
      * @return {@code true} if {@code other} is not {@code null} and has a different color
      */
     public boolean isOpponent(Piece other) {
-        // TODO(Dev 1)
-        return false;
+        return other != null && other.getColor() != color;
     }
 
     /**
@@ -120,8 +120,7 @@ public abstract class Piece {
      * @return {@code true} if the piece may land there
      */
     protected boolean canMoveTo(Board board, Position target) {
-        // TODO(Dev 1): target.isOnBoard() && (board.isEmpty(target) || isOpponent(board.getPiece(target))).
-        return false;
+        return target.isOnBoard() && (board.isEmpty(target) || isOpponent(board.getPiece(target)));
     }
 
     /**
@@ -135,8 +134,22 @@ public abstract class Piece {
      */
     protected List<Position> slide(Board board, int[][] directions) {
         List<Position> moves = new ArrayList<>();
-        // TODO(Dev 1): for each {dRow, dCol}: step from position until off the board; add empty squares;
-        //  on an occupied square add it only if it is an opponent's, then stop that direction.
+        for (int[] dir : directions) {
+            int dRow = dir[0];
+            int dCol = dir[1];
+            Position current = new Position(position.getRow() + dRow, position.getColumn() + dCol);
+            while (current.isOnBoard()) {
+                if (board.isEmpty(current)) {
+                    moves.add(current);
+                } else {
+                    if (isOpponent(board.getPiece(current))) {
+                        moves.add(current);
+                    }
+                    break;
+                }
+                current = new Position(current.getRow() + dRow, current.getColumn() + dCol);
+            }
+        }
         return moves;
     }
 
@@ -147,7 +160,6 @@ public abstract class Piece {
      */
     @Override
     public String toString() {
-        // TODO(Dev 1): return "" + color.getPrefix() + getSymbol();
-        return "??";
+        return "" + color.getPrefix() + getSymbol();
     }
 }
