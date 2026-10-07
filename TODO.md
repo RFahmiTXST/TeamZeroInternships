@@ -133,15 +133,15 @@ the other pieces come together.
 
 ### Phase A: before M1 (unblocks Dev 1 and Dev 4)
 
-- [ ] Clone the repo, create `dev2/board-core`, and build and run the template.
-- [ ] `Position.toString()`: return the file letter `'A' + column` followed by `row + 1`.
-  - [ ] 🧪 `new Position(1, 4)` gives `"E2"`, `(0, 0)` gives `"A1"`, `(7, 7)` gives `"H8"`, `(7, 3)` gives `"D8"`.
-- [ ] `Board.getPiece(Position)`: return `squares[row][column]`, or `null` if `!position.isOnBoard()`.
-- [ ] `Board.setPiece(Position, Piece)`: store the piece (or `null`) in the grid. Ignore or throw for off-board squares.
-- [ ] `Board.isEmpty(Position)`: `true` only if the square is on the board and has no piece.
-- [ ] 🧪 Empty board: `getPiece` returns `null` everywhere; `setPiece` then `getPiece` returns the same object;
+- [x] Clone the repo, create `dev2/board-core`, and build and run the template.
+- [x] `Position.toString()`: return the file letter `'A' + column` followed by `row + 1`.
+  - [x] 🧪 `new Position(1, 4)` gives `"E2"`, `(0, 0)` gives `"A1"`, `(7, 7)` gives `"H8"`, `(7, 3)` gives `"D8"`.
+- [x] `Board.getPiece(Position)`: return `squares[row][column]`, or `null` if `!position.isOnBoard()`.
+- [x] `Board.setPiece(Position, Piece)`: store the piece (or `null`) in the grid. Ignore or throw for off-board squares.
+- [x] `Board.isEmpty(Position)`: `true` only if the square is on the board and has no piece.
+- [x] 🧪 Empty board: `getPiece` returns `null` everywhere; `setPiece` then `getPiece` returns the same object;
   off-board `getPiece` returns `null`.
-- [ ] 📝 Update Javadoc if behaviour differs from the template comments.
+- [x] 📝 Update Javadoc if behaviour differs from the template comments.
 
 ### 🔀 MERGE POINT M1: open PR `dev2/board-core` → `main` (merge 2nd, after Dev 1)
 

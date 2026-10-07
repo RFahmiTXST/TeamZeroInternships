@@ -57,8 +57,10 @@ public class Board {
      * @return the piece there, or {@code null} if the square is empty or off the board
      */
     public Piece getPiece(Position position) {
-        // TODO(Dev 2): return squares[row][column]; return null when !position.isOnBoard().
-        return null;
+        if (!position.isOnBoard()) {
+            return null;
+        }
+        return squares[position.getRow()][position.getColumn()];
     }
 
     /**
@@ -69,9 +71,13 @@ public class Board {
      *
      * @param position the square to fill
      * @param piece    the piece to place, or {@code null} to clear the square
+     * @throws IllegalArgumentException if the position is off the board
      */
     public void setPiece(Position position, Piece piece) {
-        // TODO(Dev 2): store the piece in squares[row][column].
+        if (!position.isOnBoard()) {
+            throw new IllegalArgumentException("Position is off the board: " + position);
+        }
+        squares[position.getRow()][position.getColumn()] = piece;
     }
 
     /**
@@ -81,8 +87,7 @@ public class Board {
      * @return {@code true} if the square is on the board and empty
      */
     public boolean isEmpty(Position position) {
-        // TODO(Dev 2): on the board and getPiece(position) == null.
-        return false;
+        return position.isOnBoard() && getPiece(position) == null;
     }
 
     /**
