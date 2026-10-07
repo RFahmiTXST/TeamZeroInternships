@@ -71,9 +71,7 @@ public final class Position {
      */
     @Override
     public String toString() {
-        // TODO(Dev 2): build the file letter from the column ('A' + column) and the rank from the row
-        //  (row + 1). Expected: new Position(1, 4) -> "E2", (0, 0) -> "A1", (7, 7) -> "H8".
-        return "(" + row + "," + column + ")";
+        return "" + (char) ('A' + column) + (row + 1);
     }
 
     /**
