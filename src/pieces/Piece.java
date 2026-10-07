@@ -147,7 +147,6 @@ public abstract class Piece {
      */
     @Override
     public String toString() {
-        // TODO(Dev 1): return "" + color.getPrefix() + getSymbol();
-        return "??";
+        return "" + color.getPrefix() + getSymbol();
     }
 }
