@@ -89,17 +89,17 @@ the other pieces come together.
 
 ### Phase A: before M1 (Dev 2, 3 and 4 code against your `Piece` class)
 
-- [ ] Pull the latest `main`, create `dev1/piece-base`, and build and run the template.
-- [ ] Review the `Piece` contract (fields, `possibleMoves(Board)`, `getSymbol()`, `canMoveTo`, `slide`).
+- [x] Pull the latest `main`, create `dev1/piece-base`, and build and run the template.
+- [x] Review the `Piece` contract (fields, `possibleMoves(Board)`, `getSymbol()`, `canMoveTo`, `slide`).
   Raise any signature changes in the team chat **before M1**, because three other people depend on them.
-- [ ] `Piece.toString()`: `"" + color.getPrefix() + getSymbol()` gives `"wQ"`, `"bN"`, `"wp"`.
-- [ ] `Piece.move(Position)`: update `position` and set `moved = true`.
-- [ ] `Piece.isOpponent(Piece)`: `other != null && other.getColor() != color`.
-- [ ] `Piece.canMoveTo(Board, Position)`: the target is on the board **and** is either empty or holds an opponent.
+- [x] `Piece.toString()`: `"" + color.getPrefix() + getSymbol()` gives `"wQ"`, `"bN"`, `"wp"`.
+- [x] `Piece.move(Position)`: update `position` and set `moved = true`.
+- [x] `Piece.isOpponent(Piece)`: `other != null && other.getColor() != color`.
+- [x] `Piece.canMoveTo(Board, Position)`: the target is on the board **and** is either empty or holds an opponent.
   ⛔ Needs Dev 2's `isEmpty`/`getPiece` to test. Write it against the contract now and test after M1.
-- [ ] `Piece.slide(Board, int[][] directions)`: walk each direction one square at a time; add empty squares;
+- [x] `Piece.slide(Board, int[][] directions)`: walk each direction one square at a time; add empty squares;
   on an occupied square, add it only if it holds an opponent, then stop that direction; stop at the board edge.
-- [ ] 🧪 `toString()` for all 12 color/piece combinations matches the brief: `wp bp wR bR wN bN wB bB wQ bQ wK bK`.
+- [x] 🧪 `toString()` for all 12 color/piece combinations matches the brief: `wp bp wR bR wN bN wB bB wQ bQ wK bK`.
 
 ### 🔀 MERGE POINT M1: open PR `dev1/piece-base` → `main` (merge 1st). Dev 4 needs `canMoveTo` for King and Pawn.
 
