@@ -22,10 +22,60 @@
 
 ---
 
+## ♟️ Current Project: Console Chess (Phase 1)
+
+A two-player chess game that runs in the console, written in Java. The board is drawn as ASCII text
+and moves are typed in standard notation such as `E2 E4`.
+
+* 📋 **Team to-do list & merge checkpoints:** [`TODO.md`](TODO.md)
+* 📚 **Generated Javadoc:** [`docs/`](docs/) (open `docs/index.html` after generating)
+
+### Project structure
+
+```text
+src/
+├── board/    Board (8x8 grid, display), Position (row/column square)
+├── pieces/   Piece (abstract), Color, Pawn, Rook, Knight, Bishop, Queen, King
+├── core/     Game (main loop), Player, Move
+├── ui/       ConsoleUI (all console input/output)
+├── utils/    Utils (move-format validation & parsing)
+└── Main.java entry point
+docs/         generated Javadoc
+```
+
+### Build & run (JDK 17+)
+
+```bash
+# compile everything into out/
+javac -d out $(find src -name "*.java")
+
+# play
+java -cp out Main
+```
+
+### Generate the Javadoc
+
+```bash
+javadoc -private -d docs -sourcepath src -subpackages board:pieces:core:ui:utils src/Main.java
+```
+
+Add `-Xdoclint:all` to that command to list any class, method or attribute that is missing a comment.
+
+### Move notation
+
+| Input | Meaning |
+| :--- | :--- |
+| `E2 E4` | Move the piece on E2 to E4. A capture is detected automatically. |
+| `O-O` / `O-O-O` | Castle kingside / queenside *(optional)* |
+| `E7 E8=Q` | Move a pawn to E8 and promote it to a Queen *(optional)* |
+
+---
+
 ## ⚡ Tech Stack & Tools
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white)
+![Java](https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)
 ![LinkedIn](https://img.shields.io/badge/LinkedIn_Easy_Apply-0A66C2?style=flat-square&logo=linkedin&logoColor=white)
 
@@ -42,3 +92,4 @@
   [Applications Sent] ====> 1,200
   [Interviews]         ==> 4
   [Offers]             => 0
+  ```
