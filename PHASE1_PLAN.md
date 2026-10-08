@@ -9,15 +9,15 @@ All development must take place on your designated feature branch. Never commit 
 | Developer | Role | Focus | Branch Name |
 | :--- | :--- | :--- | :--- |
 | **Rayed Fahmi** | **Dev 1** | Core Piece Architecture | `feature/RFahmiTXST` |
-| **Abid Ahnaf Khan** | **Dev 2** | Board Infrastructure & Display | `feature/<username>` |
-| **Sabid Mahmud** | **Dev 3** | Game Flow & Input Validation | `feature/<username>` |
-| **Towsif Hassan** | **Dev 4** | Special Pieces, QA & PM | `feature/<username>` |
+| **Abid Ahnaf Khan** | **Dev 2** | Board Infrastructure & Display | `feature/<github-username>` |
+| **Sabid Mahmud** | **Dev 3** | Game Flow & Input Validation | `feature/<github-username>` |
+| **Towsif Hassan** | **Dev 4** | Special Pieces, QA & PM | `feature/<github-username>` |
 
 ## 📜 Team Guidelines & Workflow (Crucial)
 
 1. **Git Workflow:** 
    - We maintain a `main` branch (production-ready) and a `dev` branch (integration).
-   - Work on your `feature/<name>` branch.
+   - Work on your `feature/<github-username>` branch.
    - Open a Pull Request (PR) from your feature branch into `dev`.
    - **Requirement:** Every member must open at least one PR into `dev` and review at least one teammate's PR.
    - Do NOT delete your remote branches; keep them until grading is complete.
@@ -38,12 +38,12 @@ All development must take place on your designated feature branch. Never commit 
 **Goal:** Establish the project repository, base classes, and core structure so all developers can work in parallel.
 
 - **Dev 1 (Rayed - Repo Owner):**
-  - [ ] Set up the initial GitHub repository with `main` and `dev` branches, add teammates, and manage branch pulling and PR merges.
-  - [ ] Define `Piece.toString()`: returns `"" + color.getPrefix() + getSymbol()` (e.g., `"wQ"`, `"bN"`).
-  - [ ] Define `Piece.move(Position)`: update `position` and set `moved = true`.
-  - [ ] Define `Piece.isOpponent(Piece)`: checks `other != null && other.getColor() != color`.
-  - [ ] Define `Piece.canMoveTo(Board, Position)`: verify target is on the board and is either empty or holds an opponent.
-  - [ ] Define `Piece.slide(Board, int[][] directions)`: logic for sliding pieces (Rook, Bishop, Queen).
+  - [x] Set up the initial GitHub repository with `main` and `dev` branches, add teammates, and manage branch pulling and PR merges.
+  - [x] Define `Piece.toString()`: returns `"" + color.getPrefix() + getSymbol()` (e.g., `"wQ"`, `"bN"`).
+  - [x] Define `Piece.move(Position)`: update `position` and set `moved = true`.
+  - [x] Define `Piece.isOpponent(Piece)`: checks `other != null && other.getColor() != color`.
+  - [x] Define `Piece.canMoveTo(Board, Position)`: verify target is on the board and is either empty or holds an opponent.
+  - [x] Define `Piece.slide(Board, int[][] directions)`: logic for sliding pieces (Rook, Bishop, Queen).
 - **Dev 2 (Abid):**
   - [ ] Define `Position.toString()`: return file letter (`'A' + column`) followed by `row + 1` (e.g., `"E2"`).
   - [ ] Implement `Board` core methods: `getPiece(Position)`, `setPiece(Position, Piece)`, and `isEmpty(Position)`.
