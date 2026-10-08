@@ -32,8 +32,7 @@ public class Pawn extends Piece {
      * @return +1 for white (towards rank 8), -1 for black (towards rank 1)
      */
     public int getForwardDirection() {
-        // TODO(Dev 4)
-        return 0;
+        return getColor() == Color.WHITE ? 1 : -1;
     }
 
     /**
@@ -42,8 +41,7 @@ public class Pawn extends Piece {
      * @return 1 (rank 2) for white, 6 (rank 7) for black
      */
     public int getStartRow() {
-        // TODO(Dev 4)
-        return -1;
+        return getColor() == Color.WHITE ? 1 : 6;
     }
 
     /**
@@ -52,8 +50,7 @@ public class Pawn extends Piece {
      * @return 7 (rank 8) for white, 0 (rank 1) for black
      */
     public int getPromotionRow() {
-        // TODO(Dev 4)
-        return -1;
+        return getColor() == Color.WHITE ? 7 : 0;
     }
 
     /**
