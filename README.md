@@ -62,6 +62,37 @@ javac -d out $(find src -name "*.java")
 java -cp out Main
 ```
 
+### Running Tests (Windows PowerShell)
+
+The project includes a Java-based test harness for checking chess
+piece functionality. JDK 17 or newer is required.
+
+From the project root, compile all source and test files:
+
+```powershell
+New-Item -ItemType Directory -Force out | Out-Null
+$sources = (Get-ChildItem -Path .\src,.\test -Recurse -Filter *.java).FullName
+javac --release 17 -d out $sources
+```
+
+If compilation succeeds, run the tests:
+
+```powershell
+java -ea -cp out TestRunner
+```
+
+The test runner displays passing and failing assertions.
+
+Current tests verify:
+- White and Black Pawn forward directions
+- Pawn starting positions
+- Pawn promotion rows
+
+Current results: 6 passed, 0 failed.
+
+More tests will be added as the project develops.
+
+
 ### Generate the Javadoc
 
 ```bash
