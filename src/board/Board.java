@@ -11,11 +11,17 @@ import java.util.ArrayList;
  * Developer: Dev 2 (Abid)
  */
 public class Board {
+    /** Number of ranks and files on a chessboard. */
+    private static final int SIZE = 8;
+
+    /** Pieces indexed by row and column; null indicates an empty square. */
     private Piece[][] squares;
+    /** Pieces captured during the game, in capture order. */
     private List<Piece> capturedPieces;
 
+    /** Creates an empty board with no captured pieces. */
     public Board() {
-        squares = new Piece[8][8];
+        squares = new Piece[SIZE][SIZE];
         capturedPieces = new ArrayList<>();
     }
 
@@ -24,20 +30,28 @@ public class Board {
      * 
      * @param position The position to check.
      * @return The Piece at the position, or null if empty/off-board.
-     * TODO(Dev 2): Implement getPiece()
      */
     public Piece getPiece(Position position) {
-        return null;
+        if (!position.isOnBoard()) {
+            return null;
+        }
+        return squares[position.getRow()][position.getColumn()];
     }
 
     /**
      * Places a piece at the specified position on the board.
+     * Passing null clears the square. This changes only the grid, not the piece's
+     * own position; callers must keep the two consistent.
      * 
      * @param position The target square.
-     * @param piece The piece to place.
-     * TODO(Dev 2): Implement setPiece()
+     * @param piece The piece to place, or null to clear the square.
+     * @throws IllegalArgumentException if the position is off the board
      */
     public void setPiece(Position position, Piece piece) {
+        if (!position.isOnBoard()) {
+            throw new IllegalArgumentException("Position is off the board: " + position);
+        }
+        squares[position.getRow()][position.getColumn()] = piece;
     }
 
     /**
@@ -45,10 +59,9 @@ public class Board {
      * 
      * @param position The square to check.
      * @return True if the square is empty and valid.
-     * TODO(Dev 2): Implement isEmpty()
      */
     public boolean isEmpty(Position position) {
-        return false;
+        return position.isOnBoard() && getPiece(position) == null;
     }
 
     /**
