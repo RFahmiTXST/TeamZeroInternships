@@ -1,7 +1,21 @@
 # AI Usage Log: Sabid Mahmud (Dev 3)
 
-**Task / Method:** 
-**Prompt / Question Asked:**
-**Code / Idea Used:**
-**Result / Modification:**
+## Milestone 1 — Utility Methods
 
+**Task / Method:** Implement input validation and parsing methods in `Utils.java`.
+
+**Prompt / Question Asked:** Asked ChatGPT to explain and help implement `normalize()`, `isValidMoveFormat()`, `parsePosition()`, and `parseMove()`, with readable Javadoc comments.
+
+**Code / Idea Used:** Used regular expressions to validate chess moves, normalized input by removing extra whitespace and converting it to uppercase, and converted chess coordinates into `Position` and `Move` objects.
+
+**Result / Modification:** Reviewed and implemented the methods in `Utils.java`, then committed the changes.
+
+## Milestone 1 — Utility Testing
+
+**Task / Method:** Create and run tests for `Utils.java`.
+
+**Prompt / Question Asked:** Asked ChatGPT to help create a standalone Java test suite and explain how to compile and run it using VS Code.
+
+**Code / Idea Used:** Created `UtilsTest.java` with 22 tests covering valid inputs, invalid inputs, and edge cases.
+
+**Result / Modification:** Successfully compiled the Java files using JDK 21 and ran the tests. All 22 tests passed with 0 failures. Committed the test file separately.
