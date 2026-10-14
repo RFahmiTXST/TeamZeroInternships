@@ -45,8 +45,8 @@ All development must take place on your designated feature branch. Never commit 
   - [ ] Define `Piece.canMoveTo(Board, Position)`: verify target is on the board and is either empty or holds an opponent.
   - [ ] Define `Piece.slide(Board, int[][] directions)`: logic for sliding pieces (Rook, Bishop, Queen).
 - **Dev 2 (Abid):**
-  - [ ] Define `Position.toString()`: return file letter (`'A' + column`) followed by `row + 1` (e.g., `"E2"`).
-  - [ ] Implement `Board` core methods: `getPiece(Position)`, `setPiece(Position, Piece)`, and `isEmpty(Position)`.
+  - [x] Define `Position.toString()`: return file letter (`'A' + column`) followed by `row + 1` (e.g., `"E2"`).
+  - [x] Implement `Board` core methods: `getPiece(Position)`, `setPiece(Position, Piece)`, and `isEmpty(Position)`.
 - **Dev 3 (Sabid):**
   - [ ] Define `Utils.normalize(String)`: trim, collapse spaces, convert to uppercase.
   - [ ] Define `Utils.isValidMoveFormat(String)`: regex for basic move formats `^[A-H][1-8] [A-H][1-8]$`. (Optional: castling `O-O` and promotion `=Q`).
