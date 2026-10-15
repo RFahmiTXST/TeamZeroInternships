@@ -2,6 +2,7 @@ package utils;
 
 import board.Position;
 import core.Move;
+import java.util.Locale;
 
 /**
  * Utility functions for parsing and validating moves.
@@ -11,47 +12,94 @@ import core.Move;
 public class Utils {
 
     /**
-     * Normalizes a string by trimming, collapsing spaces, and converting to uppercase.
-     * 
-     * @param input Raw input string.
-     * @return Normalized string.
-     * TODO(Dev 3): Implement normalize()
+     * Normalizes player input by removing leading and trailing whitespace,
+     * replacing multiple whitespace characters with a single space,
+     * and converting all letters to uppercase.
+     *
+     * @param input The raw move input entered by the player.
+     * @return The normalized input string.
+     * @throws IllegalArgumentException if the input is null.
      */
     public static String normalize(String input) {
-        return null;
+        if (input == null) {
+            throw new IllegalArgumentException(
+                "Move input cannot be null."
+            );
+        }
+    
+        return input.trim()
+                    .replaceAll("\\s+", " ")
+                    .toUpperCase(Locale.ROOT);
     }
 
     /**
-     * Checks if a move string matches standard formats (e.g., "E2 E4", "O-O", "E7 E8=Q").
-     * 
+     * Checks if a move follows the basic chess format (e.g., "E2 E4").
+     * This validates input format, not whether the move is legal in chess.
+     *
      * @param normalizedInput The normalized move string.
-     * @return True if valid format.
-     * TODO(Dev 3): Implement isValidMoveFormat() with regex
+     * @return True if the format is valid, false otherwise.
      */
     public static boolean isValidMoveFormat(String normalizedInput) {
-        return false;
+        if (normalizedInput == null) {
+            return false;
+        }
+    
+        return normalizedInput.matches(
+            "^[A-H][1-8] [A-H][1-8]$"
+        );
     }
 
     /**
-     * Parses a string like "E2" into a Position object.
-     * 
-     * @param posStr The square coordinate string.
-     * @return Position object.
-     * TODO(Dev 3): Implement parsePosition()
+     * Converts a chessboard coordinate into a Position object.
+     * For example, "E2" becomes row 1 and column 4.
+     * Coordinates must be uppercase and within the A1-H8 range.
+     *
+     * @param posStr The uppercase chess coordinate to convert.
+     * @return A Position object containing the row and column.
+     * @throws IllegalArgumentException if the coordinate is null,
+     *         incorrectly formatted, or outside the chessboard.
      */
     public static Position parsePosition(String posStr) {
-        return null;
+        if (posStr == null ||
+            !posStr.matches("^[A-H][1-8]$")) {
+    
+            throw new IllegalArgumentException(
+                "Invalid board position: " + posStr
+            );
+        }
+    
+        int column = posStr.charAt(0) - 'A';
+        int row = posStr.charAt(1) - '1';
+    
+        return new Position(row, column);
     }
 
     /**
-     * Parses a full move string into a Move object.
-     * 
-     * @param moveStr The valid, normalized move string.
-     * @return Parsed Move object.
-     * TODO(Dev 3): Implement parseMove()
+     * Converts a chess move string into a Move object.
+     * For example, "E2 E4" creates a move from E2 to E4.
+     * The input is normalized and validated before parsing.
+     * Only basic coordinate moves are supported in Phase One.
+     *
+     * @param moveStr The raw move input entered by the player.
+     * @return A Move object containing the starting and ending positions.
+     * @throws IllegalArgumentException if the input is null,
+     *         incorrectly formatted, or contains invalid coordinates.
      */
     public static Move parseMove(String moveStr) {
-        return null;
+        String normalized = normalize(moveStr);
+    
+        if (!isValidMoveFormat(normalized)) {
+            throw new IllegalArgumentException(
+                "Invalid move format: " + normalized
+            );
+        }
+    
+        String[] coordinates = normalized.split(" ");
+    
+        Position from = parsePosition(coordinates[0]);
+        Position to = parsePosition(coordinates[1]);
+    
+        return new Move(from, to);
     }
 }
 
