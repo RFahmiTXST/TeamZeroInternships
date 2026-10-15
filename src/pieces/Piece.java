@@ -3,6 +3,7 @@ package pieces;
 import board.Board;
 import board.Position;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Abstract blueprint for all chess pieces.
@@ -45,7 +46,7 @@ public abstract class Piece {
      */
     @Override
     public String toString() {
-        return null;
+        return "" + color.getPrefix() + getSymbol();
     }
 
     /**
@@ -55,6 +56,8 @@ public abstract class Piece {
      * TODO(Dev 1): Implement move() to update position and set moved = true
      */
     public void move(Position newPosition) {
+        this.position = newPosition;
+        this.moved = true;
     }
 
     /**
@@ -65,7 +68,7 @@ public abstract class Piece {
      * TODO(Dev 1): Implement isOpponent()
      */
     public boolean isOpponent(Piece other) {
-        return false;
+        return other != null && other.getColor() != this.color;
     }
 
     /**
@@ -77,7 +80,14 @@ public abstract class Piece {
      * TODO(Dev 1): Implement canMoveTo()
      */
     public boolean canMoveTo(Board board, Position target) {
-        return false;
+        if (target == null || !target.isOnBoard()) {
+            return false;
+        }
+        if (board.isEmpty(target)) {
+            return true;
+        }
+        Piece pieceAtTarget = board.getPiece(target);
+        return isOpponent(pieceAtTarget);
     }
 
     /**
@@ -89,7 +99,35 @@ public abstract class Piece {
      * TODO(Dev 1): Implement slide() logic
      */
     protected List<Position> slide(Board board, int[][] directions) {
-        return null;
+        List<Position> possibleMoves = new ArrayList<>();
+        for (int[] direction : directions) {
+            int rowDir = direction[0];
+            int colDir = direction[1];
+            
+            int currentRow = this.position.getRow() + rowDir;
+            int currentCol = this.position.getColumn() + colDir;
+            
+            while (true) {
+                Position target = new Position(currentRow, currentCol);
+                if (!target.isOnBoard()) {
+                    break;
+                }
+                
+                if (board.isEmpty(target)) {
+                    possibleMoves.add(target);
+                } else {
+                    Piece pieceAtTarget = board.getPiece(target);
+                    if (isOpponent(pieceAtTarget)) {
+                        possibleMoves.add(target);
+                    }
+                    break;
+                }
+                
+                currentRow += rowDir;
+                currentCol += colDir;
+            }
+        }
+        return possibleMoves;
     }
 
     public Color getColor() { return color; }
