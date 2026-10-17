@@ -1,5 +1,6 @@
 
 import pieces.PawnTest;
+import pieces.KingTest;
 import test.TestUtils;
 import java.util.Objects;
 
@@ -20,6 +21,7 @@ public class TestRunner {
         System.out.println("Running Chess Project Tests...\n");
 
         PawnTest.main(args);
+        KingTest.main(args);
 
         TestUtils.printSummary();
 
