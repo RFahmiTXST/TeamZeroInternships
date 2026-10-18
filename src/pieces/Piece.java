@@ -11,10 +11,19 @@ import java.util.ArrayList;
  * Developer: Dev 1 (Rayed)
  */
 public abstract class Piece {
+    /** The color of this piece (WHITE or BLACK). */
     protected Color color;
+    /** The current coordinate of this piece on the board. */
     protected Position position;
+    /** Flag indicating whether this piece has moved at least once. */
     protected boolean moved;
 
+    /**
+     * Constructs a Piece with the specified color and initial position.
+     *
+     * @param color the color of the piece
+     * @param position the initial position of the piece
+     */
     public Piece(Color color, Position position) {
         this.color = color;
         this.position = position;
@@ -130,8 +139,25 @@ public abstract class Piece {
         return possibleMoves;
     }
 
+    /**
+     * Gets the color of this piece.
+     *
+     * @return the piece's color
+     */
     public Color getColor() { return color; }
+
+    /**
+     * Gets the current position of this piece.
+     *
+     * @return the piece's position
+     */
     public Position getPosition() { return position; }
+
+    /**
+     * Checks if this piece has moved at least once.
+     *
+     * @return true if the piece has moved, false otherwise
+     */
     public boolean hasMoved() { return moved; }
 }
 

@@ -64,10 +64,10 @@ All development must take place on your designated feature branch. Never commit 
 **Goal:** Populate the board with pieces and ensure pieces know their legal movement patterns.
 
 - **Dev 1 (Rayed):**
-  - [ ] Implement `Rook.possibleMoves(Board)`: use `slide` with directions `{{1,0},{-1,0},{0,1},{0,-1}}`.
-  - [ ] Implement `Bishop.possibleMoves(Board)`: use `slide` with directions `{{1,1},{1,-1},{-1,1},{-1,-1}}`.
-  - [ ] Implement `Queen.possibleMoves(Board)`: use `slide` with all 8 directions.
-  - [ ] Implement `Knight.possibleMoves(Board)`: check the 8 L-shaped offsets `{±1,±2}` and `{±2,±1}` using `canMoveTo`.
+  - [x] Implement `Rook.possibleMoves(Board)`: use `slide` with directions `{{1,0},{-1,0},{0,1},{0,-1}}`.
+  - [x] Implement `Bishop.possibleMoves(Board)`: use `slide` with directions `{{1,1},{1,-1},{-1,1},{-1,-1}}`.
+  - [x] Implement `Queen.possibleMoves(Board)`: use `slide` with all 8 directions.
+  - [x] Implement `Knight.possibleMoves(Board)`: check the 8 L-shaped offsets `{±1,±2}` and `{±2,±1}` using `canMoveTo`.
 - **Dev 2 (Abid):**
   - [ ] Implement `Board.initialize()`: clear squares, place all 32 pieces in their starting positions (white on rows 0/1, black on rows 6/7).
   - [ ] Implement `Board.render()`: use a `StringBuilder` to render the grid with file letters A-H on top and rank numbers 8-1 on the left.
