@@ -20,14 +20,26 @@ public class TestRunner {
 
         System.out.println("Running Chess Project Tests...\n");
 
+
+        // Developer 4: Pawn and King movement tests
+        System.out.println("Running Pawn and King tests...\n");
+
         PawnTest.main(args);
         KingTest.main(args);
 
+        System.out.println("\nPawn and King test summary:");
         TestUtils.printSummary();
 
+        // Developer 3: Input validation and parsing tests
+        System.out.println("\nRunning Utils tests...\n");
+
+        UtilsTest.main(args);
+
+        // Report failure to the operating system.
         if (TestUtils.getFailedCount() > 0) {
             System.exit(1);
         }
+
     }
 
     /**
