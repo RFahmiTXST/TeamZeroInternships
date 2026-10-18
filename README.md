@@ -62,6 +62,40 @@ javac -d out $(find src -name "*.java")
 java -cp out Main
 ```
 
+### Running Tests (Windows PowerShell)
+
+The project includes a Java-based QA testing framework for verifying
+chess piece behavior.
+
+**Requirements:** JDK 17 or newer.
+
+From the project root, compile the source and test files:
+
+```powershell
+New-Item -ItemType Directory -Force out | Out-Null
+$sources = (Get-ChildItem -Path .\src,.\test -Recurse -Filter *.java).FullName
+javac --release 17 -d out $sources
+```
+
+Run the tests after successful compilation:
+
+```powershell
+java -ea -cp out TestRunner
+```
+
+The test runner displays passing and failing assertions.
+
+Current test coverage:
+- White and Black Pawn movement direction
+- Pawn starting rows
+- Pawn promotion rows
+
+**Latest verified result: 6 passed, 0 failed.**
+
+Additional movement and integration tests will be added in
+subsequent milestones.
+
+
 ### Generate the Javadoc
 
 ```bash

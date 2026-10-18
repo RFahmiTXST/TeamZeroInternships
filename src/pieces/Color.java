@@ -15,7 +15,7 @@ public enum Color {
      * TODO(Dev 1): Implement getPrefix()
      */
     public char getPrefix() {
-        return ' ';
+        return this == WHITE ? 'w' : 'b';
     }
 }
 
