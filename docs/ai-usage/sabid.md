@@ -19,3 +19,17 @@
 **Code / Idea Used:** Created `UtilsTest.java` with 22 tests covering valid inputs, invalid inputs, and edge cases.
 
 **Result / Modification:** Successfully compiled the Java files using JDK 21 and ran the tests. All 22 tests passed with 0 failures. Committed the test file separately.
+
+
+
+## Milestone 2 — Console Interface Implementation
+
+**Task / Method:** Implement console interaction methods in `ConsoleUI.java`.
+
+**Prompt / Question Asked:** Asked ChatGPT to help plan, implement, explain, and test `showWelcome()`, `showBoard()`, `showTurn()`, `promptMove()`, and `showError()`.
+
+**Code / Idea Used:** Used Java console output methods to display game instructions, player turns, and errors. Used `Scanner.nextLine()` to read moves and `Board.render()` to display the chessboard.
+
+**Result / Modification:** Implemented all five methods, successfully compiled the project using JDK 21, and manually tested `showWelcome()`, `showTurn()`, `promptMove()`, and `showError()` using JShell. Committed and pushed the changes to `feature/sabidmahmud01` in commit `fbb9c4f`.
+
+**Pending Work:** `showBoard()` still requires integration testing after Abid implements `Board.render()`. `Player.makeMove()` also remains unfinished because `Board.movePiece()` has not yet been implemented.
