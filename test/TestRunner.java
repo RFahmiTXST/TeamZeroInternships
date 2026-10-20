@@ -20,6 +20,10 @@ public class TestRunner {
         System.out.println("Running Chess Project Tests...\n");
 
         PawnTest.main(args);
+        pieces.PieceMovementTest.main(args);
+        UtilsTest.main(args);
+        core.PlayerTest.main(args);
+        ui.ConsoleUITest.main(args);
 
         TestUtils.printSummary();
 
