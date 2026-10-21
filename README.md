@@ -86,14 +86,19 @@ java -ea -cp out TestRunner
 The test runner displays passing and failing assertions.
 
 Current test coverage:
-- White and Black Pawn movement direction
-- Pawn starting rows
-- Pawn promotion rows
+- Pawn helpers and Rook/Bishop/Queen/Knight movement
+- Input normalization, validation, and move parsing
+- Player M2 input/ownership checks and Board delegation
+- Console messages, raw input, and board-render delegation
 
-**Latest verified result: 6 passed, 0 failed.**
+**Latest verified result: 94 passed, 0 failed** (72 shared assertions
+plus 22 Utils assertions, reported separately by the same runner).
 
-Additional movement and integration tests will be added in
-subsequent milestones.
+Player tests use a recording Board because the Board M2 implementation
+is pending in PR #6. Actual board mutation requires that implementation.
+Player M2 rejects same-square moves, friendly captures, invalid coordinates,
+and unsupported special moves. Piece movement legality and king safety
+remain part of later integration; the game loop is not implemented yet.
 
 
 ### Generate the Javadoc
