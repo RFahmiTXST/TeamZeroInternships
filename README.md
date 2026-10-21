@@ -85,20 +85,29 @@ java -ea -cp out TestRunner
 
 The test runner displays passing and failing assertions.
 
+
 Current test coverage:
-- Pawn helpers and Rook/Bishop/Queen/Knight movement
+
+- Pawn movement, captures, blocking, and boundary conditions
+- King movement, captures, and board boundaries
+- Rook, Bishop, Queen, and Knight movement
 - Input normalization, validation, and move parsing
-- Player M2 input/ownership checks and Board delegation
-- Console messages, raw input, and board-render delegation
+- Player input, ownership, and basic move validation
+- Console messages, input, and board-render delegation
 
-**Latest verified result: 94 passed, 0 failed** (72 shared assertions
-plus 22 Utils assertions, reported separately by the same runner).
+**Latest verified results (M2):**
 
-Player tests use a recording Board because the Board M2 implementation
-is pending in PR #6. Actual board mutation requires that implementation.
-Player M2 rejects same-square moves, friendly captures, invalid coordinates,
-and unsupported special moves. Piece movement legality and king safety
-remain part of later integration; the game loop is not implemented yet.
+- Shared test suites: 115 passed, 0 failed
+- Utils test suite: 22 passed, 0 failed
+- Total: 137 assertions passed, 0 failed
+- Process exit code: 0
+
+The M2 Board implementation has been merged and independently
+verified with 17 additional QA smoke-test checks.
+
+Full piece-movement legality enforcement, king safety, and the
+interactive game loop remain pending for later integration.
+Passing M2 tests does not yet mean the full game is playable.
 
 
 ### Generate the Javadoc

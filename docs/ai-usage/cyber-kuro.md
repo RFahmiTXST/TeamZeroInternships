@@ -25,12 +25,40 @@ All six Pawn helper tests passed:
 
 **Total: 6 passed, 0 failed.**
 
+
+## Milestone 2 — Testing and QA
+
+### AI Assistance
+
+I used ChatGPT to help structure the testing framework,
+organize test scenarios for Pawn and King movement, and plan
+the integration of the team's test suites.
+
+### Work and Verification
+
+I implemented and tested Pawn and King movement, including
+normal moves, captures, blocking, and boundary conditions.
+
+I also integrated the team's automated tests into the central
+TestRunner and independently reviewed other developers' work.
+
+### Result
+
+- Pawn assertions: 34 passed
+- King assertions: 15 passed
+- Other piece assertions: 38 passed
+- Player and ConsoleUI assertions: 28 passed
+- Utils assertions: 22 passed
+
+**Combined result: 137 passed, 0 failed.**
+
+Additional Board QA smoke tests: 17 passed, 0 failed.
+
+
 ## Current Limitations
 
-The tests currently cover only Pawn helper methods.
+M2 testing covers basic movement for all six chess piece
+types, input parsing, Player validation, and ConsoleUI behavior.
 
-Full Pawn movement, King movement, castling, promotion, and whole-game integration have not yet been tested.
-
-## Future AI Assistance
-
-Additional AI-assisted tasks, code changes, manual verification, and test results will be documented here as development continues.
+Full game-loop integration, king safety, and advanced chess
+rules have not yet been completed.

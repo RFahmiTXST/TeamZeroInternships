@@ -76,8 +76,8 @@ All development must take place on your designated feature branch. Never commit 
   - [x] Build `ConsoleUI`: Implement `showWelcome()`, `showBoard(Board)`, `showTurn(Color)`, and `promptMove(Color)`.
   - [x] Build `Player.makeMove()`: reject if no piece is on `from` or belongs to the opponent, otherwise call `board.movePiece(from, to)`.
 - **Dev 4 (Towsif):**
-  - [ ] Implement `Pawn.possibleMoves(Board)`: handle moving 1 square forward, 2 squares forward (if `!hasMoved`), and diagonal captures of opponents.
-  - [ ] Implement `King.possibleMoves(Board)`: check the 8 neighboring squares using `canMoveTo`.
+  - [x] Implement `Pawn.possibleMoves(Board)`: handle moving 1 square forward, 2 squares forward (if `!hasMoved`), and diagonal captures of opponents.
+  - [x] Implement `King.possibleMoves(Board)`: check the 8 neighboring squares using `canMoveTo`.
 
 🧪 **Manual Tests for M2:**
 - Call `Board.display()` and visually verify it matches the required project brief format perfectly.
