@@ -11,6 +11,12 @@ import java.util.List;
  */
 public class Rook extends Piece {
 
+    /**
+     * Constructs a Rook with the specified color and initial position.
+     *
+     * @param color the color of the piece
+     * @param position the initial position on the board
+     */
     public Rook(Color color, Position position) {
         super(color, position);
     }
@@ -20,22 +26,20 @@ public class Rook extends Piece {
      * 
      * @param board The current board state.
      * @return List of legal moves.
-     * TODO(Dev 1): Implement possibleMoves() using slide()
      */
     @Override
     public List<Position> possibleMoves(Board board) {
-        return null;
+        int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        return slide(board, directions);
     }
 
     /**
      * Returns the symbol for the Rook ('R').
      * 
      * @return 'R'
-     * TODO(Dev 1): Implement getSymbol()
      */
     @Override
     public char getSymbol() {
-        return ' ';
+        return 'R';
     }
 }
-

@@ -1,4 +1,3 @@
-
 import pieces.PawnTest;
 import pieces.KingTest;
 import test.TestUtils;
@@ -12,7 +11,7 @@ import java.util.Objects;
 public class TestRunner {
 
     /**
-     * Runs all registered test classes.
+     * Runs all registered test suites.
      *
      * @param args command-line arguments
      */
@@ -20,26 +19,33 @@ public class TestRunner {
 
         System.out.println("Running Chess Project Tests...\n");
 
-
-        // Developer 4: Pawn and King movement tests
+        // Dev 4: Pawn and King movement tests
         System.out.println("Running Pawn and King tests...\n");
-
         PawnTest.main(args);
         KingTest.main(args);
 
-        System.out.println("\nPawn and King test summary:");
+        // Dev 1: Rook, Bishop, Queen and Knight tests
+        System.out.println("\nRunning other piece movement tests...\n");
+        pieces.PieceMovementTest.main(args);
+
+        // Dev 3: Player and console UI tests
+        System.out.println("\nRunning Player and UI tests...\n");
+        core.PlayerTest.main(args);
+        ui.ConsoleUITest.main(args);
+
+        // Summary for shared TestUtils assertions
+        System.out.println("\nShared test summary:");
         TestUtils.printSummary();
 
-        // Developer 3: Input validation and parsing tests
+        // Dev 3: Input validation and parsing tests
+        // UtilsTest manages its own assertion counters.
         System.out.println("\nRunning Utils tests...\n");
-
         UtilsTest.main(args);
 
-        // Report failure to the operating system.
+        // Ensure failures produce a non-zero exit code.
         if (TestUtils.getFailedCount() > 0) {
             System.exit(1);
         }
-
     }
 
     /**
@@ -55,8 +61,8 @@ public class TestRunner {
 
         if (!Objects.equals(expected, actual)) {
             throw new AssertionError(
-                message + " - Expected: " + expected
-                + ", Actual: " + actual
+                    message + " - Expected: " + expected
+                    + ", Actual: " + actual
             );
         }
     }

@@ -64,17 +64,17 @@ All development must take place on your designated feature branch. Never commit 
 **Goal:** Populate the board with pieces and ensure pieces know their legal movement patterns.
 
 - **Dev 1 (Rayed):**
-  - [ ] Implement `Rook.possibleMoves(Board)`: use `slide` with directions `{{1,0},{-1,0},{0,1},{0,-1}}`.
-  - [ ] Implement `Bishop.possibleMoves(Board)`: use `slide` with directions `{{1,1},{1,-1},{-1,1},{-1,-1}}`.
-  - [ ] Implement `Queen.possibleMoves(Board)`: use `slide` with all 8 directions.
-  - [ ] Implement `Knight.possibleMoves(Board)`: check the 8 L-shaped offsets `{±1,±2}` and `{±2,±1}` using `canMoveTo`.
+  - [x] Implement `Rook.possibleMoves(Board)`: use `slide` with directions `{{1,0},{-1,0},{0,1},{0,-1}}`.
+  - [x] Implement `Bishop.possibleMoves(Board)`: use `slide` with directions `{{1,1},{1,-1},{-1,1},{-1,-1}}`.
+  - [x] Implement `Queen.possibleMoves(Board)`: use `slide` with all 8 directions.
+  - [x] Implement `Knight.possibleMoves(Board)`: check the 8 L-shaped offsets `{±1,±2}` and `{±2,±1}` using `canMoveTo`.
 - **Dev 2 (Abid):**
   - [ ] Implement `Board.initialize()`: clear squares, place all 32 pieces in their starting positions (white on rows 0/1, black on rows 6/7).
   - [ ] Implement `Board.render()`: use a `StringBuilder` to render the grid with file letters A-H on top and rank numbers 8-1 on the left.
   - [ ] Implement `Board.movePiece(from, to)`: throw exception if `from` is empty, otherwise move piece, add any captured piece to `capturedPieces`, and call `Piece.move()`.
 - **Dev 3 (Sabid):**
-  - [ ] Build `ConsoleUI`: Implement `showWelcome()`, `showBoard(Board)`, `showTurn(Color)`, and `promptMove(Color)`.
-  - [ ] Build `Player.makeMove()`: reject if no piece is on `from` or belongs to the opponent, otherwise call `board.movePiece(from, to)`.
+  - [x] Build `ConsoleUI`: Implement `showWelcome()`, `showBoard(Board)`, `showTurn(Color)`, and `promptMove(Color)`.
+  - [x] Build `Player.makeMove()`: reject if no piece is on `from` or belongs to the opponent, otherwise call `board.movePiece(from, to)`.
 - **Dev 4 (Towsif):**
   - [ ] Implement `Pawn.possibleMoves(Board)`: handle moving 1 square forward, 2 squares forward (if `!hasMoved`), and diagonal captures of opponents.
   - [ ] Implement `King.possibleMoves(Board)`: check the 8 neighboring squares using `canMoveTo`.
