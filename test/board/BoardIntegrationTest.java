@@ -195,12 +195,5 @@ public final class BoardIntegrationTest {
                 false, board.getPiece(e2).hasMoved(),
                 "Reinitialize creates unmoved Pawns"
         );
-
-        System.out.println("\nBoard integration test summary:");
-        TestUtils.printSummary();
-
-        if (TestUtils.getFailedCount() > 0) {
-            System.exit(1);
-        }
     }
 }

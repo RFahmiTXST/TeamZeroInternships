@@ -28,6 +28,9 @@ public class TestRunner {
         System.out.println("\nRunning other piece movement tests...\n");
         pieces.PieceMovementTest.main(args);
 
+        // Dev 4: Board, Player, and Piece integration tests
+        board.BoardIntegrationTest.main(args);
+
         // Dev 3: Player and console UI tests
         System.out.println("\nRunning Player and UI tests...\n");
         core.PlayerTest.main(args);
