@@ -113,6 +113,18 @@ public class UtilsTest {
         check(!Utils.isValidMoveFormat("E7 E8=K"),
                 "Invalid promotion piece rejected");
 
+        check(!Utils.isValidMoveFormat("E9 E4"),
+                "Invalid rank rejected");
+
+        check(!Utils.isValidMoveFormat("I2 E4"),
+                "Invalid file rejected");
+
+        check(!Utils.isValidMoveFormat("E2E4"),
+                "Missing space rejected");
+
+        check(!Utils.isValidMoveFormat(null),
+                "Null input rejected");
+
     }
 
     /** Tests conversion of coordinates into Position objects. */
@@ -165,5 +177,24 @@ public class UtilsTest {
 
         checkInvalid(() -> Utils.parseMove("E7 E8=K"),
                 "Invalid promotion notation rejected");
+
+        Move normalMove = Utils.parseMove("E2 E4");
+
+        check(normalMove.getFrom().equals(new Position(1, 4))
+                && normalMove.getTo().equals(new Position(3, 4)),
+                "E2 E4 parses correctly");
+
+        Move spacedMove = Utils.parseMove("  e2   e4  ");
+
+        check(spacedMove.getFrom().equals(new Position(1, 4))
+                && spacedMove.getTo().equals(new Position(3, 4)),
+                "Input normalized before parsing");
+
+        checkInvalid(() -> Utils.parseMove("E9 E4"),
+                "Invalid move throws exception");
+
+        checkInvalid(() -> Utils.parseMove(null),
+                "Null move throws exception");
+
     }
 }

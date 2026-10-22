@@ -169,5 +169,80 @@ public final class SpecialMoveHandlerTest {
                 ),
                 "Null promotion move rejected"
         );
+
+        // ============================================
+        // Player-level Pawn promotion integration
+        // ============================================
+
+        // White Pawn promotion through Player.makeMove().
+        Board playerBoard = new Board();
+
+        Position g7 = new Position(6, 6);
+        Position g8 = new Position(7, 6);
+
+        playerBoard.setPiece(
+                g7, new Pawn(Color.WHITE, g7)
+        );
+
+        Player whitePlayer = new Player(Color.WHITE);
+
+        String before = playerBoard.render();
+
+        // A Pawn must not reach the last rank without promotion.
+        TestUtils.assertEquals(
+                false,
+                whitePlayer.makeMove(
+                        playerBoard, new Move(g7, g8)
+                ),
+                "Pawn cannot reach final rank without promotion"
+        );
+
+        TestUtils.assertEquals(
+                before,
+                playerBoard.render(),
+                "Missing promotion preserves board state"
+        );
+
+        // White Pawn promotes to Rook.
+        TestUtils.assertEquals(
+                true,
+                whitePlayer.makeMove(
+                        playerBoard, new Move(g7, g8, 'R')
+                ),
+                "Player accepts White promotion"
+        );
+
+        TestUtils.assertEquals(
+                true,
+                playerBoard.getPiece(g8) instanceof Rook,
+                "Player promotion replaces Pawn with Rook"
+        );
+
+        // Black Pawn promotion through Player.makeMove().
+        Board blackPlayerBoard = new Board();
+
+        Position b2 = new Position(1, 1);
+        Position b1 = new Position(0, 1);
+
+        blackPlayerBoard.setPiece(
+                b2, new Pawn(Color.BLACK, b2)
+        );
+
+        Player blackPlayer = new Player(Color.BLACK);
+
+        TestUtils.assertEquals(
+                true,
+                blackPlayer.makeMove(
+                        blackPlayerBoard, new Move(b2, b1, 'B')
+                ),
+                "Player accepts Black promotion"
+        );
+
+        TestUtils.assertEquals(
+                true,
+                blackPlayerBoard.getPiece(b1) instanceof Bishop,
+                "Player promotion replaces Black Pawn with Bishop"
+        );
+
     }
 }
