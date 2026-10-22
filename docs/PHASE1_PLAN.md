@@ -98,7 +98,14 @@ All development must take place on your designated feature branch. Never commit 
 - **Dev 4 (Towsif):**
   - [ ] Optional: Integrate Castling logic (`O-O`, `O-O-O`) across `Game` and `King`.
   - [ ] Optional: Integrate Pawn Promotion (`E7 E8=Q`) across `Game` and `Pawn`.
-  - [x] Add Board, Player, and Piece integration tests, integrate them into TestRunner, and verify the M3 regression suite.
+  - [x] Add Board integration tests with 27 assertions.
+  - [x] Implement Pawn Promotion to Queen, Rook, Bishop, and Knight.
+  - [x] Implement kingside and queenside Castling for both colors.
+  - [x] Implement square attack detection for Castling.
+  - [x] Integrate special moves with `Player.makeMove()`.
+  - [x] Support special-move notation through `Utils.parseMove()`.
+  - [x] Add special-move tests to `TestRunner`.
+  - [x] Pass all 343 regression assertions with 0 failures.
 
 🧪 **Manual Tests for M3:**
 - Play a mock game: Type `E2 E4`. Verify White pawn moves. Type `E7 E5`. Verify Black pawn moves.
