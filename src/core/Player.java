@@ -49,17 +49,19 @@ public class Player {
             return false;
         }
 
-        // Castling execution will be integrated separately.
+        // Handle kingside and queenside castling.
         if (move.isCastling()) {
-            return false;
+            return SpecialMoveHandler.executeCastling(
+                    board, move, color
+            );
         }
 
-        // Delegate promotion to the validated special-move handler.
+        // Handle Pawn Promotion.
         if (move.getPromotionPiece() != '\0') {
             return SpecialMoveHandler.executePromotion(
-                    board, move, color);
+                    board, move, color
+            );
         }
-
         Position from = move.getFrom();
         Position to = move.getTo();
         if (from == null || to == null || !from.isOnBoard() || !to.isOnBoard()

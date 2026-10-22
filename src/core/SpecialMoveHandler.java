@@ -6,6 +6,8 @@ import board.Position;
 import pieces.Color;
 import pieces.Pawn;
 import pieces.Piece;
+import pieces.King;
+import pieces.Rook;
 
 /**
  * Handles special chess moves.
@@ -76,7 +78,114 @@ public final class SpecialMoveHandler {
         board.movePiece(from, to);
 
         Piece promoted = pawn.createPromotionPiece(code);
+
+        // Promotion occurs through a Pawn move.
+        // The new piece must not acquire castling rights.
+        promoted.move(to);
+
+
         board.setPiece(to, promoted);
+
+        return true;
+    }
+
+    /**
+     * Validates and executes kingside or queenside castling.
+     *
+     * The King and Rook must be on their starting squares,
+     * neither piece may have moved, the path must be clear,
+     * and the King must not castle out of, through, or into check.
+     *
+     * @param board current chessboard
+     * @param move requested castling move
+     * @param playerColor color of the player attempting to castle
+     * @return true if castling succeeds
+     */
+    public static boolean executeCastling(
+            Board board, Move move, Color playerColor) {
+
+        // 1. Validate inputs.
+        if (board == null || move == null
+                || playerColor == null
+                || !move.isCastling()
+                || move.getPromotionPiece() != '\0') {
+            return false;
+        }
+
+        // 2. Determine the starting and destination squares.
+        boolean kingside = move.isKingsideCastle();
+
+        int row = playerColor == Color.WHITE ? 0 : 7;
+        int direction = kingside ? 1 : -1;
+
+        int rookColumn = kingside ? 7 : 0;
+        int kingDestinationColumn = kingside ? 6 : 2;
+        int rookDestinationColumn = kingside ? 5 : 3;
+
+        Position kingFrom = new Position(row, 4);
+        Position rookFrom = new Position(row, rookColumn);
+
+        Position kingTo =
+                new Position(row, kingDestinationColumn);
+
+        Position rookTo =
+                new Position(row, rookDestinationColumn);
+
+        Piece king = board.getPiece(kingFrom);
+        Piece rook = board.getPiece(rookFrom);
+
+        // 3. Validate King eligibility.
+        if (!(king instanceof King)
+                || king.getColor() != playerColor
+                || king.hasMoved()
+                || !kingFrom.equals(king.getPosition())) {
+            return false;
+        }
+
+        // 4. Validate Rook eligibility.
+        if (!(rook instanceof Rook)
+                || rook.getColor() != playerColor
+                || rook.hasMoved()
+                || !rookFrom.equals(rook.getPosition())) {
+            return false;
+        }
+
+        // 5. Check that every square between King and Rook
+        // is empty.
+        for (int col = 4 + direction;
+                col != rookColumn;
+                col += direction) {
+
+            Position square = new Position(row, col);
+
+            if (!board.isEmpty(square)) {
+                return false;
+            }
+        }
+
+        // 6. Determine the opposing color.
+        Color opponent = playerColor == Color.WHITE
+                ? Color.BLACK : Color.WHITE;
+
+        // 7. The King cannot start in check, pass through
+        // check, or land on an attacked square.
+        for (int step = 0; step <= 2; step++) {
+
+            Position kingSquare = new Position(
+                    row,
+                    4 + direction * step
+            );
+
+            if (AttackDetector.isSquareAttacked(
+                    board, kingSquare, opponent)) {
+                return false;
+            }
+        }
+
+        // 8. All validations passed.
+        // Move the King and Rook to their new squares.
+        board.movePiece(kingFrom, kingTo);
+        board.movePiece(rookFrom, rookTo);
 
         return true;
     }
