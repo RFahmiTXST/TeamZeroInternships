@@ -23,3 +23,15 @@
 **Prompt / Question Asked:** "Suppose you are a dev-ops expert with substantial experience managing Git repositories. Task: Make industry grade (short and reasonable) commits for the milestone 2 code changes for Dev 1 (Rayed)... Make sure not to push the commit to the remote repository, I'll verify and push it myself."\
 **Code / Idea Used:** Applied Conventional Commits standards to structure atomic, focused commits separating feature additions (`feat`), documentation (`docs`), and test cases (`test`).\
 **Result / Modification:** Created structured, traceable commits on `feature/RFahmiTXST` without pushing to the remote repository, ready for review.\
+
+## Milestone 3: Game Loop, Turn Flow & Integration
+
+**Task / Method:** Assisting Dev 3 in integrating move legality (Player.java, PlayerTest.java).\
+**Prompt / Question Asked:** "Suppose you are an expert Java software developer. Task: Verify the milestone 3 tasks for dev 1 (Rayed) mentioned in PHASE1_PLAN.md were correctly implemented and there's no bugs, errors or issues.. Then mark the tasks complete in PHASE1_PLAN.md... Lastly, add the updates in RFahmiTXST.md..."\
+**Code / Idea Used:** Verified integration of piece movement legality in Player.makeMove() by querying piece.possibleMoves(board) and rejecting any requested destination not contained in that list. Evaluated the expanded unit tests in PlayerTest.java. Now, it can verify illegal moves across piece types (pawns moving three squares or capturing straight, blocked bishops, rooks moving diagonally, knights moving straight).\
+**Result / Modification:** Code compiled cleanly under JDK 17 with -Xlint:all and zero warnings. All 150 test assertions passed across the central test runner (TestRunner) with zero failures. Dev 1's Milestone 3 task was marked complete in PHASE1_PLAN.md.\
+
+**Task / Method:** Organizing industry-grade Git commits for Milestone 3.\
+**Prompt / Question Asked:** "Suppose you are a dev-ops expert with substantial experience managing Git repositories. Task: Create industry grade (short and reasonable) commits for the milestone 3 code changes for Dev 1 (Rayed)... Make sure not to push the commit to the remote repository, I'll verify and push it myself."\
+**Code / Idea Used:** Applied Conventional Commits standards to structure atomic, focused commits separating feature additions (`feat`), documentation (`docs`), and test cases (`test`).\
+**Result / Modification:** Created structured, traceable commits on `feature/RFahmiTXST` without pushing to the remote repository, ready for review.\
