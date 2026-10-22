@@ -92,7 +92,7 @@ All development must take place on your designated feature branch. Never commit 
   - [ ] Treat `quit`/`exit` as end of game cleanly.
   - [ ] Show an error for invalid input format and reprompt the *same* player without switching turns.
 - **Dev 1 (Rayed):**
-  - [ ] Assist Dev 3 in integrating move legality: reject a destination if it is not in the piece's `possibleMoves(board)` list.
+  - [x] Assist Dev 3 in integrating move legality: reject a destination if it is not in the piece's `possibleMoves(board)` list.
 - **Dev 2 (Abid):**
   - [ ] Work with Dev 4 to implement `Board.isCheck(Color)`: scan if any opponent's piece targets the King's square. (Optional Phase 1 feature, required for Phase 2).
 - **Dev 4 (Towsif):**
