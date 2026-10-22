@@ -24,6 +24,8 @@ public class TestRunner {
         PawnTest.main(args);
         KingTest.main(args);
         pieces.PawnPromotionTest.main(args);
+        System.out.println("\nRunning special move integration tests...\n");
+        core.SpecialMoveHandlerTest.main(args);
 
         // Dev 1: Rook, Bishop, Queen and Knight tests
         System.out.println("\nRunning other piece movement tests...\n");
