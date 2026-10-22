@@ -23,6 +23,7 @@ public class TestRunner {
         System.out.println("Running Pawn and King tests...\n");
         PawnTest.main(args);
         KingTest.main(args);
+        pieces.PawnPromotionTest.main(args);
 
         // Dev 1: Rook, Bishop, Queen and Knight tests
         System.out.println("\nRunning other piece movement tests...\n");
