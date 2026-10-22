@@ -10,6 +10,7 @@ import pieces.Pawn;
 import pieces.Piece;
 import pieces.Rook;
 import test.TestUtils;
+import utils.Utils;
 
 /**
  * Tests kingside and queenside castling.
@@ -437,6 +438,74 @@ public final class CastlingTest {
                 beforeBlocked,
                 playerBlocked.render(),
                 "Rejected Player castling preserves board"
+        );
+
+        // ======================================
+        // Special move notation integration
+        // ======================================
+
+        // Test White kingside castling: O-O
+        Board parsedKingside = setup(Color.WHITE, true);
+
+        TestUtils.assertEquals(
+                true,
+                new Player(Color.WHITE).makeMove(
+                        parsedKingside,
+                        Utils.parseMove("O-O")
+                ),
+                "O-O executes through parser and Player"
+        );
+
+        TestUtils.assertEquals(
+                true,
+                parsedKingside.getPiece(
+                        home(Color.WHITE, 6)) instanceof King,
+                "Parsed kingside castling moves King to G1"
+        );
+
+        // Test Black queenside castling: O-O-O
+        Board parsedQueenside = setup(Color.BLACK, false);
+
+        TestUtils.assertEquals(
+                true,
+                new Player(Color.BLACK).makeMove(
+                        parsedQueenside,
+                        Utils.parseMove("O-O-O")
+                ),
+                "O-O-O executes through parser and Player"
+        );
+
+        TestUtils.assertEquals(
+                true,
+                parsedQueenside.getPiece(
+                        home(Color.BLACK, 2)) instanceof King,
+                "Parsed queenside castling moves King to C8"
+        );
+
+        // Test Pawn Promotion: E7 E8=Q
+        Board parsedPromotion = new Board();
+
+        Position promotionFrom = new Position(6, 4);
+        Position promotionTo = new Position(7, 4);
+
+        parsedPromotion.setPiece(
+                promotionFrom,
+                new Pawn(Color.WHITE, promotionFrom)
+        );
+
+        TestUtils.assertEquals(
+                true,
+                new Player(Color.WHITE).makeMove(
+                        parsedPromotion,
+                        Utils.parseMove("E7 E8=Q")
+                ),
+                "Promotion notation executes through parser and Player"
+        );
+
+        TestUtils.assertEquals(
+                "wQ",
+                parsedPromotion.getPiece(promotionTo).toString(),
+                "Parsed promotion creates White Queen"
         );
 
     }
