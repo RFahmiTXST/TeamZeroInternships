@@ -88,9 +88,9 @@ All development must take place on your designated feature branch. Never commit 
 **Goal:** Tie the board, pieces, and player input into a playable game loop.
 
 - **Dev 3 (Sabid):**
-  - [ ] Implement `Game.play()` interface loop: alternate turns, show the board, and prompt for moves.
-  - [ ] Treat `quit`/`exit` as end of game cleanly.
-  - [ ] Show an error for invalid input format and reprompt the *same* player without switching turns.
+  - [x] Implement `Game.play()` interface loop: alternate turns, show the board, and prompt for moves.
+  - [x] Treat `quit`/`exit` as end of game cleanly.
+  - [x] Show an error for invalid input format and reprompt the *same* player without switching turns.
 - **Dev 1 (Rayed):**
   - [ ] Assist Dev 3 in integrating move legality: reject a destination if it is not in the piece's `possibleMoves(board)` list.
 - **Dev 2 (Abid):**
@@ -98,6 +98,12 @@ All development must take place on your designated feature branch. Never commit 
 - **Dev 4 (Towsif):**
   - [ ] Optional: Integrate Castling logic (`O-O`, `O-O-O`) across `Game` and `King`.
   - [ ] Optional: Integrate Pawn Promotion (`E7 E8=Q`) across `Game` and `Pawn`.
+
+Dev 3 integration note (2026-10-21): Player.makeMove() now requires the
+destination to be in possibleMoves(board). The real Game/Board/UI tests cover
+turns, invalid-input retries, captures, restart, and EOF. Dev 1's assistance
+checkbox remains for teammate review; check detection and special moves are
+still separate work.
 
 🧪 **Manual Tests for M3:**
 - Play a mock game: Type `E2 E4`. Verify White pawn moves. Type `E7 E5`. Verify Black pawn moves.

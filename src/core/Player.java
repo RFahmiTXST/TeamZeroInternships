@@ -31,15 +31,15 @@ public class Player {
     }
 
     /**
-     * Applies a basic Milestone 2 move for this player.
+     * Applies a move matching this player's piece movement pattern.
      * Rejects missing/off-board coordinates, empty or opponent-owned source
      * squares, same-square moves, friendly captures, and special moves.
-     * Piece movement patterns and king safety are validated during Milestone 3
-     * integration; this method does not yet enforce those chess rules.
+     * Requires the destination to appear in possibleMoves(board).
+     * King safety is not enforced until the team's check integration is ready.
      * 
      * @param board The current board.
      * @param move The requested move.
-     * @return true if the basic checks pass and the move is delegated to Board
+     * @return true if the move passes validation and is applied to Board
      */
     public boolean makeMove(Board board, Move move) {
         if (board == null || move == null || move.isCastling()
@@ -58,6 +58,10 @@ public class Player {
         }
         Piece target = board.getPiece(to);
         if (target != null && target.getColor() == color) {
+            return false;
+        }
+        List<Position> possibleMoves = piece.possibleMoves(board);
+        if (possibleMoves == null || !possibleMoves.contains(to)) {
             return false;
         }
         board.movePiece(from, to);

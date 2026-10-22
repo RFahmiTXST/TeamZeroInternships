@@ -32,6 +32,7 @@ public class TestRunner {
         System.out.println("\nRunning Player and UI tests...\n");
         core.PlayerTest.main(args);
         ui.ConsoleUITest.main(args);
+        core.GameTest.main(args);
 
         // Summary for shared TestUtils assertions
         System.out.println("\nShared test summary:");
