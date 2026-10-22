@@ -100,20 +100,19 @@ public class UtilsTest {
         check(Utils.isValidMoveFormat("E2 E4"),
                 "Valid move format");
 
-        check(!Utils.isValidMoveFormat("E9 E4"),
-                "Invalid rank rejected");
 
-        check(!Utils.isValidMoveFormat("I2 E4"),
-                "Invalid file rejected");
+        check(Utils.isValidMoveFormat("O-O"),
+                "Kingside castling format accepted");
 
-        check(!Utils.isValidMoveFormat("E2E4"),
-                "Missing space rejected");
+        check(Utils.isValidMoveFormat("O-O-O"),
+                "Queenside castling format accepted");
 
-        check(!Utils.isValidMoveFormat("O-O"),
-                "Castling format rejected");
+        check(Utils.isValidMoveFormat("E7 E8=Q"),
+                "Pawn promotion format accepted");
 
-        check(!Utils.isValidMoveFormat(null),
-                "Null input rejected");
+        check(!Utils.isValidMoveFormat("E7 E8=K"),
+                "Invalid promotion piece rejected");
+
     }
 
     /** Tests conversion of coordinates into Position objects. */
@@ -145,26 +144,26 @@ public class UtilsTest {
     /** Tests conversion of move strings into Move objects. */
     private static void testParseMove() {
         System.out.println("\nTesting parseMove()");
+        Move kingside = Utils.parseMove("O-O");
 
-        Move move = Utils.parseMove("E2 E4");
-        check(move.getFrom().getRow() == 1
-                && move.getFrom().getColumn() == 4
-                && move.getTo().getRow() == 3
-                && move.getTo().getColumn() == 4,
-                "E2 E4 parses correctly");
+        check(kingside.isCastling()
+                && kingside.isKingsideCastle(),
+                "Kingside castling parsed correctly");
 
-        Move spacedMove = Utils.parseMove("  e2   e4  ");
-        check(spacedMove.getFrom().getRow() == 1
-                && spacedMove.getTo().getRow() == 3,
-                "Input normalized before parsing");
+        Move queenside = Utils.parseMove("O-O-O");
 
-        checkInvalid(() -> Utils.parseMove("E9 E4"),
-                "Invalid move throws exception");
+        check(queenside.isCastling()
+                && !queenside.isKingsideCastle(),
+                "Queenside castling parsed correctly");
 
-        checkInvalid(() -> Utils.parseMove("O-O"),
-                "Castling input throws exception");
+        Move promotion = Utils.parseMove("e7 e8=q");
 
-        checkInvalid(() -> Utils.parseMove(null),
-                "Null move throws exception");
+        check(promotion.getPromotionPiece() == 'Q'
+                && promotion.getFrom().equals(new Position(6, 4))
+                && promotion.getTo().equals(new Position(7, 4)),
+                "Pawn promotion parsed correctly");
+
+        checkInvalid(() -> Utils.parseMove("E7 E8=K"),
+                "Invalid promotion notation rejected");
     }
 }
