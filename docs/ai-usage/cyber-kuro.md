@@ -60,11 +60,11 @@ Additional Board QA smoke tests: 17 passed, 0 failed.
 ### AI Assistance
 
 I used ChatGPT to help design Board, Player, and Piece
-integration tests, organize regression testing, and
-investigate Git merge conflicts between team contributions.
+integration tests, implement Pawn promotion and Castling,
+organize regression testing.
 
-I reviewed and executed the suggested tests and verified
-their results locally.
+I reviewed and executed the suggested code and tests
+and verified their results locally.
 
 ### Implementation
 
@@ -73,7 +73,12 @@ their results locally.
 - Verified legal Pawn movement and rejected illegal moves.
 - Tested piece positions, moved flags, and board-state preservation.
 - Verified captures and board reinitialization.
-- Registered the integration tests in TestRunner.
+- Implemented Pawn promotion to Queen, Rook, Bishop, and Knight.
+- Implemented kingside and queenside Castling for both colors.
+- Added AttackDetector.java to detect attacked squares.
+- Integrated special moves into Player.makeMove().
+- Added support for O-O, O-O-O, and E7 E8=Q notation.
+- Added special-move tests and updated TestRunner.
 
 ### Peer Review and Integration QA
 
@@ -87,18 +92,21 @@ their results locally.
 
 ### Final Dev 4 M3 Verification
 
-- Shared assertions: 155 passed
-- Utils assertions: 22 passed
-- Total: 177 passed, 0 failed
+- Shared assertions: 315 passed
+- Utils assertions: 28 passed
+- Total: 343 passed, 0 failed
 - Exit code: 0
 
 All tests compiled using Java 17 with -Xlint:all.
 
 ### Scope and Limitations
 
-The final 177-assertion result applies to my Dev 4
-feature branch, which includes merged PR #10 but does not
-yet include Dev 3's unmerged game-loop changes.
+The final 343-assertion result applies to my Dev 4
+feature branch, which includes merged PR #10 but does
+not yet include Dev 3's unmerged game-loop changes.
 
-Castling, Pawn promotion, and check detection are optional
-features that I did not implement during M3.
+Pawn promotion and Castling are implemented and tested
+through move parsing, Player, and Board.
+
+Interactive game-loop integration and full King safety
+validation have not yet been completed.
