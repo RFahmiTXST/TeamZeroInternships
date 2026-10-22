@@ -160,4 +160,3 @@ public final class PieceMovementTest {
         TestUtils.assertEquals(true, blockedMoves.contains(f5), "Knight can capture enemy on F5");
     }
 }
-

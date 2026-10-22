@@ -19,3 +19,38 @@
 **Code / Idea Used:** Created `UtilsTest.java` with 22 tests covering valid inputs, invalid inputs, and edge cases.
 
 **Result / Modification:** Successfully compiled the Java files using JDK 21 and ran the tests. All 22 tests passed with 0 failures. Committed the test file separately.
+
+
+
+## Milestone 2 — Console Interface Implementation
+
+**Task / Method:** Implement console interaction methods in `ConsoleUI.java`.
+
+**Prompt / Question Asked:** Asked ChatGPT to help plan, implement, explain, and test `showWelcome()`, `showBoard()`, `showTurn()`, `promptMove()`, and `showError()`.
+
+**Code / Idea Used:** Used Java console output methods to display game instructions, player turns, and errors. Used `Scanner.nextLine()` to read moves and `Board.render()` to display the chessboard.
+
+**Result / Modification:** Implemented all five methods, successfully compiled the project using JDK 21, and manually tested `showWelcome()`, `showTurn()`, `promptMove()`, and `showError()` using JShell. Committed and pushed the changes to `feature/sabidmahmud01` in commit `fbb9c4f`.
+
+**Pending Work:** `showBoard()` still requires integration testing after Abid implements `Board.render()`. `Player.makeMove()` also remains unfinished because `Board.movePiece()` has not yet been implemented.
+# 2026-10-20 — Complete Dev 3 Milestone 2
+
+**Request:** Finish my part after reviewing Abid's Board implementation.
+
+**Assistance used:** Codex inspected the latest feature branch and Phase 1
+plan, retained the existing ConsoleUI implementation, and implemented
+Player.makeMove() with M2 ownership and coordinate checks, same-square and
+friendly-capture rejection, and delegation to Board.movePiece(). Unsupported
+castling/promotion requests are rejected. Full movement legality and the
+game loop remain M3 work.
+
+**Tests:** Added permanent Player and ConsoleUI tests and registered them,
+UtilsTest, and PieceMovementTest in TestRunner. Compilation with Java 17
+compatibility and -Xlint:all passed. The runner passed 94 assertions (72
+shared plus 22 Utils). A separate, uncommitted audit compiled against Abid's
+Board at 8ffa8ad and passed eight Player/Board/UI integration checks; the
+94 regression assertions also passed against that Board implementation.
+
+**Status:** Local feature-branch changes only. No merge or push performed.
+Board PR #6 remains an integration dependency. Updated the M2 checklist and
+README to describe verified coverage and remaining integration limits.

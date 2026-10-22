@@ -3,6 +3,8 @@ package pieces;
 
 import board.Board;
 import board.Position;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +31,7 @@ public class Pawn extends Piece {
         return getColor() == Color.WHITE ? 1 : -1;
     }
 
-    /**w
+    /**
      * Returns the pawn's initial row.
      *
      * @return row 1 for white, row 6 for black
@@ -54,10 +56,49 @@ public class Pawn extends Piece {
      * @return List of legal moves.
      * TODO(Dev 4): Implement possibleMoves() handling 1/2 steps and diagonal captures
      */
+
     @Override
     public List<Position> possibleMoves(Board board) {
-        return null;
+        List<Position> moves = new ArrayList<>();
+
+        int row = getPosition().getRow();
+        int col = getPosition().getColumn();
+        int direction = getForwardDirection();
+
+        // 1. Move one square forward
+        Position oneStep = new Position(row + direction, col);
+
+        if (oneStep.isOnBoard() && board.isEmpty(oneStep)) {
+            moves.add(oneStep);
+
+            // 2. Move two squares from starting position
+            if (row == getStartRow() && !hasMoved()) {
+                Position twoSteps =
+                        new Position(row + 2 * direction, col);
+
+                if (twoSteps.isOnBoard() && board.isEmpty(twoSteps)) {
+                    moves.add(twoSteps);
+                }
+            }
+        }
+
+        // 3. Capture diagonally to the left or right
+        for (int colOffset : new int[]{-1, 1}) {
+            Position diagonal =
+                    new Position(row + direction, col + colOffset);
+
+            if (diagonal.isOnBoard()) {
+                Piece target = board.getPiece(diagonal);
+
+                if (isOpponent(target)) {
+                    moves.add(diagonal);
+                }
+            }
+        }
+
+        return moves;
     }
+
 
     /**
      * Returns the symbol for the Pawn ('p').

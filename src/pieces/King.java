@@ -3,6 +3,7 @@ package pieces;
 import board.Board;
 import board.Position;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Represents a King in chess.
@@ -22,10 +23,38 @@ public class King extends Piece {
      * @return List of legal moves.
      * TODO(Dev 4): Implement possibleMoves() using 8 neighbor offsets
      */
+
     @Override
     public List<Position> possibleMoves(Board board) {
-        return null;
+        List<Position> moves = new ArrayList<>();
+
+        int row = getPosition().getRow();
+        int col = getPosition().getColumn();
+
+        // Check all eight neighboring squares.
+        for (int rowOffset = -1; rowOffset <= 1; rowOffset++) {
+            for (int colOffset = -1; colOffset <= 1; colOffset++) {
+
+                // The King cannot remain on its current square.
+                if (rowOffset == 0 && colOffset == 0) {
+                    continue;
+                }
+
+                Position target = new Position(
+                        row + rowOffset,
+                        col + colOffset
+                );
+
+                // Reject off-board squares and friendly pieces.
+                if (canMoveTo(board, target)) {
+                    moves.add(target);
+                }
+            }
+        }
+
+        return moves;
     }
+
 
     /**
      * Returns the symbol for the King ('K').
@@ -35,7 +64,7 @@ public class King extends Piece {
      */
     @Override
     public char getSymbol() {
-        return ' ';
+        return 'K';
     }
 }
 

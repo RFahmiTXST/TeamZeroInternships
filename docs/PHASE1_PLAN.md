@@ -73,11 +73,11 @@ All development must take place on your designated feature branch. Never commit 
   - [ ] Implement `Board.render()`: use a `StringBuilder` to render the grid with file letters A-H on top and rank numbers 8-1 on the left.
   - [ ] Implement `Board.movePiece(from, to)`: throw exception if `from` is empty, otherwise move piece, add any captured piece to `capturedPieces`, and call `Piece.move()`.
 - **Dev 3 (Sabid):**
-  - [ ] Build `ConsoleUI`: Implement `showWelcome()`, `showBoard(Board)`, `showTurn(Color)`, and `promptMove(Color)`.
-  - [ ] Build `Player.makeMove()`: reject if no piece is on `from` or belongs to the opponent, otherwise call `board.movePiece(from, to)`.
+  - [x] Build `ConsoleUI`: Implement `showWelcome()`, `showBoard(Board)`, `showTurn(Color)`, and `promptMove(Color)`.
+  - [x] Build `Player.makeMove()`: reject if no piece is on `from` or belongs to the opponent, otherwise call `board.movePiece(from, to)`.
 - **Dev 4 (Towsif):**
-  - [ ] Implement `Pawn.possibleMoves(Board)`: handle moving 1 square forward, 2 squares forward (if `!hasMoved`), and diagonal captures of opponents.
-  - [ ] Implement `King.possibleMoves(Board)`: check the 8 neighboring squares using `canMoveTo`.
+  - [x] Implement `Pawn.possibleMoves(Board)`: handle moving 1 square forward, 2 squares forward (if `!hasMoved`), and diagonal captures of opponents.
+  - [x] Implement `King.possibleMoves(Board)`: check the 8 neighboring squares using `canMoveTo`.
 
 🧪 **Manual Tests for M2:**
 - Call `Board.display()` and visually verify it matches the required project brief format perfectly.
@@ -92,7 +92,7 @@ All development must take place on your designated feature branch. Never commit 
   - [ ] Treat `quit`/`exit` as end of game cleanly.
   - [ ] Show an error for invalid input format and reprompt the *same* player without switching turns.
 - **Dev 1 (Rayed):**
-  - [ ] Assist Dev 3 in integrating move legality: reject a destination if it is not in the piece's `possibleMoves(board)` list.
+  - [x] Assist Dev 3 in integrating move legality: reject a destination if it is not in the piece's `possibleMoves(board)` list.
 - **Dev 2 (Abid):**
   - [ ] Work with Dev 4 to implement `Board.isCheck(Color)`: scan if any opponent's piece targets the King's square. (Optional Phase 1 feature, required for Phase 2).
 - **Dev 4 (Towsif):**
