@@ -98,6 +98,7 @@ All development must take place on your designated feature branch. Never commit 
 - **Dev 4 (Towsif):**
   - [ ] Optional: Integrate Castling logic (`O-O`, `O-O-O`) across `Game` and `King`.
   - [ ] Optional: Integrate Pawn Promotion (`E7 E8=Q`) across `Game` and `Pawn`.
+  - [x] Add Board, Player, and Piece integration tests, integrate them into TestRunner, and verify the M3 regression suite.
 
 🧪 **Manual Tests for M3:**
 - Play a mock game: Type `E2 E4`. Verify White pawn moves. Type `E7 E5`. Verify Black pawn moves.
