@@ -69,9 +69,9 @@ All development must take place on your designated feature branch. Never commit 
   - [x] Implement `Queen.possibleMoves(Board)`: use `slide` with all 8 directions.
   - [x] Implement `Knight.possibleMoves(Board)`: check the 8 L-shaped offsets `{±1,±2}` and `{±2,±1}` using `canMoveTo`.
 - **Dev 2 (Abid):**
-  - [ ] Implement `Board.initialize()`: clear squares, place all 32 pieces in their starting positions (white on rows 0/1, black on rows 6/7).
-  - [ ] Implement `Board.render()`: use a `StringBuilder` to render the grid with file letters A-H on top and rank numbers 8-1 on the left.
-  - [ ] Implement `Board.movePiece(from, to)`: throw exception if `from` is empty, otherwise move piece, add any captured piece to `capturedPieces`, and call `Piece.move()`.
+  - [x] Implement `Board.initialize()`: clear squares, place all 32 pieces in their starting positions (white on rows 0/1, black on rows 6/7).
+  - [x] Implement `Board.render()`: use a `StringBuilder` to render the grid with file letters A-H on top and rank numbers 8-1 on the left.
+  - [x] Implement `Board.movePiece(from, to)`: throw exception if `from` is empty, otherwise move piece, add any captured piece to `capturedPieces`, and call `Piece.move()`.
 - **Dev 3 (Sabid):**
   - [x] Build `ConsoleUI`: Implement `showWelcome()`, `showBoard(Board)`, `showTurn(Color)`, and `promptMove(Color)`.
   - [x] Build `Player.makeMove()`: reject if no piece is on `from` or belongs to the opponent, otherwise call `board.movePiece(from, to)`.
@@ -94,7 +94,7 @@ All development must take place on your designated feature branch. Never commit 
 - **Dev 1 (Rayed):**
   - [x] Assist Dev 3 in integrating move legality: reject a destination if it is not in the piece's `possibleMoves(board)` list.
 - **Dev 2 (Abid):**
-  - [ ] Work with Dev 4 to implement `Board.isCheck(Color)`: scan if any opponent's piece targets the King's square. (Optional Phase 1 feature, required for Phase 2).
+  - [x] Work with Dev 4 to implement `Board.isCheck(Color)`: scan if any opponent's piece targets the King's square. (Optional Phase 1 feature, required for Phase 2).
 - **Dev 4 (Towsif):**
   - [ ] Optional: Integrate Castling logic (`O-O`, `O-O-O`) across `Game` and `King`.
   - [ ] Optional: Integrate Pawn Promotion (`E7 E8=Q`) across `Game` and `Pawn`.
