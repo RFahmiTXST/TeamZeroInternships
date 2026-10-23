@@ -27,7 +27,7 @@
 A two-player chess game that runs in the console, written in Java. The board is drawn as ASCII text
 and moves are typed in standard notation such as `E2 E4`.
 
-* 📋 **Team to-do list & merge checkpoints:** [`PHASE1_PLAN.md`](PHASE1_PLAN.md)
+* 📋 **Team to-do list & merge checkpoints:** [`PHASE1_PLAN.md`](docs/PHASE1_PLAN.md)
 * 📚 **Generated Javadoc:** [`docs/`](docs/) (open `docs/index.html` after generating)
 
 ### Who owns what
