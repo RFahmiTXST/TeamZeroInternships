@@ -15,7 +15,7 @@ All development must take place on your designated feature branch. Never commit 
 
 ## 📜 Team Guidelines & Workflow (Crucial)
 
-1. **Git Workflow:** 
+1. **Git Workflow:**
    - We maintain a `main` branch (production-ready) and a `dev` branch (integration).
    - Work on your `feature/<github-username>` branch.
    - Open a Pull Request (PR) from your feature branch into `dev`.
@@ -96,8 +96,8 @@ All development must take place on your designated feature branch. Never commit 
 - **Dev 2 (Abid):**
   - [ ] Work with Dev 4 to implement `Board.isCheck(Color)`: scan if any opponent's piece targets the King's square. (Optional Phase 1 feature, required for Phase 2).
 - **Dev 4 (Towsif):**
-  - [ ] Optional: Integrate Castling logic (`O-O`, `O-O-O`) across `Game` and `King`.
-  - [ ] Optional: Integrate Pawn Promotion (`E7 E8=Q`) across `Game` and `Pawn`.
+  - [x] Optional: Integrate Castling logic (`O-O`, `O-O-O`) across `Game` and `King`.
+  - [x] Optional: Integrate Pawn Promotion (`E7 E8=Q`) across `Game` and `Pawn`.
   - [x] Add Board integration tests with 27 assertions.
   - [x] Implement Pawn Promotion to Queen, Rook, Bishop, and Knight.
   - [x] Implement kingside and queenside Castling for both colors.
@@ -122,17 +122,17 @@ successfully and switches turns. Ordinary-move king safety remains pending.
 **Goal:** Finalize code quality, generate Javadocs, write the README, and merge everything into `main`.
 
 - **Dev 1 (Rayed - Repo Owner):**
-  - [ ] Manage the final PR from `dev` to `main` and oversee repository delivery. 
+  - [ ] Manage the final PR from `dev` to `main` and oversee repository delivery.
   - [ ] Perform a final peer review of all merged code in the `dev` branch. Look for tight coupling, poor naming, or missing Javadocs.
   - [ ] Update your personal AI usage logs.
 - **Dev 4 (Towsif):**
-  - [ ] Run Javadoc generation tool with `-Xdoclint:all` and ensure zero warnings. 
-  - [ ] Write the runnable README with dependencies, commands, and feature summaries.
+  - [x] Run Javadoc generation tool with `-Xdoclint:all` and ensure zero warnings.
+  - [x] Write the runnable README with dependencies, commands, and feature summaries.
 - **Dev 2 (Abid) & Dev 3 (Sabid):**
-  - [ ] Perform a final peer review of all merged code in the `dev` branch. 
+  - [ ] Perform a final peer review of all merged code in the `dev` branch.
   - [ ] Update your personal AI usage logs.
-- **All Members:** 
-  - [ ] Verify all tasks in the rubric are met. 
+- **All Members:**
+  - [ ] Verify all tasks in the rubric are met.
   - [ ] Submit peer contribution evaluations if required.
 
 🧪 **Manual Tests for M4:**

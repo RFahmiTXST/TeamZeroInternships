@@ -28,7 +28,7 @@ A two-player chess game that runs in the console, written in Java. The board is 
 and moves are typed in standard notation such as `E2 E4`.
 
 * 📋 **Team to-do list & merge checkpoints:** [`PHASE1_PLAN.md`](docs/PHASE1_PLAN.md)
-* 📚 **Generated Javadoc:** [`docs/`](docs/) (open `docs/index.html` after generating)
+* 📚 **API Documentation:** Generate Javadoc locally and open `out/javadoc/index.html`.
 
 ### Who owns what
 
@@ -116,11 +116,43 @@ Checkmate/stalemate and en passant remain unimplemented. The game currently
 ends on quit, exit, or end-of-input.
 
 
+
 ### Generate the Javadoc
 
-```bash
-javadoc -private -d docs -sourcepath src -subpackages board:pieces:core:ui:utils src/Main.java
+Requires JDK 17 or newer.
+
+From the project root, generate API documentation using:
+
+```powershell
+javadoc -private -Xdoclint:all -encoding UTF-8 `
+    -d out/javadoc `
+    -sourcepath src `
+    -subpackages board:pieces:core:ui:utils `
+    src/Main.java
 ```
+
+If `javadoc` is not recognized on Windows, use the full path
+to `javadoc.exe` inside your installed JDK.
+
+For example, with Oracle JDK 25:
+
+```powershell
+& "C:\Program Files\Java\jdk-25\bin\javadoc.exe" `
+    -private -Xdoclint:all -encoding UTF-8 `
+    -d out/javadoc `
+    -sourcepath src `
+    -subpackages board:pieces:core:ui:utils `
+    src/Main.java
+```
+
+Open the generated documentation:
+
+```powershell
+Start-Process ".\out\javadoc\index.html"
+```
+
+The final M4 Javadoc audit completed with 0 warnings and 0 errors.
+
 
 Add `-Xdoclint:all` to that command to list any class, method or attribute that is missing a comment.
 
