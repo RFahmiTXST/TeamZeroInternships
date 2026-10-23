@@ -6,6 +6,7 @@ import board.Board;
 import board.Position;
 import java.util.List;
 import java.util.ArrayList;
+import pieces.Pawn;
 
 /**
  * Represents a player in the game.
@@ -43,9 +44,23 @@ public class Player {
      * @return true if the move passes validation and is applied to Board
      */
     public boolean makeMove(Board board, Move move) {
-        if (board == null || move == null || move.isCastling()
-                || move.getPromotionPiece() != '\0') {
+
+        if (board == null || move == null) {
             return false;
+        }
+
+        // Handle kingside and queenside castling.
+        if (move.isCastling()) {
+            return SpecialMoveHandler.executeCastling(
+                    board, move, color
+            );
+        }
+
+        // Handle Pawn Promotion.
+        if (move.getPromotionPiece() != '\0') {
+            return SpecialMoveHandler.executePromotion(
+                    board, move, color
+            );
         }
         Position from = move.getFrom();
         Position to = move.getTo();
@@ -61,12 +76,23 @@ public class Player {
         if (target != null && target.getColor() == color) {
             return false;
         }
+
         List<Position> possibleMoves = piece.possibleMoves(board);
+
         if (possibleMoves == null || !possibleMoves.contains(to)) {
             return false;
         }
+
+        // A Pawn reaching the final rank must promote.
+        // Do not leave an ordinary Pawn on the promotion square.
+        if (piece instanceof Pawn
+                && to.getRow() == ((Pawn) piece).getPromotionRow()) {
+            return false;
+        }
+
         board.movePiece(from, to);
         return true;
+
     }
 
     public Color getColor() {

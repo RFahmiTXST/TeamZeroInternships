@@ -55,10 +55,58 @@ TestRunner and independently reviewed other developers' work.
 Additional Board QA smoke tests: 17 passed, 0 failed.
 
 
-## Current Limitations
+## Milestone 3 — Integration Testing and QA
 
-M2 testing covers basic movement for all six chess piece
-types, input parsing, Player validation, and ConsoleUI behavior.
+### AI Assistance
 
-Full game-loop integration, king safety, and advanced chess
-rules have not yet been completed.
+I used ChatGPT to help design Board, Player, and Piece
+integration tests, implement Pawn promotion and Castling,
+organize regression testing.
+
+I reviewed and executed the suggested code and tests
+and verified their results locally.
+
+### Implementation
+
+- Added BoardIntegrationTest.java with 27 assertions.
+- Tested board initialization and starting piece placement.
+- Verified legal Pawn movement and rejected illegal moves.
+- Tested piece positions, moved flags, and board-state preservation.
+- Verified captures and board reinitialization.
+- Implemented Pawn promotion to Queen, Rook, Bishop, and Knight.
+- Implemented kingside and queenside Castling for both colors.
+- Added AttackDetector.java to detect attacked squares.
+- Integrated special moves into Player.makeMove().
+- Added support for O-O, O-O-O, and E7 E8=Q notation.
+- Added special-move tests and updated TestRunner.
+
+### Peer Review and Integration QA
+
+- Independently tested Dev 1's M3 PR #10: 150 assertions passed.
+- Independently tested Dev 3's M3 PR #9: 173 assertions passed.
+- Tested a temporary combined integration of PR #9 and PR #10:
+  175 assertions passed.
+- Reviewed and approved PR #10, which was merged into dev.
+- Identified and reported PR #9's merge conflicts for Dev 3
+  to resolve independently.
+
+### Final Dev 4 M3 Verification
+
+- Shared assertions: 315 passed
+- Utils assertions: 28 passed
+- Total: 343 passed, 0 failed
+- Exit code: 0
+
+All tests compiled using Java 17 with -Xlint:all.
+
+### Scope and Limitations
+
+The final 343-assertion result applies to my Dev 4
+feature branch, which includes merged PR #10 but does
+not yet include Dev 3's unmerged game-loop changes.
+
+Pawn promotion and Castling are implemented and tested
+through move parsing, Player, and Board.
+
+Interactive game-loop integration and full King safety
+validation have not yet been completed.
