@@ -122,9 +122,9 @@ successfully and switches turns. Ordinary-move king safety remains pending.
 **Goal:** Finalize code quality, generate Javadocs, write the README, and merge everything into `main`.
 
 - **Dev 1 (Rayed - Repo Owner):**
-  - [ ] Manage the final PR from `dev` to `main` and oversee repository delivery. 
-  - [ ] Perform a final peer review of all merged code in the `dev` branch. Look for tight coupling, poor naming, or missing Javadocs.
-  - [ ] Update your personal AI usage logs.
+  - [x] Manage the final PR from `dev` to `main` and oversee repository delivery. 
+  - [x] Perform a final peer review of all merged code in the `dev` branch. Look for tight coupling, poor naming, or missing Javadocs.
+  - [x] Update your personal AI usage logs.
 - **Dev 4 (Towsif):**
   - [ ] Run Javadoc generation tool with `-Xdoclint:all` and ensure zero warnings. 
   - [ ] Write the runnable README with dependencies, commands, and feature summaries.
