@@ -196,10 +196,33 @@ public class Board {
      * Checks if a given color's king is currently under attack (in check).
      * 
      * @param color The color to check.
-     * @return True if in check.
-     * TODO(Dev 2, Dev 4): Implement isCheck()
+     * @return true if the color's king is targeted by an opposing piece;
+     *         false when it is not targeted or the king is absent
      */
     public boolean isCheck(Color color) {
+        if (color == null) {
+            return false;
+        }
+
+        Position kingPosition = null;
+        for (Piece piece : getPieces(color)) {
+            if (piece instanceof King) {
+                kingPosition = piece.getPosition();
+                break;
+            }
+        }
+
+        if (kingPosition == null) {
+            return false;
+        }
+
+        Color opponent = color == Color.WHITE ? Color.BLACK : Color.WHITE;
+        for (Piece opponentPiece : getPieces(opponent)) {
+            List<Position> possibleMoves = opponentPiece.possibleMoves(this);
+            if (possibleMoves != null && possibleMoves.contains(kingPosition)) {
+                return true;
+            }
+        }
         return false;
     }
 }
