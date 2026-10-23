@@ -114,9 +114,12 @@ All development must take place on your designated feature branch. Never commit 
 - **Dev 4 (Towsif):**
   - [ ] Run Javadoc generation tool with `-Xdoclint:all` and ensure zero warnings. 
   - [ ] Write the runnable README with dependencies, commands, and feature summaries.
-- **Dev 2 (Abid) & Dev 3 (Sabid):**
-  - [ ] Perform a final peer review of all merged code in the `dev` branch. 
-  - [ ] Update your personal AI usage logs.
+- **Dev 2 (Abid):**
+  - [x] Perform a final peer review of all merged code in the `dev` branch.
+  - [x] Update your personal AI usage log.
+- **Dev 3 (Sabid):**
+  - [ ] Perform a final peer review of all merged code in the `dev` branch.
+  - [ ] Update your personal AI usage log.
 - **All Members:** 
   - [ ] Verify all tasks in the rubric are met. 
   - [ ] Submit peer contribution evaluations if required.
