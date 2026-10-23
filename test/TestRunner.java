@@ -35,11 +35,13 @@ public class TestRunner {
 
         // Dev 4: Board, Player, and Piece integration tests
         board.BoardIntegrationTest.main(args);
+        board.BoardCheckTest.main(args);
 
         // Dev 3: Player and console UI tests
         System.out.println("\nRunning Player and UI tests...\n");
         core.PlayerTest.main(args);
         ui.ConsoleUITest.main(args);
+        core.GameTest.main(args);
 
         // Summary for shared TestUtils assertions
         System.out.println("\nShared test summary:");

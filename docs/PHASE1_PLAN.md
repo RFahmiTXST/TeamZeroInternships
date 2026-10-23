@@ -88,9 +88,9 @@ All development must take place on your designated feature branch. Never commit 
 **Goal:** Tie the board, pieces, and player input into a playable game loop.
 
 - **Dev 3 (Sabid):**
-  - [ ] Implement `Game.play()` interface loop: alternate turns, show the board, and prompt for moves.
-  - [ ] Treat `quit`/`exit` as end of game cleanly.
-  - [ ] Show an error for invalid input format and reprompt the *same* player without switching turns.
+  - [x] Implement `Game.play()` interface loop: alternate turns, show the board, and prompt for moves.
+  - [x] Treat `quit`/`exit` as end of game cleanly.
+  - [x] Show an error for invalid input format and reprompt the *same* player without switching turns.
 - **Dev 1 (Rayed):**
   - [x] Assist Dev 3 in integrating move legality: reject a destination if it is not in the piece's `possibleMoves(board)` list.
 - **Dev 2 (Abid):**
@@ -106,6 +106,12 @@ All development must take place on your designated feature branch. Never commit 
   - [x] Support special-move notation through `Utils.parseMove()`.
   - [x] Add special-move tests to `TestRunner`.
   - [x] Pass all 343 regression assertions with 0 failures.
+
+Dev 3 integration note (2026-10-23): Synced PRs #10, #11, and #12 from dev,
+retaining Dev 1's Player validation and Dev 4's special-move delegation.
+The combined runner includes GameTest and BoardCheckTest. All 380 assertions
+pass, including a scripted game that rejects blocked castling, then castles
+successfully and switches turns. Ordinary-move king safety remains pending.
 
 🧪 **Manual Tests for M3:**
 - Play a mock game: Type `E2 E4`. Verify White pawn moves. Type `E7 E5`. Verify Black pawn moves.

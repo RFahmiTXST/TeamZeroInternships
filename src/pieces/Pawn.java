@@ -110,7 +110,7 @@ public class Pawn extends Piece {
     public char getSymbol() {
         return 'p';
     }
-    
+
     /**
      * Creates a replacement piece when this Pawn reaches
      * its promotion rank.

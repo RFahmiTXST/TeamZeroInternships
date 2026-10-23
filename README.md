@@ -27,7 +27,7 @@
 A two-player chess game that runs in the console, written in Java. The board is drawn as ASCII text
 and moves are typed in standard notation such as `E2 E4`.
 
-* 📋 **Team to-do list & merge checkpoints:** [`PHASE1_PLAN.md`](PHASE1_PLAN.md)
+* 📋 **Team to-do list & merge checkpoints:** [`PHASE1_PLAN.md`](docs/PHASE1_PLAN.md)
 * 📚 **Generated Javadoc:** [`docs/`](docs/) (open `docs/index.html` after generating)
 
 ### Who owns what
@@ -92,22 +92,28 @@ Current test coverage:
 - King movement, captures, and board boundaries
 - Rook, Bishop, Queen, and Knight movement
 - Input normalization, validation, and move parsing
-- Player input, ownership, and basic move validation
+- Player input, ownership, and piece movement validation
 - Console messages, input, and board-render delegation
+- Game initialization, turn alternation, invalid-input retries, captures, restart, and clean exit
 
-**Latest verified results (M2):**
+**Latest verified results (M3):**
 
-- Shared test suites: 115 passed, 0 failed
-- Utils test suite: 22 passed, 0 failed
-- Total: 137 assertions passed, 0 failed
+- Shared test suites: 352 passed, 0 failed
+- Utils test suite: 28 passed, 0 failed
+- Total: 380 assertions passed, 0 failed
 - Process exit code: 0
 
-The M2 Board implementation has been merged and independently
-verified with 17 additional QA smoke-test checks.
+The interactive game now initializes the board, starts with White, displays
+each turn, and accepts moves such as `E2 E4`. A move must match the selected
+piece's movement pattern. Invalid input, opponent-owned pieces, blocked moves,
+and friendly captures are rejected without changing turns. Type `quit` or
+`exit` to stop; end-of-input also exits cleanly.
 
-Full piece-movement legality enforcement, king safety, and the
-interactive game loop remain pending for later integration.
-Passing M2 tests does not yet mean the full game is playable.
+This is a Phase 1 movement demo, not a complete chess rules engine.
+Board check detection, castling, and promotion are implemented. Castling
+checks attacked squares, but ordinary moves do not yet enforce king safety.
+Checkmate/stalemate and en passant remain unimplemented. The game currently
+ends on quit, exit, or end-of-input.
 
 
 ### Generate the Javadoc
@@ -123,8 +129,9 @@ Add `-Xdoclint:all` to that command to list any class, method or attribute that 
 | Input | Meaning |
 | :--- | :--- |
 | `E2 E4` | Move the piece on E2 to E4. A capture is detected automatically. |
-| `O-O` / `O-O-O` | Castle kingside / queenside *(optional)* |
-| `E7 E8=Q` | Move a pawn to E8 and promote it to a Queen *(optional)* |
+| `quit` / `exit` | End the game (case-insensitive). |
+| `O-O` / `O-O-O` | Castle kingside / queenside when permitted. |
+| `E7 E8=Q` | Promote a pawn; Q, R, B, and N are supported. |
 
 ---
 
