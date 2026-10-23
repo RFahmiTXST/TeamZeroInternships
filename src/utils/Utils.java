@@ -10,6 +10,8 @@ import java.util.Locale;
  * Developer: Dev 3 (Sabid)
  */
 public class Utils {
+    /** Creates a utility instance; methods may also be called statically. */
+    public Utils() { }
 
     /**
      * Normalizes player input by removing leading and trailing whitespace,

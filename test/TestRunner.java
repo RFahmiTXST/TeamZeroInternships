@@ -42,6 +42,7 @@ public class TestRunner {
         core.PlayerTest.main(args);
         ui.ConsoleUITest.main(args);
         core.GameTest.main(args);
+        core.MoveTest.main(args);
 
         // Summary for shared TestUtils assertions
         System.out.println("\nShared test summary:");

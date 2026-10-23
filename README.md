@@ -28,7 +28,7 @@ A two-player chess game that runs in the console, written in Java. The board is 
 and moves are typed in standard notation such as `E2 E4`.
 
 * 📋 **Team to-do list & merge checkpoints:** [`PHASE1_PLAN.md`](docs/PHASE1_PLAN.md)
-* 📚 **Generated Javadoc:** [`docs/`](docs/) (open `docs/index.html` after generating)
+* 📚 **Generated Javadoc:** open `out/javadoc/index.html` after generating.
 
 ### Who owns what
 
@@ -49,7 +49,8 @@ src/
 ├── ui/       ConsoleUI (all console input/output)
 ├── utils/    Utils (move-format validation & parsing)
 └── Main.java entry point
-docs/         generated Javadoc
+docs/         team plan, QA report, and AI usage logs
+out/javadoc/  generated API documentation (not committed)
 ```
 
 ### Build & run (JDK 17+)
@@ -63,6 +64,8 @@ java -cp out Main
 ```
 
 ### Running Tests (Windows PowerShell)
+
+To play after compiling, run `java -cp out Main`.
 
 The project includes a Java-based QA testing framework for verifying
 chess piece behavior.
@@ -96,11 +99,11 @@ Current test coverage:
 - Console messages, input, and board-render delegation
 - Game initialization, turn alternation, invalid-input retries, captures, restart, and clean exit
 
-**Latest verified results (M3):**
+**Latest verified results (M4):**
 
-- Shared test suites: 352 passed, 0 failed
+- Shared test suites: 360 passed, 0 failed
 - Utils test suite: 28 passed, 0 failed
-- Total: 380 assertions passed, 0 failed
+- Total: 388 assertions passed, 0 failed
 - Process exit code: 0
 
 The interactive game now initializes the board, starts with White, displays
@@ -119,10 +122,20 @@ ends on quit, exit, or end-of-input.
 ### Generate the Javadoc
 
 ```bash
-javadoc -private -d docs -sourcepath src -subpackages board:pieces:core:ui:utils src/Main.java
+javadoc -private -Xdoclint:all -Werror -d out/javadoc -sourcepath src -subpackages board:pieces:core:ui:utils src/Main.java
 ```
 
-Add `-Xdoclint:all` to that command to list any class, method or attribute that is missing a comment.
+This command checks private members and fails on warnings. Open
+`out/javadoc/index.html` to browse the generated API documentation.
+
+On Windows, if `javadoc` is not on PATH, use the executable in your JDK's
+`bin` folder. For example, with JAVA_HOME set to the installed JDK:
+
+```powershell
+& "$env:JAVA_HOME/bin/javadoc.exe" -private -Xdoclint:all -Werror -d out/javadoc -sourcepath src -subpackages board:pieces:core:ui:utils src/Main.java
+```
+
+See [Milestone 4 QA report](docs/M4_QA_SABID.md) for validation and remaining release tasks.
 
 ### Move notation
 

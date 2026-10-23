@@ -8,12 +8,16 @@ import java.util.Scanner;
  * Developer: Dev 4 (Towsif)
  */
 public class Main {
+    /** Prevents entry-point construction. */
+    private Main() { }
+    /** Starts the console game.
+     * @param args unused command-line arguments
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ConsoleUI ui = new ConsoleUI(scanner);
         Game game = new Game(ui);
         
-        // TODO(Dev 4): Ensure game starts properly
         game.start();
     }
 }

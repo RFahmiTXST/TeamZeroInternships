@@ -20,15 +20,18 @@ import pieces.Rook;
  */
 public final class AttackDetector {
 
+    /** Row and column offsets for knight attacks. */
     private static final int[][] KNIGHT_OFFSETS = {
         {1, 2}, {2, 1}, {-1, 2}, {-2, 1},
         {1, -2}, {2, -1}, {-1, -2}, {-2, -1}
     };
 
+    /** Orthogonal sliding directions. */
     private static final int[][] STRAIGHT = {
         {1, 0}, {-1, 0}, {0, 1}, {0, -1}
     };
 
+    /** Diagonal sliding directions. */
     private static final int[][] DIAGONAL = {
         {1, 1}, {1, -1}, {-1, 1}, {-1, -1}
     };

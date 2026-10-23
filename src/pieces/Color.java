@@ -15,7 +15,6 @@ public enum Color {
      * Gets the character prefix for this color ('w' for White, 'b' for Black).
      * 
      * @return prefix character
-     * TODO(Dev 1): Implement getPrefix()
      */
     public char getPrefix() {
         return this == WHITE ? 'w' : 'b';

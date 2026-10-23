@@ -14,9 +14,14 @@ import pieces.Pawn;
  * Developer: Dev 3 (Sabid)
  */
 public class Player {
+    /** Side controlled by this player. */
     private Color color;
+    /** Optional piece list supplied by the caller; Board is authoritative for moves. */
     private List<Piece> availablePieces;
 
+    /** Creates a player.
+     * @param color owning side
+     */
     public Player(Color color) {
         this.color = color;
         this.availablePieces = new ArrayList<>();
@@ -34,10 +39,11 @@ public class Player {
     /**
      * Applies a move matching this player's piece movement pattern.
      * Rejects missing/off-board coordinates, empty or opponent-owned source
-     * squares, same-square moves, friendly captures, and special moves.
+     * squares, same-square moves, and friendly captures.
+     * Castling and promotion are delegated to SpecialMoveHandler.
      * Enforces move legality by requiring the destination to appear in
      * the piece's possibleMoves(board) list (Milestone 3 Dev 1).
-     * King safety is validated during check integration.
+     * Ordinary-move king safety is not yet enforced.
      * 
      * @param board The current board.
      * @param move The requested move.
@@ -95,6 +101,8 @@ public class Player {
 
     }
 
+    /** Returns this player's color.
+     * @return this player's side */
     public Color getColor() {
         return color;
     }

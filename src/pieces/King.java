@@ -12,6 +12,10 @@ import java.util.ArrayList;
  */
 public class King extends Piece {
 
+    /** Creates a king.
+     * @param color owning side
+     * @param position initial square
+     */
     public King(Color color, Position position) {
         super(color, position);
     }
@@ -21,7 +25,6 @@ public class King extends Piece {
      * 
      * @param board The current board state.
      * @return List of legal moves.
-     * TODO(Dev 4): Implement possibleMoves() using 8 neighbor offsets
      */
 
     @Override
@@ -60,7 +63,6 @@ public class King extends Piece {
      * Returns the symbol for the King ('K').
      * 
      * @return 'K'
-     * TODO(Dev 4): Implement getSymbol()
      */
     @Override
     public char getSymbol() {

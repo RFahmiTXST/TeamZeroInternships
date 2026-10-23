@@ -92,3 +92,29 @@ Updated stale README and integration notes.
 **Verification:** Java 17 compilation with -Xlint:all passed. The combined
 runner passed 352 shared and 28 Utils assertions (380 total), with no failures.
 Ordinary-move king safety remains outside this resolution's scope.
+
+## 2026-10-23 — Milestone 4 final review and documentation
+
+**Request:** "Pull everything and do milestone 4".
+
+**Assistance used:** Codex fetched all remote branches and fast-forwarded the
+clean feature checkout to dev 929830a after PR #9 merged. Reviewed merged
+gameplay, Board, piece movement, parsing, special moves, and regression tests.
+Completed Move.toString() and added eight notation tests. Corrected missing
+and malformed source Javadocs and removed obsolete implementation TODOs.
+Updated README build/documentation instructions, the Dev 3 checklist, and
+docs/M4_QA_SABID.md with verification and remaining release requirements.
+
+**Validation:** Java 17-compatible compilation with -Xlint:all passed; all
+388 assertions passed (360 shared, 28 Utils). Source Javadoc generated with
+-private -Xdoclint:all -Werror and zero warnings. A clean source copy passed
+the documented build, test, and Javadoc commands and a scripted game covering
+invalid input, turns, castling, and quit. Generated overview and Move HTML
+were checked. Javadoc was invoked by its installed JDK path because the
+Windows Java shortcut directory does not expose javadoc on PATH.
+
+**Limits:** Ordinary-move king safety, checkmate/stalemate, and en passant
+remain documented limitations. Original rubric and peer-evaluation forms are
+not in the checkout, so they have not been marked complete. The final release
+PR remains Rayed's responsibility. M4 changes are local pending review;
+no M4 push or dev-to-main merge was performed.

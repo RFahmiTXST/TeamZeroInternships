@@ -129,13 +129,20 @@ successfully and switches turns. Ordinary-move king safety remains pending.
   - [ ] Run Javadoc generation tool with `-Xdoclint:all` and ensure zero warnings. 
   - [ ] Write the runnable README with dependencies, commands, and feature summaries.
 - **Dev 2 (Abid) & Dev 3 (Sabid):**
-  - [ ] Perform a final peer review of all merged code in the `dev` branch. 
-  - [ ] Update your personal AI usage logs.
+  - [x] Sabid: perform final review of merged dev code; see `M4_QA_SABID.md`.
+  - [x] Sabid: update personal AI usage log.
+  - [ ] Abid: confirm final peer review and personal AI usage log.
 - **All Members:** 
   - [ ] Verify all tasks in the rubric are met. 
   - [ ] Submit peer contribution evaluations if required.
 
 🧪 **Manual Tests for M4:**
-- Verify `javadoc -private -d docs ...` generates successfully and `index.html` is readable.
+- Verify `javadoc -private -Xdoclint:all -Werror -d out/javadoc ...` generates successfully and `index.html` is readable.
 - Clone the repository into a fresh directory, follow the README instructions blindly, and ensure the game compiles and runs perfectly.
 - Ensure all feature branches are pushed and untouched for grading.
+
+Sabid's M4 validation (2026-10-23): 388 assertions passed, clean-copy build
+and scripted gameplay passed, and source Javadoc generated with zero warnings.
+Team-owned completion boxes and rubric sign-off remain subject to teammate
+confirmation and the original assignment requirements. No final release merge
+has been performed as part of this work.
