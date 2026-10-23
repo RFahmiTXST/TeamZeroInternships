@@ -76,3 +76,19 @@ smoke test. No external test dependencies were added.
 Check detection/king safety and optional castling/promotion remain team work.
 Updated the checklist and README. Changes remain local pending review; no
 M3 push or remote merge was performed.
+
+## 2026-10-23 — Resolve M3 integration conflicts
+
+**Request:** Pull the team's latest changes, resolve PR #9 conflicts, verify,
+commit, and push the feature branch.
+
+**Assistance used:** Codex fetched all branches and merged origin/dev at
+ e6faede into feature/sabidmahmud01. Accepted dev's Player.java and PlayerTest.java,
+preserving Dev 1's legality checks and Dev 4's castling/promotion delegation.
+Verified the automatically merged TestRunner and plan retained all team work
+and GameTest. Registered BoardCheckTest and added game-loop castling checks.
+Updated stale README and integration notes.
+
+**Verification:** Java 17 compilation with -Xlint:all passed. The combined
+runner passed 352 shared and 28 Utils assertions (380 total), with no failures.
+Ordinary-move king safety remains outside this resolution's scope.

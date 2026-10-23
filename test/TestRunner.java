@@ -23,10 +23,19 @@ public class TestRunner {
         System.out.println("Running Pawn and King tests...\n");
         PawnTest.main(args);
         KingTest.main(args);
+        pieces.PawnPromotionTest.main(args);
+        System.out.println("\nRunning special move integration tests...\n");
+        core.SpecialMoveHandlerTest.main(args);
+        core.AttackDetectorTest.main(args);
+        core.CastlingTest.main(args);
 
         // Dev 1: Rook, Bishop, Queen and Knight tests
         System.out.println("\nRunning other piece movement tests...\n");
         pieces.PieceMovementTest.main(args);
+
+        // Dev 4: Board, Player, and Piece integration tests
+        board.BoardIntegrationTest.main(args);
+        board.BoardCheckTest.main(args);
 
         // Dev 3: Player and console UI tests
         System.out.println("\nRunning Player and UI tests...\n");

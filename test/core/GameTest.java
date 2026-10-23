@@ -94,6 +94,16 @@ public final class GameTest {
             TestUtils.assertEquals(false, ui.board.getPiece(new Position(1, 4)).hasMoved(), "Restart resets moved flags");
             TestUtils.assertEquals(2, ui.endings, "Quit ends restarted game once");
         }
+        try (Scanner scanner = new Scanner("O-O\nE2 E4\nE7 E5\nG1 F3\nB8 C6\nF1 C4\nG8 F6\nO-O\nquit\n")) {
+            ObservedUI ui = new ObservedUI(scanner);
+            run(new Game(ui));
+            TestUtils.assertEquals(1, ui.errors, "Blocked castling rejected without losing turn");
+            TestUtils.assertEquals(Color.WHITE, ui.turns.get(1), "Rejected castle preserves White turn");
+            TestUtils.assertEquals("wK", ui.board.getPiece(new Position(0, 6)).toString(), "Game castles king to G1");
+            TestUtils.assertEquals("wR", ui.board.getPiece(new Position(0, 5)).toString(), "Game castles rook to F1");
+            TestUtils.assertEquals(null, ui.board.getPiece(new Position(0, 4)), "Castling clears E1");
+            TestUtils.assertEquals(Color.BLACK, ui.turns.get(ui.turns.size() - 1), "Successful castle switches turn");
+        }
         for (String scriptEnd : new String[]{"", "\n", " QuIt \n", "E2 E4\n"}) {
             try (Scanner scanner = new Scanner(scriptEnd)) {
                 ObservedUI ui = new ObservedUI(scanner);

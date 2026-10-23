@@ -7,7 +7,7 @@ import pieces.Pawn;
 import pieces.Piece;
 import test.TestUtils;
 
-/** Tests player validation and delegation to Board. */
+/** Tests player validation, move legality enforcement, and delegation to Board. */
 public final class PlayerTest {
     private PlayerTest() { }
 
@@ -52,6 +52,7 @@ public final class PlayerTest {
         TestUtils.assertEquals(true, player.makeMove(board, valid), "Own piece move delegated");
         TestUtils.assertEquals(from, board.from, "Correct source delegated");
         TestUtils.assertEquals(to, board.to, "Correct destination delegated");
+
         board.setPiece(to, new Pawn(Color.BLACK, to));
         TestUtils.assertEquals(false, player.makeMove(board, valid), "Pawn cannot capture straight ahead");
         board.setPiece(to, null);
@@ -61,11 +62,14 @@ public final class PlayerTest {
         TestUtils.assertEquals(true, new Player(Color.BLACK).makeMove(board,
                 new Move(capture, from)), "Black can capture white");
         TestUtils.assertEquals(3, board.calls, "Exactly three accepted moves delegated");
+
         Board real = new Board();
         real.initialize();
         String before = real.render();
         TestUtils.assertEquals(false, player.makeMove(real, new Move(from, new Position(4, 4))), "Pawn cannot move three squares");
         TestUtils.assertEquals(false, player.makeMove(real, new Move(new Position(0, 2), new Position(2, 4))), "Blocked bishop rejected");
+        TestUtils.assertEquals(false, player.makeMove(real, new Move(new Position(0, 0), new Position(2, 2))), "Rook cannot move diagonally");
+        TestUtils.assertEquals(false, player.makeMove(real, new Move(new Position(0, 1), new Position(2, 1))), "Knight cannot move straight");
         TestUtils.assertEquals(before, real.render(), "Illegal movement preserves real board");
         Piece pawn = real.getPiece(from);
         TestUtils.assertEquals(true, player.makeMove(real, valid), "Real pawn move accepted");

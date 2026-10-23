@@ -98,9 +98,9 @@ Current test coverage:
 
 **Latest verified results (M3):**
 
-- Shared test suites: 151 passed, 0 failed
-- Utils test suite: 22 passed, 0 failed
-- Total: 173 assertions passed, 0 failed
+- Shared test suites: 352 passed, 0 failed
+- Utils test suite: 28 passed, 0 failed
+- Total: 380 assertions passed, 0 failed
 - Process exit code: 0
 
 The interactive game now initializes the board, starts with White, displays
@@ -110,9 +110,10 @@ and friendly captures are rejected without changing turns. Type `quit` or
 `exit` to stop; end-of-input also exits cleanly.
 
 This is a Phase 1 movement demo, not a complete chess rules engine.
-Check detection, preventing moves into check, checkmate/stalemate, castling,
-promotion, and en passant are not implemented. King safety remains a team
-integration task. The game currently ends on quit, exit, or end-of-input.
+Board check detection, castling, and promotion are implemented. Castling
+checks attacked squares, but ordinary moves do not yet enforce king safety.
+Checkmate/stalemate and en passant remain unimplemented. The game currently
+ends on quit, exit, or end-of-input.
 
 
 ### Generate the Javadoc
@@ -129,8 +130,8 @@ Add `-Xdoclint:all` to that command to list any class, method or attribute that 
 | :--- | :--- |
 | `E2 E4` | Move the piece on E2 to E4. A capture is detected automatically. |
 | `quit` / `exit` | End the game (case-insensitive). |
-| `O-O` / `O-O-O` | Optional castling notation; currently rejected. |
-| `E7 E8=Q` | Optional promotion notation; currently rejected. |
+| `O-O` / `O-O-O` | Castle kingside / queenside when permitted. |
+| `E7 E8=Q` | Promote a pawn; Q, R, B, and N are supported. |
 
 ---
 
