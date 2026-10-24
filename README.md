@@ -49,7 +49,8 @@ src/
 ├── ui/       ConsoleUI (all console input/output)
 ├── utils/    Utils (move-format validation & parsing)
 └── Main.java entry point
-docs/         team plan and AI usage logs
+docs/         team plan, QA report, and AI usage logs
+out/javadoc/  generated API documentation (not committed)
 ```
 
 ### Build & run (JDK 17+)
@@ -96,11 +97,12 @@ Current test coverage:
 - Console messages, input, and board-render delegation
 - Game initialization, turn alternation, invalid-input retries, captures, restart, and clean exit
 
-**Latest verified results (M3):**
+**Latest verified results:**
 
 - Shared test suites: 352 passed, 0 failed
 - Utils test suite: 28 passed, 0 failed
-- Total: 380 assertions passed, 0 failed
+- Move notation tests: 8 passed, 0 failed
+- Total: 388 assertions passed, 0 failed
 - Process exit code: 0
 
 The interactive game now initializes the board, starts with White, displays
@@ -152,6 +154,8 @@ Start-Process ".\out\javadoc\index.html"
 ```
 
 The final M4 Javadoc audit completed with 0 warnings and 0 errors.
+
+See [Milestone 4 QA report](docs/M4_QA_SABID.md) for validation and remaining release tasks.
 
 
 

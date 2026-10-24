@@ -1,4 +1,3 @@
-
 package core;
 
 import board.Position;
@@ -99,12 +98,17 @@ public class Move {
     public boolean isKingsideCastle() { return isKingsideCastle; }
 
     /**
-     * Returns the move notation.
+     * Reconstructs the move string from this object (e.g., "E2 E4").
      *
-     * @return move notation, currently not implemented
+     * @return Move string notation.
      */
     @Override
     public String toString() {
-        return null;
+        if (isCastling) {
+            return isKingsideCastle ? "O-O" : "O-O-O";
+        }
+        String notation = from + " " + to;
+        return promotionPiece == '\0' ? notation
+                : notation + "=" + Character.toUpperCase(promotionPiece);
     }
 }
