@@ -49,7 +49,7 @@ src/
 ├── ui/       ConsoleUI (all console input/output)
 ├── utils/    Utils (move-format validation & parsing)
 └── Main.java entry point
-docs/         generated Javadoc
+docs/         team plan and AI usage logs
 ```
 
 ### Build & run (JDK 17+)
@@ -154,7 +154,7 @@ Start-Process ".\out\javadoc\index.html"
 The final M4 Javadoc audit completed with 0 warnings and 0 errors.
 
 
-Add `-Xdoclint:all` to that command to list any class, method or attribute that is missing a comment.
+
 
 ### Move notation
 
