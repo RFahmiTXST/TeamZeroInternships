@@ -7,18 +7,24 @@ import java.util.ArrayList;
 
 /**
  * Represents a King in chess.
- * 
+ *
  * Developer: Dev 4 (Towsif)
  */
 public class King extends Piece {
 
+    /**
+     * Creates a King with the given color and position.
+     *
+     * @param color the King's color
+     * @param position the King's starting position
+     */
     public King(Color color, Position position) {
         super(color, position);
     }
 
     /**
      * Calculates possible moves for the King (1 step any direction).
-     * 
+     *
      * @param board The current board state.
      * @return List of legal moves.
      * TODO(Dev 4): Implement possibleMoves() using 8 neighbor offsets
@@ -58,7 +64,7 @@ public class King extends Piece {
 
     /**
      * Returns the symbol for the King ('K').
-     * 
+     *
      * @return 'K'
      * TODO(Dev 4): Implement getSymbol()
      */
