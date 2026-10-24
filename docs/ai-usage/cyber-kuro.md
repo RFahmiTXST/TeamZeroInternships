@@ -110,3 +110,42 @@ through move parsing, Player, and Board.
 
 Interactive game-loop integration and full King safety
 validation have not yet been completed.
+
+
+## Milestone 4 — Final QA and Documentation
+
+### AI Assistance
+
+I used ChatGPT to help investigate the Javadoc setup on
+Windows, identify missing documentation.
+
+I reviewed the changes and verified them locally.
+
+### Work Completed
+
+- Synchronized with the merged M3 game-loop implementation.
+- Verified Castling and Pawn Promotion in the interactive game.
+- Ran the complete regression suite successfully.
+- Located the Javadoc tool in the Oracle JDK 25 installation.
+- Resolved 29 Javadoc warnings across the Java source files.
+- Generated API documentation using `-Xdoclint:all`.
+- Opened and verified the generated HTML documentation.
+- Updated README instructions for generating Javadocs.
+- Updated the Phase 1 milestone completion checklist.
+
+### Final Verification
+
+- Shared assertions: 352 passed, 0 failed.
+- Utils assertions: 28 passed, 0 failed.
+- Total: 380 passed, 0 failed.
+- Java compilation: successful with `--release 17 -Xlint:all`.
+- Javadoc warnings: 0.
+- Javadoc errors: 0.
+- Javadoc exit code: 0.
+- Regression exit code: 0.
+
+### Scope
+
+This milestone focused on QA and documentation.
+Ordinary-move king safety, checkmate, stalemate, and
+en passant remain outside the implemented Phase 1 scope.

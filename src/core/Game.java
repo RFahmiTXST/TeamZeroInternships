@@ -24,8 +24,10 @@ public class Game {
     /** Whether the game loop should continue. */
     private boolean running;
 
-    /** Creates a game.
-     * @param ui console input and output
+    /**
+     * Creates a new chess game.
+     *
+     * @param ui console interface for input and output
      */
     public Game(ConsoleUI ui) {
         this.board = new Board();

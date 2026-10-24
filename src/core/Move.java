@@ -3,26 +3,33 @@ package core;
 import board.Position;
 
 /**
- * Represents a single move command, including starting square, ending square, and special flags.
- * 
+ * Represents a chess move, including normal moves,
+ * Pawn promotion, and Castling.
+ *
  * Developer: Dev 3 (Sabid)
  */
 public class Move {
-    /** Starting square, null for castling. */
+
+    /** Starting position of the move. */
     private Position from;
-    /** Destination square, null for castling. */
+
+    /** Destination position of the move. */
     private Position to;
-    /** Promotion symbol, or the null character for an ordinary move. */
+
+    /** Piece selected for Pawn promotion, or zero if none. */
     private char promotionPiece;
-    /** Whether this request is castling. */
+
+    /** Whether this move represents Castling. */
     private boolean isCastling;
-    /** Whether castling uses the kingside rook. */
+
+    /** Whether Castling is on the kingside. */
     private boolean isKingsideCastle;
 
     /**
-     * Creates a coordinate move; validation occurs when it is applied.
-     * @param from starting square
-     * @param to destination square
+     * Creates a normal chess move.
+     *
+     * @param from starting position
+     * @param to destination position
      */
     public Move(Position from, Position to) {
         this.from = from;
@@ -30,10 +37,11 @@ public class Move {
     }
 
     /**
-     * Creates a promotion request.
-     * @param from starting square
-     * @param to destination square
-     * @param promotionPiece requested promotion symbol
+     * Creates a move with Pawn promotion.
+     *
+     * @param from starting position
+     * @param to destination position
+     * @param promotionPiece requested promotion piece
      */
     public Move(Position from, Position to, char promotionPiece) {
         this.from = from;
@@ -42,9 +50,10 @@ public class Move {
     }
 
     /**
-     * Creates a castling request.
+     * Creates a Castling move.
+     *
      * @param kingside true for kingside, false for queenside
-     * @return castling move
+     * @return Castling move
      */
     public static Move castle(boolean kingside) {
         Move m = new Move(null, null);
@@ -53,25 +62,44 @@ public class Move {
         return m;
     }
 
-    /** Returns the starting square.
-     * @return starting square, or null for castling */
+    /**
+     * Returns the starting position.
+     *
+     * @return starting position
+     */
     public Position getFrom() { return from; }
-    /** Returns the destination square.
-     * @return destination square, or null for castling */
+
+    /**
+     * Returns the destination position.
+     *
+     * @return destination position
+     */
     public Position getTo() { return to; }
-    /** Returns the requested promotion symbol.
-     * @return promotion symbol, or the null character if absent */
+
+    /**
+     * Returns the Pawn promotion piece code.
+     *
+     * @return promotion piece code, or zero if none
+     */
     public char getPromotionPiece() { return promotionPiece; }
-    /** Identifies a castling request.
-     * @return whether this is a castling request */
+
+    /**
+     * Checks whether this move represents Castling.
+     *
+     * @return true if the move is Castling
+     */
     public boolean isCastling() { return isCastling; }
-    /** Identifies kingside castling.
-     * @return whether the castling request is kingside */
+
+    /**
+     * Checks whether the Castling direction is kingside.
+     *
+     * @return true for kingside Castling
+     */
     public boolean isKingsideCastle() { return isKingsideCastle; }
-    
+
     /**
      * Reconstructs the move string from this object (e.g., "E2 E4").
-     * 
+     *
      * @return Move string notation.
      */
     @Override
@@ -84,4 +112,3 @@ public class Move {
                 : notation + "=" + Character.toUpperCase(promotionPiece);
     }
 }
-

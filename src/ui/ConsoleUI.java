@@ -10,11 +10,13 @@ import java.util.Scanner;
  * Developer: Dev 3 (Sabid)
  */
 public class ConsoleUI {
-    /** Input source owned by the caller. */
+    /** Scanner used to read player input. */
     private Scanner scanner;
 
-    /** Creates console interactions.
-     * @param scanner input source
+    /**
+     * Creates the console interface.
+     *
+     * @param scanner scanner for player input
      */
     public ConsoleUI(Scanner scanner) {
         this.scanner = scanner;
@@ -77,7 +79,9 @@ public class ConsoleUI {
         System.out.println("Error: " + error);
     }
 
-    /** Displays the game result.
+    /**
+     * Displays the game result.
+     *
      * @param result message explaining why play ended
      */
     public void showResult(String result) {

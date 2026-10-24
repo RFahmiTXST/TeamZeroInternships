@@ -14,9 +14,11 @@ import java.util.List;
  */
 public class Pawn extends Piece {
 
-    /** Creates a pawn.
-     * @param color owning side
-     * @param position initial square
+    /**
+     * Creates a Pawn with the given color and position.
+     *
+     * @param color the Pawn's color
+     * @param position the Pawn's starting position
      */
     public Pawn(Color color, Position position) {
         super(color, position);
@@ -58,6 +60,7 @@ public class Pawn extends Piece {
      *
      * @param board The current board state.
      * @return List of legal moves.
+     * TODO(Dev 4): Implement possibleMoves() handling 1/2 steps and diagonal captures
      */
 
     @Override
@@ -107,6 +110,7 @@ public class Pawn extends Piece {
      * Returns the symbol for the Pawn ('p').
      *
      * @return 'p'
+     * TODO(Dev 4): Implement getSymbol()
      */
     @Override
     public char getSymbol() {
