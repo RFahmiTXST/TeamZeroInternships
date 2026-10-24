@@ -9,13 +9,13 @@ All development must take place on your designated feature branch. Never commit 
 | Developer | Role | Focus | Branch Name |
 | :--- | :--- | :--- | :--- |
 | **Rayed Fahmi** | **Dev 1** | Core Piece Architecture | `feature/RFahmiTXST` |
-| **Abid Ahnaf Khan** | **Dev 2** | Board Infrastructure & Display | `feature/<github-username>` |
-| **Sabid Mahmud** | **Dev 3** | Game Flow & Input Validation | `feature/<github-username>` |
-| **Towsif Hassan** | **Dev 4** | Special Pieces, QA & PM | `feature/<github-username>` |
+| **Abid Ahnaf Khan** | **Dev 2** | Board Infrastructure & Display | `feature/ajv163` |
+| **Sabid Mahmud** | **Dev 3** | Game Flow & Input Validation | `feature/sabidmahmud01` |
+| **Towsif Hassan** | **Dev 4** | Special Pieces, QA & PM | `feature/cyber-kuro` |
 
 ## 📜 Team Guidelines & Workflow (Crucial)
 
-1. **Git Workflow:** 
+1. **Git Workflow:**
    - We maintain a `main` branch (production-ready) and a `dev` branch (integration).
    - Work on your `feature/<github-username>` branch.
    - Open a Pull Request (PR) from your feature branch into `dev`.
@@ -48,12 +48,12 @@ All development must take place on your designated feature branch. Never commit 
   - [x] Define `Position.toString()`: return file letter (`'A' + column`) followed by `row + 1` (e.g., `"E2"`).
   - [x] Implement `Board` core methods: `getPiece(Position)`, `setPiece(Position, Piece)`, and `isEmpty(Position)`.
 - **Dev 3 (Sabid):**
-  - [ ] Define `Utils.normalize(String)`: trim, collapse spaces, convert to uppercase.
-  - [ ] Define `Utils.isValidMoveFormat(String)`: regex for basic move formats `^[A-H][1-8] [A-H][1-8]$`. (Optional: castling `O-O` and promotion `=Q`).
-  - [ ] Define `Utils.parsePosition(String)` and `Utils.parseMove(String)`.
+  - [x] Define `Utils.normalize(String)`: trim, collapse spaces, convert to uppercase.
+  - [x] Define `Utils.isValidMoveFormat(String)`: regex for basic move formats `^[A-H][1-8] [A-H][1-8]$`. (Optional: castling `O-O` and promotion `=Q`).
+  - [x] Define `Utils.parsePosition(String)` and `Utils.parseMove(String)`.
 - **Dev 4 (Towsif - PM):**
-  - [ ] Create the directory structure (`src/board`, `src/pieces`, `src/core`, `src/ui`, `src/utils`), and `docs/ai-usage/` folder.
-  - [ ] Setup a dependency-free test folder (`test/`) with a `TestRunner.java` to execute simple assertion tests.
+  - [x] Create the directory structure (`src/board`, `src/pieces`, `src/core`, `src/ui`, `src/utils`), and `docs/ai-usage/` folder.
+  - [x] Setup a dependency-free test folder (`test/`) with a `TestRunner.java` to execute simple assertion tests.
 
 🧪 **Manual Tests for M1:**
 - Compile the project successfully: `javac -d out $(find src -name "*.java")`.
@@ -69,9 +69,9 @@ All development must take place on your designated feature branch. Never commit 
   - [x] Implement `Queen.possibleMoves(Board)`: use `slide` with all 8 directions.
   - [x] Implement `Knight.possibleMoves(Board)`: check the 8 L-shaped offsets `{±1,±2}` and `{±2,±1}` using `canMoveTo`.
 - **Dev 2 (Abid):**
-  - [ ] Implement `Board.initialize()`: clear squares, place all 32 pieces in their starting positions (white on rows 0/1, black on rows 6/7).
-  - [ ] Implement `Board.render()`: use a `StringBuilder` to render the grid with file letters A-H on top and rank numbers 8-1 on the left.
-  - [ ] Implement `Board.movePiece(from, to)`: throw exception if `from` is empty, otherwise move piece, add any captured piece to `capturedPieces`, and call `Piece.move()`.
+  - [x] Implement `Board.initialize()`: clear squares, place all 32 pieces in their starting positions (white on rows 0/1, black on rows 6/7).
+  - [x] Implement `Board.render()`: use a `StringBuilder` to render the grid with file letters A-H on top and rank numbers 8-1 on the left.
+  - [x] Implement `Board.movePiece(from, to)`: throw exception if `from` is empty, otherwise move piece, add any captured piece to `capturedPieces`, and call `Piece.move()`.
 - **Dev 3 (Sabid):**
   - [x] Build `ConsoleUI`: Implement `showWelcome()`, `showBoard(Board)`, `showTurn(Color)`, and `promptMove(Color)`.
   - [x] Build `Player.makeMove()`: reject if no piece is on `from` or belongs to the opponent, otherwise call `board.movePiece(from, to)`.
@@ -94,10 +94,10 @@ All development must take place on your designated feature branch. Never commit 
 - **Dev 1 (Rayed):**
   - [x] Assist Dev 3 in integrating move legality: reject a destination if it is not in the piece's `possibleMoves(board)` list.
 - **Dev 2 (Abid):**
-  - [ ] Work with Dev 4 to implement `Board.isCheck(Color)`: scan if any opponent's piece targets the King's square. (Optional Phase 1 feature, required for Phase 2).
+  - [x] Work with Dev 4 to implement `Board.isCheck(Color)`: scan if any opponent's piece targets the King's square. (Optional Phase 1 feature, required for Phase 2).
 - **Dev 4 (Towsif):**
-  - [ ] Optional: Integrate Castling logic (`O-O`, `O-O-O`) across `Game` and `King`.
-  - [ ] Optional: Integrate Pawn Promotion (`E7 E8=Q`) across `Game` and `Pawn`.
+  - [x] Optional: Integrate Castling logic (`O-O`, `O-O-O`) across `Game` and `King`.
+  - [x] Optional: Integrate Pawn Promotion (`E7 E8=Q`) across `Game` and `Pawn`.
   - [x] Add Board integration tests with 27 assertions.
   - [x] Implement Pawn Promotion to Queen, Rook, Bishop, and Knight.
   - [x] Implement kingside and queenside Castling for both colors.
@@ -126,16 +126,23 @@ successfully and switches turns. Ordinary-move king safety remains pending.
   - [x] Perform a final peer review of all merged code in the `dev` branch. Look for tight coupling, poor naming, or missing Javadocs.
   - [x] Update your personal AI usage logs.
 - **Dev 4 (Towsif):**
-  - [ ] Run Javadoc generation tool with `-Xdoclint:all` and ensure zero warnings. 
-  - [ ] Write the runnable README with dependencies, commands, and feature summaries.
+  - [x] Run Javadoc generation tool with `-Xdoclint:all` and ensure zero warnings.
+  - [x] Write the runnable README with dependencies, commands, and feature summaries.
 - **Dev 2 (Abid) & Dev 3 (Sabid):**
-  - [ ] Perform a final peer review of all merged code in the `dev` branch. 
-  - [ ] Update your personal AI usage logs.
+  - [x] Sabid: perform final review of merged dev code; see `M4_QA_SABID.md`.
+  - [x] Sabid: update personal AI usage log.
+  - [x] Abid: confirm final peer review and personal AI usage log.
 - **All Members:** 
-  - [ ] Verify all tasks in the rubric are met. 
-  - [ ] Submit peer contribution evaluations if required.
+  - [x] Verify all tasks in the rubric are met.
+  - [x] Submit peer contribution evaluations if required.
 
 🧪 **Manual Tests for M4:**
-- Verify `javadoc -private -d docs ...` generates successfully and `index.html` is readable.
+- Verify `javadoc -private -Xdoclint:all -Werror -d out/javadoc ...` generates successfully and `index.html` is readable.
 - Clone the repository into a fresh directory, follow the README instructions blindly, and ensure the game compiles and runs perfectly.
 - Ensure all feature branches are pushed and untouched for grading.
+
+Sabid's M4 validation (2026-10-23): 388 assertions passed, clean-copy build
+and scripted gameplay passed, and source Javadoc generated with zero warnings.
+Team-owned completion boxes and rubric sign-off remain subject to teammate
+confirmation and the original assignment requirements. No final release merge
+has been performed as part of this work.

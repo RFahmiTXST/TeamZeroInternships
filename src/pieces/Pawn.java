@@ -14,6 +14,12 @@ import java.util.List;
  */
 public class Pawn extends Piece {
 
+    /**
+     * Creates a Pawn with the given color and position.
+     *
+     * @param color the Pawn's color
+     * @param position the Pawn's starting position
+     */
     public Pawn(Color color, Position position) {
         super(color, position);
     }

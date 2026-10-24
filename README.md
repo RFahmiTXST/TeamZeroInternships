@@ -28,7 +28,7 @@ A two-player chess game that runs in the console, written in Java. The board is 
 and moves are typed in standard notation such as `E2 E4`.
 
 * 📋 **Team to-do list & merge checkpoints:** [`PHASE1_PLAN.md`](docs/PHASE1_PLAN.md)
-* 📚 **Generated Javadoc:** [`docs/`](docs/) (open `docs/index.html` after generating)
+* 📚 **API Documentation:** Generate Javadoc locally and open `out/javadoc/index.html`.
 
 ### Who owns what
 
@@ -49,7 +49,8 @@ src/
 ├── ui/       ConsoleUI (all console input/output)
 ├── utils/    Utils (move-format validation & parsing)
 └── Main.java entry point
-docs/         generated Javadoc
+docs/         team plan, QA report, and AI usage logs
+out/javadoc/  generated API documentation (not committed)
 ```
 
 ### Build & run (JDK 17+)
@@ -96,11 +97,12 @@ Current test coverage:
 - Console messages, input, and board-render delegation
 - Game initialization, turn alternation, invalid-input retries, captures, restart, and clean exit
 
-**Latest verified results (M3):**
+**Latest verified results:**
 
 - Shared test suites: 352 passed, 0 failed
 - Utils test suite: 28 passed, 0 failed
-- Total: 380 assertions passed, 0 failed
+- Move notation tests: 8 passed, 0 failed
+- Total: 388 assertions passed, 0 failed
 - Process exit code: 0
 
 The interactive game now initializes the board, starts with White, displays
@@ -116,13 +118,47 @@ Checkmate/stalemate and en passant remain unimplemented. The game currently
 ends on quit, exit, or end-of-input.
 
 
+
 ### Generate the Javadoc
 
-```bash
-javadoc -private -d docs -sourcepath src -subpackages board:pieces:core:ui:utils src/Main.java
+Requires JDK 17 or newer.
+
+From the project root, generate API documentation using:
+
+```powershell
+javadoc -private -Xdoclint:all -encoding UTF-8 `
+    -d out/javadoc `
+    -sourcepath src `
+    -subpackages board:pieces:core:ui:utils `
+    src/Main.java
 ```
 
-Add `-Xdoclint:all` to that command to list any class, method or attribute that is missing a comment.
+If `javadoc` is not recognized on Windows, use the full path
+to `javadoc.exe` inside your installed JDK.
+
+For example, with Oracle JDK 25:
+
+```powershell
+& "C:\Program Files\Java\jdk-25\bin\javadoc.exe" `
+    -private -Xdoclint:all -encoding UTF-8 `
+    -d out/javadoc `
+    -sourcepath src `
+    -subpackages board:pieces:core:ui:utils `
+    src/Main.java
+```
+
+Open the generated documentation:
+
+```powershell
+Start-Process ".\out\javadoc\index.html"
+```
+
+The final M4 Javadoc audit completed with 0 warnings and 0 errors.
+
+See [Milestone 4 QA report](docs/M4_QA_SABID.md) for validation and remaining release tasks.
+
+
+
 
 ### Move notation
 

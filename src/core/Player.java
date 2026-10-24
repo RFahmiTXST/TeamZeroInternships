@@ -10,13 +10,21 @@ import pieces.Pawn;
 
 /**
  * Represents a player in the game.
- * 
+ *
  * Developer: Dev 3 (Sabid)
  */
 public class Player {
+    /** Color assigned to this player. */
     private Color color;
+
+    /** Pieces available to this player. */
     private List<Piece> availablePieces;
 
+    /**
+     * Creates a player with the specified color.
+     *
+     * @param color player's color
+     */
     public Player(Color color) {
         this.color = color;
         this.availablePieces = new ArrayList<>();
@@ -24,7 +32,7 @@ public class Player {
 
     /**
      * Sets the player's pieces currently on the board.
-     * 
+     *
      * @param pieces List of active pieces.
      */
     public void setAvailablePieces(List<Piece> pieces) {
@@ -38,7 +46,7 @@ public class Player {
      * Enforces move legality by requiring the destination to appear in
      * the piece's possibleMoves(board) list (Milestone 3 Dev 1).
      * King safety is validated during check integration.
-     * 
+     *
      * @param board The current board.
      * @param move The requested move.
      * @return true if the move passes validation and is applied to Board
@@ -95,6 +103,11 @@ public class Player {
 
     }
 
+    /**
+     * Returns the player's color.
+     *
+     * @return player's color
+     */
     public Color getColor() {
         return color;
     }
