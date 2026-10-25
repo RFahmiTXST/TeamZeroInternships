@@ -27,8 +27,8 @@
 A two-player chess game that runs in the console, written in Java. The board is drawn as ASCII text
 and moves are typed in standard notation such as `E2 E4`.
 
-* 📋 **Team to-do list & merge checkpoints:** [`PHASE1_PLAN.md`](PHASE1_PLAN.md)
-* 📚 **Generated Javadoc:** [`docs/`](docs/) (open `docs/index.html` after generating)
+* 📋 **Team to-do list & merge checkpoints:** [`PHASE1_PLAN.md`](docs/PHASE1_PLAN.md)
+* 📚 **API Documentation:** Generate Javadoc locally and open `out/javadoc/index.html`.
 
 ### Who owns what
 
@@ -49,7 +49,8 @@ src/
 ├── ui/       ConsoleUI (all console input/output)
 ├── utils/    Utils (move-format validation & parsing)
 └── Main.java entry point
-docs/         generated Javadoc
+docs/         team plan, QA report, and AI usage logs
+out/javadoc/  generated API documentation (not committed)
 ```
 
 ### Build & run (JDK 17+)
@@ -62,21 +63,111 @@ javac -d out $(find src -name "*.java")
 java -cp out Main
 ```
 
-### Generate the Javadoc
+### Running Tests (Windows PowerShell)
 
-```bash
-javadoc -private -d docs -sourcepath src -subpackages board:pieces:core:ui:utils src/Main.java
+The project includes a Java-based QA testing framework for verifying
+chess piece behavior.
+
+**Requirements:** JDK 17 or newer.
+
+From the project root, compile the source and test files:
+
+```powershell
+New-Item -ItemType Directory -Force out | Out-Null
+$sources = (Get-ChildItem -Path .\src,.\test -Recurse -Filter *.java).FullName
+javac --release 17 -d out $sources
 ```
 
-Add `-Xdoclint:all` to that command to list any class, method or attribute that is missing a comment.
+Run the tests after successful compilation:
+
+```powershell
+java -ea -cp out TestRunner
+```
+
+The test runner displays passing and failing assertions.
+
+
+Current test coverage:
+
+- Pawn movement, captures, blocking, and boundary conditions
+- King movement, captures, and board boundaries
+- Rook, Bishop, Queen, and Knight movement
+- Input normalization, validation, and move parsing
+- Player input, ownership, and piece movement validation
+- Console messages, input, and board-render delegation
+- Game initialization, turn alternation, invalid-input retries, captures, restart, and clean exit
+
+**Latest verified results:**
+
+- Shared test suites: 352 passed, 0 failed
+- Utils test suite: 28 passed, 0 failed
+- Move notation tests: 8 passed, 0 failed
+- Total: 388 assertions passed, 0 failed
+- Process exit code: 0
+
+The interactive game now initializes the board, starts with White, displays
+each turn, and accepts moves such as `E2 E4`. A move must match the selected
+piece's movement pattern. Invalid input, opponent-owned pieces, blocked moves,
+and friendly captures are rejected without changing turns. Type `quit` or
+`exit` to stop; end-of-input also exits cleanly.
+
+This is a Phase 1 movement demo, not a complete chess rules engine.
+Board check detection, castling, and promotion are implemented. Castling
+checks attacked squares, but ordinary moves do not yet enforce king safety.
+Checkmate/stalemate and en passant remain unimplemented. The game currently
+ends on quit, exit, or end-of-input.
+
+
+
+### Generate the Javadoc
+
+Requires JDK 17 or newer.
+
+From the project root, generate API documentation using:
+
+```powershell
+javadoc -private -Xdoclint:all -encoding UTF-8 `
+    -d out/javadoc `
+    -sourcepath src `
+    -subpackages board:pieces:core:ui:utils `
+    src/Main.java
+```
+
+If `javadoc` is not recognized on Windows, use the full path
+to `javadoc.exe` inside your installed JDK.
+
+For example, with Oracle JDK 25:
+
+```powershell
+& "C:\Program Files\Java\jdk-25\bin\javadoc.exe" `
+    -private -Xdoclint:all -encoding UTF-8 `
+    -d out/javadoc `
+    -sourcepath src `
+    -subpackages board:pieces:core:ui:utils `
+    src/Main.java
+```
+
+Open the generated documentation:
+
+```powershell
+Start-Process ".\out\javadoc\index.html"
+```
+
+The final M4 Javadoc audit completed with 0 warnings and 0 errors.
+
+See [Milestone 4 QA report](docs/M4_QA_SABID.md) for validation and remaining release tasks.
+
+
+
 
 ### Move notation
 
 | Input | Meaning |
 | :--- | :--- |
 | `E2 E4` | Move the piece on E2 to E4. A capture is detected automatically. |
-| `O-O` / `O-O-O` | Castle kingside / queenside *(optional)* |
-| `E7 E8=Q` | Move a pawn to E8 and promote it to a Queen *(optional)* |
+| `quit` / `exit` | End the game (case-insensitive). |
+| `O-O` / `O-O-O` | Castle kingside / queenside when permitted. |
+| `E7 E8=Q` | Promote a pawn; Q, R, B, and N are supported. |
 
 ---
 

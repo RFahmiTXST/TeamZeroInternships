@@ -6,16 +6,18 @@ package pieces;
  * Developer: Dev 1 (Rayed)
  */
 public enum Color {
-    WHITE, BLACK;
+    /** The white player color. */
+    WHITE,
+    /** The black player color. */
+    BLACK;
 
     /**
      * Gets the character prefix for this color ('w' for White, 'b' for Black).
      * 
      * @return prefix character
-     * TODO(Dev 1): Implement getPrefix()
      */
     public char getPrefix() {
-        return ' ';
+        return this == WHITE ? 'w' : 'b';
     }
 }
 

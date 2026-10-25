@@ -3,6 +3,7 @@ package pieces;
 import board.Board;
 import board.Position;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Abstract blueprint for all chess pieces.
@@ -10,10 +11,19 @@ import java.util.List;
  * Developer: Dev 1 (Rayed)
  */
 public abstract class Piece {
+    /** The color of this piece (WHITE or BLACK). */
     protected Color color;
+    /** The current coordinate of this piece on the board. */
     protected Position position;
+    /** Flag indicating whether this piece has moved at least once. */
     protected boolean moved;
 
+    /**
+     * Constructs a Piece with the specified color and initial position.
+     *
+     * @param color the color of the piece
+     * @param position the initial position of the piece
+     */
     public Piece(Color color, Position position) {
         this.color = color;
         this.position = position;
@@ -25,7 +35,6 @@ public abstract class Piece {
      * 
      * @param board The current state of the board.
      * @return List of possible positions this piece can move to.
-     * TODO(Dev 1, Dev 4): Implement possibleMoves logic in subclasses
      */
     public abstract List<Position> possibleMoves(Board board);
 
@@ -33,7 +42,6 @@ public abstract class Piece {
      * Gets the character symbol of the piece (e.g., 'Q', 'N', 'p').
      * 
      * @return The piece symbol.
-     * TODO(Dev 1, Dev 4): Implement getSymbol() in subclasses
      */
     public abstract char getSymbol();
 
@@ -41,20 +49,20 @@ public abstract class Piece {
      * Returns the string representation of the piece (e.g., "wQ", "bp").
      * 
      * @return String representation of the piece.
-     * TODO(Dev 1): Implement toString()
      */
     @Override
     public String toString() {
-        return null;
+        return "" + color.getPrefix() + getSymbol();
     }
 
     /**
      * Moves the piece to a new position on the board.
      * 
      * @param newPosition The destination square.
-     * TODO(Dev 1): Implement move() to update position and set moved = true
      */
     public void move(Position newPosition) {
+        this.position = newPosition;
+        this.moved = true;
     }
 
     /**
@@ -62,10 +70,9 @@ public abstract class Piece {
      * 
      * @param other The piece to check against.
      * @return True if the piece belongs to the opponent color.
-     * TODO(Dev 1): Implement isOpponent()
      */
     public boolean isOpponent(Piece other) {
-        return false;
+        return other != null && other.getColor() != this.color;
     }
 
     /**
@@ -74,10 +81,16 @@ public abstract class Piece {
      * @param board The current board state.
      * @param target The target position to check.
      * @return True if the move is valid.
-     * TODO(Dev 1): Implement canMoveTo()
      */
     public boolean canMoveTo(Board board, Position target) {
-        return false;
+        if (target == null || !target.isOnBoard()) {
+            return false;
+        }
+        if (board.isEmpty(target)) {
+            return true;
+        }
+        Piece pieceAtTarget = board.getPiece(target);
+        return isOpponent(pieceAtTarget);
     }
 
     /**
@@ -86,14 +99,58 @@ public abstract class Piece {
      * @param board The current board state.
      * @param directions A 2D array of movement direction vectors.
      * @return List of valid positions in the given directions.
-     * TODO(Dev 1): Implement slide() logic
      */
     protected List<Position> slide(Board board, int[][] directions) {
-        return null;
+        List<Position> possibleMoves = new ArrayList<>();
+        for (int[] direction : directions) {
+            int rowDir = direction[0];
+            int colDir = direction[1];
+            
+            int currentRow = this.position.getRow() + rowDir;
+            int currentCol = this.position.getColumn() + colDir;
+            
+            while (true) {
+                Position target = new Position(currentRow, currentCol);
+                if (!target.isOnBoard()) {
+                    break;
+                }
+                
+                if (board.isEmpty(target)) {
+                    possibleMoves.add(target);
+                } else {
+                    Piece pieceAtTarget = board.getPiece(target);
+                    if (isOpponent(pieceAtTarget)) {
+                        possibleMoves.add(target);
+                    }
+                    break;
+                }
+                
+                currentRow += rowDir;
+                currentCol += colDir;
+            }
+        }
+        return possibleMoves;
     }
 
+    /**
+     * Gets the color of this piece.
+     *
+     * @return the piece's color
+     */
     public Color getColor() { return color; }
+
+    /**
+     * Gets the current position of this piece.
+     *
+     * @return the piece's position
+     */
     public Position getPosition() { return position; }
+
+    /**
+     * Checks if this piece has moved at least once.
+     *
+     * @return true if the piece has moved, false otherwise
+     */
     public boolean hasMoved() { return moved; }
 }
 

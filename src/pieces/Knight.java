@@ -2,6 +2,7 @@ package pieces;
 
 import board.Board;
 import board.Position;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,6 +12,12 @@ import java.util.List;
  */
 public class Knight extends Piece {
 
+    /**
+     * Constructs a Knight with the specified color and initial position.
+     *
+     * @param color the color of the piece
+     * @param position the initial position on the board
+     */
     public Knight(Color color, Position position) {
         super(color, position);
     }
@@ -20,22 +27,34 @@ public class Knight extends Piece {
      * 
      * @param board The current board state.
      * @return List of legal moves.
-     * TODO(Dev 1): Implement possibleMoves() using 8 jump offsets
      */
     @Override
     public List<Position> possibleMoves(Board board) {
-        return null;
+        List<Position> moves = new ArrayList<>();
+        int[][] offsets = {
+            {1, 2}, {1, -2}, {-1, 2}, {-1, -2},
+            {2, 1}, {2, -1}, {-2, 1}, {-2, -1}
+        };
+
+        for (int[] offset : offsets) {
+            Position target = new Position(
+                this.position.getRow() + offset[0],
+                this.position.getColumn() + offset[1]
+            );
+            if (canMoveTo(board, target)) {
+                moves.add(target);
+            }
+        }
+        return moves;
     }
 
     /**
      * Returns the symbol for the Knight ('N').
      * 
      * @return 'N'
-     * TODO(Dev 1): Implement getSymbol()
      */
     @Override
     public char getSymbol() {
-        return ' ';
+        return 'N';
     }
 }
-

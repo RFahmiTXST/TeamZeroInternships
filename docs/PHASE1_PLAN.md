@@ -9,15 +9,15 @@ All development must take place on your designated feature branch. Never commit 
 | Developer | Role | Focus | Branch Name |
 | :--- | :--- | :--- | :--- |
 | **Rayed Fahmi** | **Dev 1** | Core Piece Architecture | `feature/RFahmiTXST` |
-| **Abid Ahnaf Khan** | **Dev 2** | Board Infrastructure & Display | `feature/<username>` |
-| **Sabid Mahmud** | **Dev 3** | Game Flow & Input Validation | `feature/<username>` |
-| **Towsif Hassan** | **Dev 4** | Special Pieces, QA & PM | `feature/<username>` |
+| **Abid Ahnaf Khan** | **Dev 2** | Board Infrastructure & Display | `feature/ajv163` |
+| **Sabid Mahmud** | **Dev 3** | Game Flow & Input Validation | `feature/sabidmahmud01` |
+| **Towsif Hassan** | **Dev 4** | Special Pieces, QA & PM | `feature/cyber-kuro` |
 
 ## 📜 Team Guidelines & Workflow (Crucial)
 
-1. **Git Workflow:** 
+1. **Git Workflow:**
    - We maintain a `main` branch (production-ready) and a `dev` branch (integration).
-   - Work on your `feature/<name>` branch.
+   - Work on your `feature/<github-username>` branch.
    - Open a Pull Request (PR) from your feature branch into `dev`.
    - **Requirement:** Every member must open at least one PR into `dev` and review at least one teammate's PR.
    - Do NOT delete your remote branches; keep them until grading is complete.
@@ -38,22 +38,22 @@ All development must take place on your designated feature branch. Never commit 
 **Goal:** Establish the project repository, base classes, and core structure so all developers can work in parallel.
 
 - **Dev 1 (Rayed - Repo Owner):**
-  - [ ] Set up the initial GitHub repository with `main` and `dev` branches, add teammates, and manage branch pulling and PR merges.
-  - [ ] Define `Piece.toString()`: returns `"" + color.getPrefix() + getSymbol()` (e.g., `"wQ"`, `"bN"`).
-  - [ ] Define `Piece.move(Position)`: update `position` and set `moved = true`.
-  - [ ] Define `Piece.isOpponent(Piece)`: checks `other != null && other.getColor() != color`.
-  - [ ] Define `Piece.canMoveTo(Board, Position)`: verify target is on the board and is either empty or holds an opponent.
-  - [ ] Define `Piece.slide(Board, int[][] directions)`: logic for sliding pieces (Rook, Bishop, Queen).
+  - [x] Set up the initial GitHub repository with `main` and `dev` branches, add teammates, and manage branch pulling and PR merges.
+  - [x] Define `Piece.toString()`: returns `"" + color.getPrefix() + getSymbol()` (e.g., `"wQ"`, `"bN"`).
+  - [x] Define `Piece.move(Position)`: update `position` and set `moved = true`.
+  - [x] Define `Piece.isOpponent(Piece)`: checks `other != null && other.getColor() != color`.
+  - [x] Define `Piece.canMoveTo(Board, Position)`: verify target is on the board and is either empty or holds an opponent.
+  - [x] Define `Piece.slide(Board, int[][] directions)`: logic for sliding pieces (Rook, Bishop, Queen).
 - **Dev 2 (Abid):**
-  - [ ] Define `Position.toString()`: return file letter (`'A' + column`) followed by `row + 1` (e.g., `"E2"`).
-  - [ ] Implement `Board` core methods: `getPiece(Position)`, `setPiece(Position, Piece)`, and `isEmpty(Position)`.
+  - [x] Define `Position.toString()`: return file letter (`'A' + column`) followed by `row + 1` (e.g., `"E2"`).
+  - [x] Implement `Board` core methods: `getPiece(Position)`, `setPiece(Position, Piece)`, and `isEmpty(Position)`.
 - **Dev 3 (Sabid):**
-  - [ ] Define `Utils.normalize(String)`: trim, collapse spaces, convert to uppercase.
-  - [ ] Define `Utils.isValidMoveFormat(String)`: regex for basic move formats `^[A-H][1-8] [A-H][1-8]$`. (Optional: castling `O-O` and promotion `=Q`).
-  - [ ] Define `Utils.parsePosition(String)` and `Utils.parseMove(String)`.
+  - [x] Define `Utils.normalize(String)`: trim, collapse spaces, convert to uppercase.
+  - [x] Define `Utils.isValidMoveFormat(String)`: regex for basic move formats `^[A-H][1-8] [A-H][1-8]$`. (Optional: castling `O-O` and promotion `=Q`).
+  - [x] Define `Utils.parsePosition(String)` and `Utils.parseMove(String)`.
 - **Dev 4 (Towsif - PM):**
-  - [ ] Create the directory structure (`src/board`, `src/pieces`, `src/core`, `src/ui`, `src/utils`), and `docs/ai-usage/` folder.
-  - [ ] Setup a dependency-free test folder (`test/`) with a `TestRunner.java` to execute simple assertion tests.
+  - [x] Create the directory structure (`src/board`, `src/pieces`, `src/core`, `src/ui`, `src/utils`), and `docs/ai-usage/` folder.
+  - [x] Setup a dependency-free test folder (`test/`) with a `TestRunner.java` to execute simple assertion tests.
 
 🧪 **Manual Tests for M1:**
 - Compile the project successfully: `javac -d out $(find src -name "*.java")`.
@@ -64,20 +64,20 @@ All development must take place on your designated feature branch. Never commit 
 **Goal:** Populate the board with pieces and ensure pieces know their legal movement patterns.
 
 - **Dev 1 (Rayed):**
-  - [ ] Implement `Rook.possibleMoves(Board)`: use `slide` with directions `{{1,0},{-1,0},{0,1},{0,-1}}`.
-  - [ ] Implement `Bishop.possibleMoves(Board)`: use `slide` with directions `{{1,1},{1,-1},{-1,1},{-1,-1}}`.
-  - [ ] Implement `Queen.possibleMoves(Board)`: use `slide` with all 8 directions.
-  - [ ] Implement `Knight.possibleMoves(Board)`: check the 8 L-shaped offsets `{±1,±2}` and `{±2,±1}` using `canMoveTo`.
+  - [x] Implement `Rook.possibleMoves(Board)`: use `slide` with directions `{{1,0},{-1,0},{0,1},{0,-1}}`.
+  - [x] Implement `Bishop.possibleMoves(Board)`: use `slide` with directions `{{1,1},{1,-1},{-1,1},{-1,-1}}`.
+  - [x] Implement `Queen.possibleMoves(Board)`: use `slide` with all 8 directions.
+  - [x] Implement `Knight.possibleMoves(Board)`: check the 8 L-shaped offsets `{±1,±2}` and `{±2,±1}` using `canMoveTo`.
 - **Dev 2 (Abid):**
-  - [ ] Implement `Board.initialize()`: clear squares, place all 32 pieces in their starting positions (white on rows 0/1, black on rows 6/7).
-  - [ ] Implement `Board.render()`: use a `StringBuilder` to render the grid with file letters A-H on top and rank numbers 8-1 on the left.
-  - [ ] Implement `Board.movePiece(from, to)`: throw exception if `from` is empty, otherwise move piece, add any captured piece to `capturedPieces`, and call `Piece.move()`.
+  - [x] Implement `Board.initialize()`: clear squares, place all 32 pieces in their starting positions (white on rows 0/1, black on rows 6/7).
+  - [x] Implement `Board.render()`: use a `StringBuilder` to render the grid with file letters A-H on top and rank numbers 8-1 on the left.
+  - [x] Implement `Board.movePiece(from, to)`: throw exception if `from` is empty, otherwise move piece, add any captured piece to `capturedPieces`, and call `Piece.move()`.
 - **Dev 3 (Sabid):**
-  - [ ] Build `ConsoleUI`: Implement `showWelcome()`, `showBoard(Board)`, `showTurn(Color)`, and `promptMove(Color)`.
-  - [ ] Build `Player.makeMove()`: reject if no piece is on `from` or belongs to the opponent, otherwise call `board.movePiece(from, to)`.
+  - [x] Build `ConsoleUI`: Implement `showWelcome()`, `showBoard(Board)`, `showTurn(Color)`, and `promptMove(Color)`.
+  - [x] Build `Player.makeMove()`: reject if no piece is on `from` or belongs to the opponent, otherwise call `board.movePiece(from, to)`.
 - **Dev 4 (Towsif):**
-  - [ ] Implement `Pawn.possibleMoves(Board)`: handle moving 1 square forward, 2 squares forward (if `!hasMoved`), and diagonal captures of opponents.
-  - [ ] Implement `King.possibleMoves(Board)`: check the 8 neighboring squares using `canMoveTo`.
+  - [x] Implement `Pawn.possibleMoves(Board)`: handle moving 1 square forward, 2 squares forward (if `!hasMoved`), and diagonal captures of opponents.
+  - [x] Implement `King.possibleMoves(Board)`: check the 8 neighboring squares using `canMoveTo`.
 
 🧪 **Manual Tests for M2:**
 - Call `Board.display()` and visually verify it matches the required project brief format perfectly.
@@ -88,16 +88,30 @@ All development must take place on your designated feature branch. Never commit 
 **Goal:** Tie the board, pieces, and player input into a playable game loop.
 
 - **Dev 3 (Sabid):**
-  - [ ] Implement `Game.play()` interface loop: alternate turns, show the board, and prompt for moves.
-  - [ ] Treat `quit`/`exit` as end of game cleanly.
-  - [ ] Show an error for invalid input format and reprompt the *same* player without switching turns.
+  - [x] Implement `Game.play()` interface loop: alternate turns, show the board, and prompt for moves.
+  - [x] Treat `quit`/`exit` as end of game cleanly.
+  - [x] Show an error for invalid input format and reprompt the *same* player without switching turns.
 - **Dev 1 (Rayed):**
-  - [ ] Assist Dev 3 in integrating move legality: reject a destination if it is not in the piece's `possibleMoves(board)` list.
+  - [x] Assist Dev 3 in integrating move legality: reject a destination if it is not in the piece's `possibleMoves(board)` list.
 - **Dev 2 (Abid):**
-  - [ ] Work with Dev 4 to implement `Board.isCheck(Color)`: scan if any opponent's piece targets the King's square. (Optional Phase 1 feature, required for Phase 2).
+  - [x] Work with Dev 4 to implement `Board.isCheck(Color)`: scan if any opponent's piece targets the King's square. (Optional Phase 1 feature, required for Phase 2).
 - **Dev 4 (Towsif):**
-  - [ ] Optional: Integrate Castling logic (`O-O`, `O-O-O`) across `Game` and `King`.
-  - [ ] Optional: Integrate Pawn Promotion (`E7 E8=Q`) across `Game` and `Pawn`.
+  - [x] Optional: Integrate Castling logic (`O-O`, `O-O-O`) across `Game` and `King`.
+  - [x] Optional: Integrate Pawn Promotion (`E7 E8=Q`) across `Game` and `Pawn`.
+  - [x] Add Board integration tests with 27 assertions.
+  - [x] Implement Pawn Promotion to Queen, Rook, Bishop, and Knight.
+  - [x] Implement kingside and queenside Castling for both colors.
+  - [x] Implement square attack detection for Castling.
+  - [x] Integrate special moves with `Player.makeMove()`.
+  - [x] Support special-move notation through `Utils.parseMove()`.
+  - [x] Add special-move tests to `TestRunner`.
+  - [x] Pass all 343 regression assertions with 0 failures.
+
+Dev 3 integration note (2026-10-23): Synced PRs #10, #11, and #12 from dev,
+retaining Dev 1's Player validation and Dev 4's special-move delegation.
+The combined runner includes GameTest and BoardCheckTest. All 380 assertions
+pass, including a scripted game that rejects blocked castling, then castles
+successfully and switches turns. Ordinary-move king safety remains pending.
 
 🧪 **Manual Tests for M3:**
 - Play a mock game: Type `E2 E4`. Verify White pawn moves. Type `E7 E5`. Verify Black pawn moves.
@@ -108,20 +122,27 @@ All development must take place on your designated feature branch. Never commit 
 **Goal:** Finalize code quality, generate Javadocs, write the README, and merge everything into `main`.
 
 - **Dev 1 (Rayed - Repo Owner):**
-  - [ ] Manage the final PR from `dev` to `main` and oversee repository delivery. 
-  - [ ] Perform a final peer review of all merged code in the `dev` branch. Look for tight coupling, poor naming, or missing Javadocs.
-  - [ ] Update your personal AI usage logs.
+  - [x] Manage the final PR from `dev` to `main` and oversee repository delivery.
+  - [x] Perform a final peer review of all merged code in the `dev` branch. Look for tight coupling, poor naming, or missing Javadocs.
+  - [x] Update your personal AI usage logs.
 - **Dev 4 (Towsif):**
-  - [ ] Run Javadoc generation tool with `-Xdoclint:all` and ensure zero warnings. 
-  - [ ] Write the runnable README with dependencies, commands, and feature summaries.
+  - [x] Run Javadoc generation tool with `-Xdoclint:all` and ensure zero warnings.
+  - [x] Write the runnable README with dependencies, commands, and feature summaries.
 - **Dev 2 (Abid) & Dev 3 (Sabid):**
-  - [ ] Perform a final peer review of all merged code in the `dev` branch. 
-  - [ ] Update your personal AI usage logs.
+  - [x] Sabid: perform final review of merged dev code; see `M4_QA_SABID.md`.
+  - [x] Sabid: update personal AI usage log.
+  - [x] Abid: confirm final peer review and personal AI usage log.
 - **All Members:** 
-  - [ ] Verify all tasks in the rubric are met. 
-  - [ ] Submit peer contribution evaluations if required.
+  - [x] Verify all tasks in the rubric are met.
+  - [x] Submit peer contribution evaluations if required.
 
 🧪 **Manual Tests for M4:**
-- Verify `javadoc -private -d docs ...` generates successfully and `index.html` is readable.
+- Verify `javadoc -private -Xdoclint:all -Werror -d out/javadoc ...` generates successfully and `index.html` is readable.
 - Clone the repository into a fresh directory, follow the README instructions blindly, and ensure the game compiles and runs perfectly.
 - Ensure all feature branches are pushed and untouched for grading.
+
+Sabid's M4 validation (2026-10-23): 388 assertions passed, clean-copy build
+and scripted gameplay passed, and source Javadoc generated with zero warnings.
+Team-owned completion boxes and rubric sign-off remain subject to teammate
+confirmation and the original assignment requirements. No final release merge
+has been performed as part of this work.
