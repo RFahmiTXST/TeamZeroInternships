@@ -1,5 +1,6 @@
 import pieces.PawnTest;
 import pieces.KingTest;
+import board.BoardCheckTest;
 import test.TestUtils;
 import java.util.Objects;
 
@@ -23,6 +24,10 @@ public class TestRunner {
         System.out.println("Running Pawn and King tests...\n");
         PawnTest.main(args);
         KingTest.main(args);
+
+        // Dev 2: Board check detection tests
+        System.out.println("Running Board check tests...\n");
+        BoardCheckTest.main(args);
 
         // Dev 1: Rook, Bishop, Queen and Knight tests
         System.out.println("\nRunning other piece movement tests...\n");
