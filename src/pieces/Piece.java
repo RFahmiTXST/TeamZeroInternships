@@ -35,7 +35,6 @@ public abstract class Piece {
      * 
      * @param board The current state of the board.
      * @return List of possible positions this piece can move to.
-     * TODO(Dev 1, Dev 4): Implement possibleMoves logic in subclasses
      */
     public abstract List<Position> possibleMoves(Board board);
 
@@ -43,7 +42,6 @@ public abstract class Piece {
      * Gets the character symbol of the piece (e.g., 'Q', 'N', 'p').
      * 
      * @return The piece symbol.
-     * TODO(Dev 1, Dev 4): Implement getSymbol() in subclasses
      */
     public abstract char getSymbol();
 
@@ -51,7 +49,6 @@ public abstract class Piece {
      * Returns the string representation of the piece (e.g., "wQ", "bp").
      * 
      * @return String representation of the piece.
-     * TODO(Dev 1): Implement toString()
      */
     @Override
     public String toString() {
@@ -62,7 +59,6 @@ public abstract class Piece {
      * Moves the piece to a new position on the board.
      * 
      * @param newPosition The destination square.
-     * TODO(Dev 1): Implement move() to update position and set moved = true
      */
     public void move(Position newPosition) {
         this.position = newPosition;
@@ -74,7 +70,6 @@ public abstract class Piece {
      * 
      * @param other The piece to check against.
      * @return True if the piece belongs to the opponent color.
-     * TODO(Dev 1): Implement isOpponent()
      */
     public boolean isOpponent(Piece other) {
         return other != null && other.getColor() != this.color;
@@ -86,7 +81,6 @@ public abstract class Piece {
      * @param board The current board state.
      * @param target The target position to check.
      * @return True if the move is valid.
-     * TODO(Dev 1): Implement canMoveTo()
      */
     public boolean canMoveTo(Board board, Position target) {
         if (target == null || !target.isOnBoard()) {
@@ -105,7 +99,6 @@ public abstract class Piece {
      * @param board The current board state.
      * @param directions A 2D array of movement direction vectors.
      * @return List of valid positions in the given directions.
-     * TODO(Dev 1): Implement slide() logic
      */
     protected List<Position> slide(Board board, int[][] directions) {
         List<Position> possibleMoves = new ArrayList<>();

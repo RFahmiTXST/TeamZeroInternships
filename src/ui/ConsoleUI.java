@@ -10,8 +10,14 @@ import java.util.Scanner;
  * Developer: Dev 3 (Sabid)
  */
 public class ConsoleUI {
+    /** Scanner used to read player input. */
     private Scanner scanner;
 
+    /**
+     * Creates the console interface.
+     *
+     * @param scanner scanner for player input
+     */
     public ConsoleUI(Scanner scanner) {
         this.scanner = scanner;
     }
@@ -57,11 +63,11 @@ public class ConsoleUI {
      * Prompts the current player to enter a chess move.
      *
      * @param color The color of the active player.
-     * @return The raw move input entered by the player.
+     * @return the raw move input, or null when the input stream ends
      */
     public String promptMove(Color color) {
         System.out.print(color + ", enter your move (e.g., E2 E4): ");
-        return scanner.nextLine();
+        return scanner.hasNextLine() ? scanner.nextLine() : null;
     }
 
     /**
@@ -71,6 +77,15 @@ public class ConsoleUI {
      */
     public void showError(String error) {
         System.out.println("Error: " + error);
+    }
+
+    /**
+     * Displays the game result.
+     *
+     * @param result message explaining why play ended
+     */
+    public void showResult(String result) {
+        System.out.println(result);
     }
 }
 

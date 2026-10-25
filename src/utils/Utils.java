@@ -10,6 +10,8 @@ import java.util.Locale;
  * Developer: Dev 3 (Sabid)
  */
 public class Utils {
+    /** Creates a utility instance. */
+    public Utils() { }
 
     /**
      * Normalizes player input by removing leading and trailing whitespace,
@@ -33,21 +35,22 @@ public class Utils {
     }
 
     /**
-     * Checks if a move follows the basic chess format (e.g., "E2 E4").
-     * This validates input format, not whether the move is legal in chess.
+     * Validates normal moves, promotion, and castling notation.
      *
-     * @param normalizedInput The normalized move string.
-     * @return True if the format is valid, false otherwise.
+     * @param normalizedInput normalized move text
+     * @return true if the input follows a supported format
      */
     public static boolean isValidMoveFormat(String normalizedInput) {
         if (normalizedInput == null) {
             return false;
         }
-    
+
         return normalizedInput.matches(
-            "^[A-H][1-8] [A-H][1-8]$"
-        );
+                "^[A-H][1-8] [A-H][1-8](=[QRBN])?$")
+                || normalizedInput.equals("O-O")
+                || normalizedInput.equals("O-O-O");
     }
+
 
     /**
      * Converts a chessboard coordinate into a Position object.
@@ -75,31 +78,42 @@ public class Utils {
     }
 
     /**
-     * Converts a chess move string into a Move object.
-     * For example, "E2 E4" creates a move from E2 to E4.
-     * The input is normalized and validated before parsing.
-     * Only basic coordinate moves are supported in Phase One.
+     * Parses normal moves, Pawn promotion, and castling.
      *
-     * @param moveStr The raw move input entered by the player.
-     * @return A Move object containing the starting and ending positions.
-     * @throws IllegalArgumentException if the input is null,
-     *         incorrectly formatted, or contains invalid coordinates.
+     * @param moveStr move entered by the player
+     * @return parsed Move object
+     * @throws IllegalArgumentException if the format is invalid
      */
     public static Move parseMove(String moveStr) {
         String normalized = normalize(moveStr);
-    
+
         if (!isValidMoveFormat(normalized)) {
             throw new IllegalArgumentException(
-                "Invalid move format: " + normalized
-            );
+                    "Invalid move format: " + normalized);
         }
-    
+
+        if (normalized.equals("O-O")) {
+            return Move.castle(true);
+        }
+
+        if (normalized.equals("O-O-O")) {
+            return Move.castle(false);
+        }
+
         String[] coordinates = normalized.split(" ");
-    
+
         Position from = parsePosition(coordinates[0]);
-        Position to = parsePosition(coordinates[1]);
-    
+
+        String destination = coordinates[1];
+        Position to = parsePosition(destination.substring(0, 2));
+
+        if (destination.length() == 4) {
+            char promotionCode = destination.charAt(3);
+            return new Move(from, to, promotionCode);
+        }
+
         return new Move(from, to);
     }
+
 }
 

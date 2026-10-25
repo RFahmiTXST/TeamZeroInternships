@@ -1,6 +1,5 @@
 import pieces.PawnTest;
 import pieces.KingTest;
-import board.BoardCheckTest;
 import test.TestUtils;
 import java.util.Objects;
 
@@ -24,19 +23,26 @@ public class TestRunner {
         System.out.println("Running Pawn and King tests...\n");
         PawnTest.main(args);
         KingTest.main(args);
-
-        // Dev 2: Board check detection tests
-        System.out.println("Running Board check tests...\n");
-        BoardCheckTest.main(args);
+        pieces.PawnPromotionTest.main(args);
+        System.out.println("\nRunning special move integration tests...\n");
+        core.SpecialMoveHandlerTest.main(args);
+        core.AttackDetectorTest.main(args);
+        core.CastlingTest.main(args);
 
         // Dev 1: Rook, Bishop, Queen and Knight tests
         System.out.println("\nRunning other piece movement tests...\n");
         pieces.PieceMovementTest.main(args);
 
+        // Dev 4: Board, Player, and Piece integration tests
+        board.BoardIntegrationTest.main(args);
+        board.BoardCheckTest.main(args);
+
         // Dev 3: Player and console UI tests
         System.out.println("\nRunning Player and UI tests...\n");
         core.PlayerTest.main(args);
         ui.ConsoleUITest.main(args);
+        core.GameTest.main(args);
+        core.MoveTest.main(args);
 
         // Summary for shared TestUtils assertions
         System.out.println("\nShared test summary:");

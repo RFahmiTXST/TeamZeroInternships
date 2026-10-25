@@ -46,6 +46,10 @@ public final class ConsoleUITest {
             TestUtils.assertEquals(true, prompt.contains("WHITE") && prompt.contains("E2 E4"), "Prompt identifies player and format");
             capture(() -> input[0] = ui.promptMove(Color.BLACK));
             TestUtils.assertEquals("quit", input[0], "Quit input preserved");
+            capture(() -> input[0] = ui.promptMove(Color.WHITE));
+            TestUtils.assertEquals(null, input[0], "End of input returns null");
+            TestUtils.assertEquals("Game ended" + System.lineSeparator(),
+                    capture(() -> ui.showResult("Game ended")), "Result displayed");
             TestUtils.assertEquals("Error: Invalid move" + System.lineSeparator(),
                     capture(() -> ui.showError("Invalid move")), "Error displayed");
         }

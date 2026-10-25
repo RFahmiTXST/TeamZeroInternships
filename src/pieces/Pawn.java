@@ -14,6 +14,12 @@ import java.util.List;
  */
 public class Pawn extends Piece {
 
+    /**
+     * Creates a Pawn with the given color and position.
+     *
+     * @param color the Pawn's color
+     * @param position the Pawn's starting position
+     */
     public Pawn(Color color, Position position) {
         super(color, position);
     }
@@ -110,4 +116,51 @@ public class Pawn extends Piece {
     public char getSymbol() {
         return 'p';
     }
+
+    /**
+     * Creates a replacement piece when this Pawn reaches
+     * its promotion rank.
+     *
+     * Supported promotion pieces:
+     * Q = Queen, R = Rook, B = Bishop, N = Knight.
+     *
+     * The caller is responsible for replacing the Pawn
+     * on the Board after validating and executing the move.
+     *
+     * @param pieceCode character identifying the new piece
+     * @return replacement chess piece
+     * @throws IllegalStateException if the Pawn has not
+     *         reached its promotion rank
+     * @throws IllegalArgumentException for an invalid piece
+     */
+    public Piece createPromotionPiece(char pieceCode) {
+
+        if (getPosition().getRow() != getPromotionRow()) {
+            throw new IllegalStateException(
+                    "Pawn has not reached the promotion rank."
+            );
+        }
+
+        char code = Character.toUpperCase(pieceCode);
+
+        switch (code) {
+            case 'Q':
+                return new Queen(getColor(), getPosition());
+
+            case 'R':
+                return new Rook(getColor(), getPosition());
+
+            case 'B':
+                return new Bishop(getColor(), getPosition());
+
+            case 'N':
+                return new Knight(getColor(), getPosition());
+
+            default:
+                throw new IllegalArgumentException(
+                        "Invalid promotion piece: " + pieceCode
+                );
+        }
+    }
+
 }
