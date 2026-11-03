@@ -33,6 +33,10 @@ public class TestRunner {
         System.out.println("\nRunning other piece movement tests...\n");
         pieces.PieceMovementTest.main(args);
 
+        // Dev 1: Phase 2 GUI tests
+        System.out.println("\nRunning Phase 2 GUI tests...\n");
+        test.gui.PieceIconManagerTest.main(args);
+
         // Dev 4: Board, Player, and Piece integration tests
         board.BoardIntegrationTest.main(args);
         board.BoardCheckTest.main(args);
