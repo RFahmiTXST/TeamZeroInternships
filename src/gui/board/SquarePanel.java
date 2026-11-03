@@ -11,6 +11,12 @@ import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Represents a single square component on the GUI chessboard.
@@ -52,6 +58,10 @@ public class SquarePanel extends JPanel {
     private boolean selected;
     /** Whether this square is highlighted. */
     private boolean highlighted;
+    /** Whether the pointer is over this square. */
+    private boolean hovered;
+    /** Whether this square has keyboard focus. */
+    private boolean focused;
 
     /**
      * Constructs a SquarePanel at the given board position.
@@ -70,6 +80,38 @@ public class SquarePanel extends JPanel {
         pieceLabel.setHorizontalAlignment(SwingConstants.CENTER);
         pieceLabel.setVerticalAlignment(SwingConstants.CENTER);
         add(pieceLabel, BorderLayout.CENTER);
+
+        setFocusable(true);
+        MouseAdapter mouseFeedback = new MouseAdapter() {
+            @Override public void mouseEntered(MouseEvent event) {
+                hovered = true;
+                refreshAppearance();
+            }
+            @Override public void mouseExited(MouseEvent event) {
+                hovered = false;
+                refreshAppearance();
+            }
+            @Override public void mousePressed(MouseEvent event) {
+                requestFocusInWindow();
+            }
+        };
+        addMouseListener(mouseFeedback);
+        pieceLabel.addMouseListener(mouseFeedback);
+        addFocusListener(new FocusAdapter() {
+            @Override public void focusGained(FocusEvent event) {
+                focused = true;
+                refreshAppearance();
+            }
+            @Override public void focusLost(FocusEvent event) {
+                focused = false;
+                refreshAppearance();
+            }
+        });
+        addComponentListener(new ComponentAdapter() {
+            @Override public void componentResized(ComponentEvent event) {
+                refreshAppearance();
+            }
+        });
 
         refreshAppearance();
     }
@@ -112,13 +154,9 @@ public class SquarePanel extends JPanel {
             pieceLabel.setIcon(null);
             pieceLabel.setToolTipText(null);
         } else {
-            int iconSize = Math.max(32, Math.min(getWidth(), getHeight()) - 16);
-            if (iconSize <= 32) {
-                iconSize = PieceIconManager.DEFAULT_SIZE;
-            }
-            pieceLabel.setIcon(PieceIconManager.getPieceIcon(piece, iconSize));
             pieceLabel.setToolTipText(piece.getColor() + " " + piece.getClass().getSimpleName() + " at " + position);
         }
+        refreshAppearance();
         revalidate();
         repaint();
     }
@@ -186,7 +224,7 @@ public class SquarePanel extends JPanel {
         if (selected) {
             setBorder(BorderFactory.createLineBorder(SELECTION_BORDER_COLOR, 3));
             setBackground(baseColor);
-        } else if (highlighted) {
+        } else if (highlighted || hovered || focused) {
             setBorder(BorderFactory.createLineBorder(HIGHLIGHT_TINT_COLOR, 2));
             setBackground(baseColor);
         } else {
@@ -195,10 +233,8 @@ public class SquarePanel extends JPanel {
         }
 
         if (currentPiece != null) {
-            int iconSize = Math.max(32, Math.min(getWidth(), getHeight()) - 16);
-            if (iconSize <= 32) {
-                iconSize = PieceIconManager.DEFAULT_SIZE;
-            }
+            int side = Math.min(getWidth(), getHeight());
+            int iconSize = side <= 0 ? PieceIconManager.DEFAULT_SIZE : Math.max(1, side - 12);
             pieceLabel.setIcon(PieceIconManager.getPieceIcon(currentPiece, iconSize));
         }
     }
