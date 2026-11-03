@@ -149,3 +149,31 @@ I reviewed the changes and verified them locally.
 This milestone focused on QA and documentation.
 Ordinary-move king safety, checkmate, stalemate, and
 en passant remain outside the implemented Phase 1 scope.
+
+## Phase 2 Milestone 1 — GUI QA and Setup (2026-11-03)
+
+### AI Assistance
+
+I used ChatGPT to review the Phase 2 plan and existing Swing GUI classes, plan headless GUI tests, prepare cross-platform build scripts, and organize the screenshot checklist. I reviewed and tested the changes locally.
+
+### Work Completed
+
+- Added `test/gui/GuiSmokeTest.java` for headless GUI component and board-to-view tests.
+- Registered the GUI tests in `TestRunner.java`.
+- Added PowerShell and Bash verification scripts in `scripts/`.
+- Created `docs/PHASE2_REPORT_CHECKLIST.md`.
+- Verified the initial Swing chessboard manually.
+
+### Verification
+
+- PowerShell compilation and tests: PASS.
+- Git Bash compilation and tests: PASS.
+- Shared assertions: 639 passed, 0 failed.
+- Utils assertions: 28 passed, 0 failed.
+- Total: 667 passed, 0 failed.
+- Swing GUI launched successfully.
+- Verified the 8x8 board, alternating square colors, all 32 starting pieces, and coordinate labels.
+
+### Scope
+
+This milestone covers GUI testing, build verification, and documentation. Mouse controls, captures, and additional game features are assigned to later milestones.
