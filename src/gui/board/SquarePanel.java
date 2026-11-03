@@ -18,7 +18,7 @@ import java.awt.Dimension;
  * <p>Handles square background coloring (alternating light/dark), piece icon presentation,
  * and selection/highlight states.</p>
  *
- * @author Dev 1 (Rayed) &amp; Dev 2 (Abid)
+ * @author Dev 2 (Abid - Primary Owner) &amp; Dev 1 (Rayed - Architecture)
  */
 public class SquarePanel extends JPanel {
 

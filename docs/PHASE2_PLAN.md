@@ -64,15 +64,15 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
 **Goal:** Construct the foundational Swing GUI application, render an 8x8 chessboard with alternating light and dark squares, and display all 32 chess pieces on their initial starting squares.
 
 - **Dev 1 (Rayed - Repo Owner / Architecture):**
-  - [x] Set up the GUI package architecture (`src/gui/`, `src/gui/board/`, `src/gui/pieces/`, `src/gui/dialogs/`).
+  - [x] Set up the GUI package architecture (`src/gui/`, `src/gui/board/`, `src/gui/pieces/`, `src/gui/dialogs/`) with initial component scaffolding.
   - [x] Create the main application window `ChessFrame` (`JFrame`) with appropriate layout manager (`BorderLayout`), minimum dimensions, and clean window closing behavior.
   - [x] Implement `PieceIconManager` / `PieceView`: load or procedurally render visually distinct graphics for all 6 piece types (`Pawn`, `Rook`, `Knight`, `Bishop`, `Queen`, `King`) for both `White` and `Black`.
   - [x] Provide GUI entry point in `src/Main.java` allowing users to launch either the new Swing GUI (default) or the Phase 1 Console game.
 - **Dev 2 (Abid - Board Infrastructure & Layout):**
-  - [ ] Create `BoardPanel` (`JPanel`) utilizing an 8x8 `GridLayout` containing 64 individual `SquarePanel` components.
-  - [ ] Implement alternating light and dark square styling with clean default color palettes.
-  - [ ] Add coordinate indicator borders or rank labels (`1–8`) and file labels (`A–H`) around the perimeter of the board.
-  - [ ] Connect `BoardPanel` to the Phase 1 `Board` model so square components query pieces accurately based on row and column coordinates.
+  - [ ] Refine and customize `BoardPanel` layout and `SquarePanel` visual styling (fine-tuning alternating square contrast, square border styles, and coordinate label typography).
+  - [ ] Implement dynamic board resizing listener / aspect ratio constraints (ensuring squares remain square during window resize).
+  - [ ] Implement visual square hover and focus indicators (`SquarePanel.setHighlighted` visual feedback for mouse interaction).
+  - [ ] Develop dedicated unit tests for board infrastructure (`test/gui/BoardPanelTest.java`) verifying square lookup, coordinate mapping, and theme configuration.
 - **Dev 3 (Sabid - Game State Bridge & Initial Placement):**
   - [ ] Implement `GUIController` to act as the mediator between the underlying `Board` / `Piece` data model and the Swing UI.
   - [ ] Populate the initial visual board: place all 32 pieces in their standard starting positions (White on ranks 1 & 2, Black on ranks 7 & 8).

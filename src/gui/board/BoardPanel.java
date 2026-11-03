@@ -21,7 +21,7 @@ import java.awt.GridLayout;
  * A through H spanning left to right. Synchronizes piece placement directly with the
  * underlying {@link Board} domain model.</p>
  *
- * @author Dev 1 (Rayed) &amp; Dev 2 (Abid)
+ * @author Dev 2 (Abid - Primary Owner) &amp; Dev 1 (Rayed - Architecture)
  */
 public class BoardPanel extends JPanel {
 
