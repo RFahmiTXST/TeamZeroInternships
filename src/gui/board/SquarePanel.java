@@ -39,6 +39,8 @@ public class SquarePanel extends JPanel {
     public static final Color SELECTION_BORDER_COLOR = new Color(46, 204, 113);
     /** Highlighted square tint (e.g., legal target or move source). */
     public static final Color HIGHLIGHT_TINT_COLOR = new Color(241, 196, 15, 160);
+    /** Muted plum hover border complements the board's wood palette. */
+    private static final Color HOVER_BORDER_COLOR = new Color(112, 58, 72);
 
     /** Coordinate position of this square on the board. */
     private final Position position;
@@ -224,8 +226,11 @@ public class SquarePanel extends JPanel {
         if (selected) {
             setBorder(BorderFactory.createLineBorder(SELECTION_BORDER_COLOR, 3));
             setBackground(baseColor);
-        } else if (highlighted || hovered || focused) {
+        } else if (highlighted || focused) {
             setBorder(BorderFactory.createLineBorder(HIGHLIGHT_TINT_COLOR, 2));
+            setBackground(baseColor);
+        } else if (hovered) {
+            setBorder(BorderFactory.createLineBorder(HOVER_BORDER_COLOR, 2));
             setBackground(baseColor);
         } else {
             setBorder(null);

@@ -9,6 +9,7 @@ import test.TestUtils;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
@@ -84,10 +85,16 @@ public final class BoardPanelTest {
         MouseEvent exit = new MouseEvent(a1, MouseEvent.MOUSE_EXITED, 0, 0, 1, 1, 0, false);
         for (MouseListener listener : a1.getMouseListeners()) { listener.mouseEntered(enter); }
         TestUtils.assertEquals(true, a1.getBorder() != null, "Hover shows a border");
+        Color hoverColor = ((LineBorder) a1.getBorder()).getLineColor();
+        TestUtils.assertEquals(false, hoverColor.equals(SquarePanel.HIGHLIGHT_TINT_COLOR), "Hover differs from focus");
+        TestUtils.assertEquals(false, hoverColor.equals(SquarePanel.SELECTION_BORDER_COLOR), "Hover differs from selection");
+        a1.setSelected(true);
+        TestUtils.assertEquals(SquarePanel.SELECTION_BORDER_COLOR, ((LineBorder) a1.getBorder()).getLineColor(), "Selection remains visible while hovered");
+        a1.setSelected(false);
         for (MouseListener listener : a1.getMouseListeners()) { listener.mouseExited(exit); }
         TestUtils.assertEquals(null, a1.getBorder(), "Hover exit clears the border");
         for (FocusListener listener : a1.getFocusListeners()) { listener.focusGained(new FocusEvent(a1, FocusEvent.FOCUS_GAINED)); }
-        TestUtils.assertEquals(true, a1.getBorder() != null, "Focus shows a border");
+        TestUtils.assertEquals(SquarePanel.HIGHLIGHT_TINT_COLOR, ((LineBorder) a1.getBorder()).getLineColor(), "Focus retains its highlight color");
         for (FocusListener listener : a1.getFocusListeners()) { listener.focusLost(new FocusEvent(a1, FocusEvent.FOCUS_LOST)); }
         a1.setHighlighted(true);
         panel.clearHighlights();
