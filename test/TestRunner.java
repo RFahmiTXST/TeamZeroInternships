@@ -37,6 +37,7 @@ public class TestRunner {
         System.out.println("\nRunning Phase 2 GUI tests...\n");
         test.gui.PieceIconManagerTest.main(args);
         test.gui.GuiSmokeTest.main(args);
+        test.gui.GUIControllerTest.main(args);
 
         // Dev 4: Board, Player, and Piece integration tests
         board.BoardIntegrationTest.main(args);
