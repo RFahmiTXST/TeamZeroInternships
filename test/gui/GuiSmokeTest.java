@@ -14,7 +14,6 @@ import test.TestUtils;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import java.awt.BorderLayout;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -56,8 +55,7 @@ public final class GuiSmokeTest {
         board.initialize();
         BoardPanel panel = new BoardPanel(board);
 
-        JPanel grid = (JPanel) ((BorderLayout) panel.getLayout())
-                .getLayoutComponent(BorderLayout.CENTER);
+        JPanel grid = (JPanel) panel.getSquarePanel(7, 0).getParent();
         TestUtils.assertEquals(64, grid.getComponentCount(),
                 "The GUI contains 64 board squares");
         TestUtils.assertEquals(new Position(7, 0),

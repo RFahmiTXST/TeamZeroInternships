@@ -7,11 +7,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Insets;
 
 /**
  * Renders the 8x8 chessboard grid with perimeter coordinate labels and square components.
@@ -37,6 +37,16 @@ public class BoardPanel extends JPanel {
     /** Panel holding the 8x8 squares. */
     private final JPanel gridContainer;
 
+    /** Coordinate labels beside and below the grid. */
+    private final JPanel rankLabels;
+    /** File labels below the grid. */
+    private final JPanel fileLabels;
+
+    /** Space reserved for coordinate labels. */
+    private static final int LABEL_SIZE = 24;
+    /** Width of the grid's outer border. */
+    private static final int GRID_BORDER = 2;
+
     /** The current domain board model. */
     private Board board;
 
@@ -52,7 +62,8 @@ public class BoardPanel extends JPanel {
         this.board = board;
         this.squarePanels = new SquarePanel[BOARD_SIZE][BOARD_SIZE];
 
-        setLayout(new BorderLayout());
+        setLayout(null);
+        setPreferredSize(new Dimension(688, 688));
         setBackground(new Color(40, 42, 48));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -71,9 +82,11 @@ public class BoardPanel extends JPanel {
             }
         }
 
-        add(gridContainer, BorderLayout.CENTER);
-        add(createFileLabelsPanel(), BorderLayout.SOUTH);
-        add(createRankLabelsPanel(), BorderLayout.WEST);
+        fileLabels = createFileLabelsPanel();
+        rankLabels = createRankLabelsPanel();
+        add(gridContainer);
+        add(fileLabels);
+        add(rankLabels);
 
         updateFromBoard();
     }
@@ -87,14 +100,14 @@ public class BoardPanel extends JPanel {
         JPanel filePanel = new JPanel(new GridLayout(1, BOARD_SIZE));
         filePanel.setOpaque(false);
         filePanel.setPreferredSize(new Dimension(0, 24));
-        filePanel.setBorder(BorderFactory.createEmptyBorder(4, 24, 0, 0));
+        filePanel.setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
 
-        Font labelFont = new Font("SansSerif", Font.BOLD, 13);
+        Font labelFont = new Font("SansSerif", Font.BOLD, 14);
         for (int col = 0; col < BOARD_SIZE; col++) {
             char fileChar = (char) ('A' + col);
             JLabel label = new JLabel(String.valueOf(fileChar), SwingConstants.CENTER);
             label.setFont(labelFont);
-            label.setForeground(new Color(180, 185, 195));
+            label.setForeground(new Color(220, 224, 230));
             filePanel.add(label);
         }
         return filePanel;
@@ -111,15 +124,31 @@ public class BoardPanel extends JPanel {
         rankPanel.setPreferredSize(new Dimension(24, 0));
         rankPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 4));
 
-        Font labelFont = new Font("SansSerif", Font.BOLD, 13);
+        Font labelFont = new Font("SansSerif", Font.BOLD, 14);
         for (int screenRow = 0; screenRow < BOARD_SIZE; screenRow++) {
             int rankNum = BOARD_SIZE - screenRow;
             JLabel label = new JLabel(String.valueOf(rankNum), SwingConstants.CENTER);
             label.setFont(labelFont);
-            label.setForeground(new Color(180, 185, 195));
+            label.setForeground(new Color(220, 224, 230));
             rankPanel.add(label);
         }
         return rankPanel;
+    }
+
+    /** Centers the grid and aligns its labels while keeping every square square. */
+    @Override
+    public void doLayout() {
+        Insets insets = getInsets();
+        int width = Math.max(0, getWidth() - insets.left - insets.right);
+        int height = Math.max(0, getHeight() - insets.top - insets.bottom);
+        int available = Math.max(0, Math.min(width - LABEL_SIZE, height - LABEL_SIZE));
+        int cell = Math.max(0, (available - 2 * GRID_BORDER) / BOARD_SIZE);
+        int gridSize = cell == 0 ? 0 : cell * BOARD_SIZE + 2 * GRID_BORDER;
+        int x = insets.left + Math.max(0, (width - LABEL_SIZE - gridSize) / 2) + LABEL_SIZE;
+        int y = insets.top + Math.max(0, (height - LABEL_SIZE - gridSize) / 2);
+        gridContainer.setBounds(x, y, gridSize, gridSize);
+        rankLabels.setBounds(x - LABEL_SIZE, y + GRID_BORDER, LABEL_SIZE, cell * BOARD_SIZE);
+        fileLabels.setBounds(x + GRID_BORDER, y + gridSize, cell * BOARD_SIZE, LABEL_SIZE);
     }
 
     /**

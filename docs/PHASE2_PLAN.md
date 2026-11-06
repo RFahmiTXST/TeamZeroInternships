@@ -69,10 +69,10 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
   - [x] Implement `PieceIconManager` / `PieceView`: load or procedurally render visually distinct graphics for all 6 piece types (`Pawn`, `Rook`, `Knight`, `Bishop`, `Queen`, `King`) for both `White` and `Black`.
   - [x] Provide GUI entry point in `src/Main.java` allowing users to launch either the new Swing GUI (default) or the Phase 1 Console game.
 - **Dev 2 (Abid - Board Infrastructure & Layout):**
-  - [ ] Refine and customize `BoardPanel` layout and `SquarePanel` visual styling (fine-tuning alternating square contrast, square border styles, and coordinate label typography).
-  - [ ] Implement dynamic board resizing listener / aspect ratio constraints (ensuring squares remain square during window resize).
-  - [ ] Implement visual square hover and focus indicators (`SquarePanel.setHighlighted` visual feedback for mouse interaction).
-  - [ ] Develop dedicated unit tests for board infrastructure (`test/gui/BoardPanelTest.java`) verifying square lookup, coordinate mapping, and theme configuration.
+  - [x] Refine `BoardPanel` layout and `SquarePanel` visual styling, including coordinate label typography and square feedback borders.
+  - [x] Keep the board and its squares square during window resizing; align coordinate labels and resize piece icons.
+  - [x] Show square hover and focus indicators while preserving explicit selection and highlights.
+  - [x] Add `test/gui/BoardPanelTest.java` for mapping, layout, theme, model refresh, and feedback.
 - **Dev 3 (Sabid - Game State Bridge & Initial Placement):**
   - [ ] Implement `GUIController` to act as the mediator between the underlying `Board` / `Piece` data model and the Swing UI.
   - [ ] Populate the initial visual board: place all 32 pieces in their standard starting positions (White on ranks 1 & 2, Black on ranks 7 & 8).
