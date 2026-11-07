@@ -189,9 +189,9 @@ public class ChessFrame extends JFrame {
      *
      * @param from starting square
      * @param to destination square
-     * @return the captured piece if an opponent was captured, or null
+     * @return true if the move was executed; false if rejected
      */
-    public pieces.Piece movePiece(board.Position from, board.Position to) {
+    public boolean movePiece(board.Position from, board.Position to) {
         return controller.movePiece(from, to);
     }
 }

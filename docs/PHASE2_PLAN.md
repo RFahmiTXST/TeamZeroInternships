@@ -93,11 +93,11 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
 **Goal:** Allow users to move pieces using mouse interactions (both click-and-move and drag-and-drop), execute captures when landing on opponent squares, and trigger the endgame winner pop-up upon King capture.
 
 - **Dev 3 (Sabid - Mouse Event Handling & Move Execution):**
-  - [ ] Implement mouse event listeners on `SquarePanel` / `BoardPanel`:
+  - [x] Implement mouse event listeners on `SquarePanel` / `BoardPanel`:
     - **Click-and-Move:** Click a piece to select it (with visual feedback), then click a destination square to move the piece. Clicking an invalid target or empty square deselects.
     - **Drag-and-Drop:** Mouse press initiates drag with visual floating icon/ghost cursor, mouse drag tracks cursor, and mouse release drops piece onto target square.
-  - [ ] Implement unrestricted piece movement: as required by Phase 2 instructions, movement validation is not required—any piece can move to any valid square on the board.
-  - [ ] Update piece coordinates in the underlying `Board` and refresh the visual squares on both origin and destination.
+  - [x] Implement unrestricted piece movement: as required by Phase 2 instructions, movement validation is not required—any piece can move to any valid square on the board.
+  - [x] Update piece coordinates in the underlying `Board` and refresh the visual squares on both origin and destination.
 - **Dev 2 (Abid - Visual Feedback & Board Dynamic Refresh):**
   - [ ] Implement visual highlight for currently selected square (e.g., subtle highlighted border or semi-transparent colored overlay).
   - [ ] Implement smooth drag-and-drop feedback (dragged piece icon follows mouse pointer).

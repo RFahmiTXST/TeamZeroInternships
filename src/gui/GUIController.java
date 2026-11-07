@@ -13,11 +13,12 @@ import java.util.List;
 /**
  * Connects the GUI's board model to its Swing view and coordinates gameplay state.
  *
- * <p>Orchestrates board initialization, model-to-view synchronization, unrestricted piece
- * movement, opponent piece capture handling, and active player turn tracking. All state-mutating
- * operations enforce execution on the Swing Event Dispatch Thread (EDT).</p>
+ * <p>Orchestrates board initialization, model-to-view synchronization, unrestricted Phase 2
+ * mouse gestures (click-and-move and drag-and-drop), opponent piece capture handling, and active
+ * player turn tracking. All state-mutating operations enforce execution on the Swing Event
+ * Dispatch Thread (EDT).</p>
  *
- * @author Dev 3 (Sabid - Architecture) &amp; Dev 1 (Rayed - Capture Logic &amp; Turn State)
+ * @author Dev 3 (Sabid - Architecture &amp; Input) &amp; Dev 1 (Rayed - Capture Logic &amp; Turn State)
  */
 public final class GUIController {
 
@@ -52,6 +53,10 @@ public final class GUIController {
     private Board board;
     /** View displaying the session's board. */
     private final BoardPanel boardPanel;
+    /** Selected source square, or null. */
+    private Position selected;
+    /** Mouse gesture adapter shared by all board components. */
+    private final BoardMouseHandler mouseHandler;
     /** Active player whose turn it is to move. */
     private Color currentTurn = Color.WHITE;
     /** The most recently captured piece, or null if no capture has occurred yet. */
@@ -76,6 +81,7 @@ public final class GUIController {
         }
         this.board = board;
         this.boardPanel = boardPanel;
+        this.mouseHandler = new BoardMouseHandler(this);
         refreshBoard();
     }
 
@@ -87,6 +93,7 @@ public final class GUIController {
      */
     public void startNewGame() {
         requireEventDispatchThread();
+        cancelSelection();
         board.initialize();
         currentTurn = Color.WHITE;
         lastCapturedPiece = null;
@@ -108,6 +115,7 @@ public final class GUIController {
         if (board == null) {
             throw new IllegalArgumentException("Board must not be null.");
         }
+        cancelSelection();
         this.board = board;
         this.currentTurn = Color.WHITE;
         this.lastCapturedPiece = null;
@@ -128,6 +136,48 @@ public final class GUIController {
         } else {
             boardPanel.updateFromBoard();
         }
+    }
+
+    /**
+     * Selects a piece or attempts a move from the current selection.
+     *
+     * @param target clicked square, or null for the board margin
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public void clickSquare(Position target) {
+        requireEventDispatchThread();
+        if (selected != null) {
+            movePiece(selected, target);
+        } else {
+            selectSquare(target);
+        }
+    }
+
+    /**
+     * Selects an occupied square and clears previous selection feedback.
+     *
+     * @param target source square, or null to clear selection
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public void selectSquare(Position target) {
+        requireEventDispatchThread();
+        boardPanel.clearHighlights();
+        selected = target != null && target.isOnBoard() && board.getPiece(target) != null
+                ? target : null;
+        if (selected != null) {
+            boardPanel.getSquarePanel(selected).setSelected(true);
+        }
+    }
+
+    /**
+     * Cancels selection and any pending mouse gesture without changing the model.
+     *
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public void cancelSelection() {
+        requireEventDispatchThread();
+        mouseHandler.cancel();
+        selectSquare(null);
     }
 
     /**
@@ -241,42 +291,31 @@ public final class GUIController {
     }
 
     /**
-     * Moves a piece from a starting square to a destination square, executing piece
-     * captures and turn switching.
+     * Moves a piece without chess legality or turn restrictions, as required by Phase 2.
      *
-     * <p>If the destination square contains an opponent piece, the captured piece is removed
-     * from the board model and its icon is cleared immediately from the display. If the destination
-     * contains a friendly piece (same color), the move is rejected. Upon successful movement or
-     * capture, the active turn switches and status listeners are notified.</p>
+     * <p>Same-square moves, empty sources, off-board coordinates, and friendly captures are
+     * rejected without modifying the board or throwing exceptions, allowing mouse gestures
+     * to cancel cleanly. If the destination square contains an opponent piece, the captured piece
+     * is removed from the board model, its icon is cleared immediately from the display, and
+     * capture listeners are notified. Upon a successful move or capture, the active turn switches
+     * and status listeners are notified.</p>
      *
-     * @param from starting square containing the piece to move
-     * @param to destination target square
-     * @return the captured {@link Piece} if an opponent piece was captured; null otherwise
-     * @throws IllegalArgumentException if either position is null or off-board,
-     *         if the starting square has no piece, if from and to are the same square,
-     *         or if attempting to capture a friendly piece
+     * @param from source coordinate containing the piece to move
+     * @param to destination target coordinate
+     * @return true if the move was executed; false if rejected
      * @throws IllegalStateException if called outside the EDT
      */
-    public Piece movePiece(Position from, Position to) {
+    public boolean movePiece(Position from, Position to) {
         requireEventDispatchThread();
-        if (from == null || to == null) {
-            throw new IllegalArgumentException("From and to positions must not be null.");
+        cancelSelection();
+        if (from == null || to == null || !from.isOnBoard() || !to.isOnBoard()
+                || from.equals(to)) {
+            return false;
         }
-        if (!from.isOnBoard() || !to.isOnBoard()) {
-            throw new IllegalArgumentException("Positions must be on the board: from=" + from + ", to=" + to);
-        }
-        if (from.equals(to)) {
-            throw new IllegalArgumentException("Cannot move a piece to its own square: " + from);
-        }
-
-        Piece movingPiece = board.getPiece(from);
-        if (movingPiece == null) {
-            throw new IllegalArgumentException("No piece at starting position: " + from);
-        }
-
-        Piece targetPiece = board.getPiece(to);
-        if (targetPiece != null && targetPiece.getColor() == movingPiece.getColor()) {
-            throw new IllegalArgumentException("Cannot capture friendly piece at " + to);
+        Piece moving = board.getPiece(from);
+        Piece target = board.getPiece(to);
+        if (moving == null || (target != null && target.getColor() == moving.getColor())) {
+            return false;
         }
 
         Piece captured = board.movePiece(from, to);
@@ -290,7 +329,7 @@ public final class GUIController {
         }
 
         switchTurn();
-        return captured;
+        return true;
     }
 
     /**
@@ -298,11 +337,10 @@ public final class GUIController {
      *
      * @param from starting square
      * @param to destination square
-     * @return the captured {@link Piece}, or null if no capture occurred
-     * @throws IllegalArgumentException if move positions or conditions are invalid
+     * @return true if the move was executed; false if rejected
      * @throws IllegalStateException if called outside the EDT
      */
-    public Piece executeMove(Position from, Position to) {
+    public boolean executeMove(Position from, Position to) {
         return movePiece(from, to);
     }
 

@@ -150,9 +150,9 @@ public final class CaptureAndTurnTest {
         Position to = new Position(3, 4);   // E4
         Piece movingPiece = board.getPiece(from);
 
-        Piece captured = controller.movePiece(from, to);
+        boolean moved = controller.movePiece(from, to);
 
-        TestUtils.assertEquals(null, captured, "Non-capture move returns null captured piece");
+        TestUtils.assertEquals(true, moved, "Non-capture move executes successfully");
         TestUtils.assertEquals(null, controller.getLastCapturedPiece(),
                 "lastCapturedPiece remains null after quiet move");
         TestUtils.assertEquals(null, board.getPiece(from), "Source square cleared in model");
@@ -199,9 +199,11 @@ public final class CaptureAndTurnTest {
         });
 
         // Execute capture
-        Piece captured = controller.movePiece(queenPos, rookPos);
+        boolean moved = controller.movePiece(queenPos, rookPos);
+        Piece captured = controller.getLastCapturedPiece();
 
-        TestUtils.assertEquals(blackRook, captured, "Captured piece returned by movePiece");
+        TestUtils.assertEquals(true, moved, "Capture move executes successfully");
+        TestUtils.assertEquals(blackRook, captured, "Captured piece recorded in controller");
         TestUtils.assertEquals(blackRook, controller.getLastCapturedPiece(),
                 "lastCapturedPiece recorded in controller");
         TestUtils.assertEquals(1, capturedEvents.size(), "Capture listener triggered once");
@@ -274,8 +276,8 @@ public final class CaptureAndTurnTest {
         Piece rook = board.getPiece(from);
         Piece pawn = board.getPiece(to);
 
-        assertThrows(IllegalArgumentException.class, () -> controller.movePiece(from, to),
-                "Cannot capture friendly piece");
+        boolean moved = controller.movePiece(from, to);
+        TestUtils.assertEquals(false, moved, "Friendly capture rejected without modifying board");
 
         // State remains completely intact
         TestUtils.assertEquals(rook, board.getPiece(from), "Friendly piece preserved at from");
@@ -300,8 +302,10 @@ public final class CaptureAndTurnTest {
         board.setPiece(kingPos, blackKing);
         controller.refreshBoard();
 
-        Piece captured = controller.movePiece(bishopPos, kingPos);
+        boolean moved = controller.movePiece(bishopPos, kingPos);
+        Piece captured = controller.getLastCapturedPiece();
 
+        TestUtils.assertEquals(true, moved, "King capture move executes successfully");
         TestUtils.assertEquals(true, captured instanceof King,
                 "Captured piece identified as King instance");
         TestUtils.assertEquals(blackKing, captured, "Captured piece matches Black King");
