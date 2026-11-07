@@ -38,6 +38,7 @@ public class TestRunner {
         test.gui.PieceIconManagerTest.main(args);
         test.gui.BoardPanelTest.main(args);
         test.gui.GuiSmokeTest.main(args);
+        test.gui.GUIControllerTest.main(args);
 
         // Dev 4: Board, Player, and Piece integration tests
         board.BoardIntegrationTest.main(args);

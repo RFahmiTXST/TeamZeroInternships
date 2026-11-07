@@ -118,3 +118,23 @@ remain documented limitations. Original rubric and peer-evaluation forms are
 not in the checkout, so they have not been marked complete. The final release
 PR remains Rayed's responsibility. M4 changes are local pending review;
 no M4 push or dev-to-main merge was performed.
+
+## 2026-11-04 — Phase 2 Milestone 1 controller
+
+**Request:** "Complete my Milestone 1 first."
+
+**Assistance adopted:** Codex implemented GUIController to connect Board and
+BoardPanel, initialize all 32 pieces, refresh the view, and replace an existing
+board without resetting it. ChessFrame delegates model access and refresh to
+this controller. Mutation is restricted to Swing's EDT; Main already launches
+through invokeLater. Existing GUI tests now also execute on the EDT.
+
+**Verification:** Java 17-compatible compilation passed. Full desktop test run:
+807 shared + 28 Utils assertions (835 total); headless: 797 + 28 (825 total).
+Controller checks cover all starting squares, reset after capture, supplied and
+replacement models, refresh, invalid arguments, and rejected non-EDT updates.
+Strict source Javadoc (-private -Xdoclint:all -Werror) passed without warnings.
+The compiler retains seven existing Swing serialization/constructor warnings.
+
+**Scope:** M1 only. Mouse movement, capture events, and history remain later
+milestones. Abid's pending board-layout PR was not merged. No push performed.

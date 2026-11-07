@@ -34,12 +34,21 @@ public class PieceIconManagerTest {
     public static void main(String[] args) {
         System.out.println("Running PieceIconManager and GUI Tests...");
 
-        testPieceIconGeneration();
-        testPieceScaling();
-        testIconCaching();
-        testPieceView();
-        testBoardPanelStructure();
-        testChessFrameInitialization();
+        try {
+            javax.swing.SwingUtilities.invokeAndWait(() -> {
+                testPieceIconGeneration();
+                testPieceScaling();
+                testIconCaching();
+                testPieceView();
+                testBoardPanelStructure();
+                testChessFrameInitialization();
+            });
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError("GUI tests interrupted", e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            throw new AssertionError("GUI tests failed", e.getCause());
+        }
 
         System.out.println("PieceIconManager and GUI Tests completed.");
     }

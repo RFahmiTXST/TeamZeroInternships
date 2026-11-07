@@ -11,6 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -37,8 +38,8 @@ public class ChessFrame extends JFrame {
     /** Minimum allowed window height in pixels. */
     public static final int MIN_HEIGHT = 720;
 
-    /** The underlying domain board model. */
-    private final Board board;
+    /** Mediates the active board model and its Swing view. */
+    private final GUIController controller;
     /** The central visual board panel component. */
     private final BoardPanel boardPanel;
     /** The status label displayed in the southern footer panel. */
@@ -46,23 +47,29 @@ public class ChessFrame extends JFrame {
 
     /**
      * Constructs a new ChessFrame with a fresh, initialized standard chess board.
+     *
+     * @throws IllegalStateException if constructed outside the Swing EDT
      */
     public ChessFrame() {
-        this(createDefaultBoard());
+        this(new Board());
+        controller.startNewGame();
     }
 
     /**
      * Constructs a new ChessFrame with the specified Board model.
      *
      * @param board the domain Board model to display; must not be null
+     * @throws IllegalArgumentException if the board is null
+     * @throws IllegalStateException if constructed outside the Swing EDT
      */
     public ChessFrame(Board board) {
         super(DEFAULT_TITLE);
+        if (!SwingUtilities.isEventDispatchThread()) {
+            throw new IllegalStateException("ChessFrame must be constructed on the Swing EDT.");
+        }
         if (board == null) {
             throw new IllegalArgumentException("Board model must not be null.");
         }
-        this.board = board;
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
         setPreferredSize(new Dimension(740, 780));
@@ -70,6 +77,7 @@ public class ChessFrame extends JFrame {
 
         // Center: Chessboard panel
         this.boardPanel = new BoardPanel(board);
+        this.controller = new GUIController(board, boardPanel);
         add(boardPanel, BorderLayout.CENTER);
 
         // South: Status bar panel
@@ -89,17 +97,6 @@ public class ChessFrame extends JFrame {
 
         pack();
         setLocationRelativeTo(null);
-    }
-
-    /**
-     * Helper factory to create and populate a default initialized Board.
-     *
-     * @return initialized Board
-     */
-    private static Board createDefaultBoard() {
-        Board b = new Board();
-        b.initialize();
-        return b;
     }
 
     /**
@@ -125,7 +122,16 @@ public class ChessFrame extends JFrame {
      * @return the Board model
      */
     public Board getBoard() {
-        return board;
+        return controller.getBoard();
+    }
+
+    /**
+     * Returns the controller for board initialization and model-view updates.
+     *
+     * @return the GUI controller
+     */
+    public GUIController getController() {
+        return controller;
     }
 
     /**
@@ -159,9 +165,11 @@ public class ChessFrame extends JFrame {
 
     /**
      * Refreshes the board visual components from the domain model.
+     *
+     * @throws IllegalStateException if called outside the Swing EDT
      */
     public void refresh() {
-        boardPanel.updateFromBoard();
+        controller.refreshBoard();
     }
 }
 

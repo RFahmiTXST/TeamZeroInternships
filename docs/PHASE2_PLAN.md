@@ -74,9 +74,9 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
   - [x] Show square hover and focus indicators while preserving explicit selection and highlights.
   - [x] Add `test/gui/BoardPanelTest.java` for mapping, layout, theme, model refresh, and feedback.
 - **Dev 3 (Sabid - Game State Bridge & Initial Placement):**
-  - [ ] Implement `GUIController` to act as the mediator between the underlying `Board` / `Piece` data model and the Swing UI.
-  - [ ] Populate the initial visual board: place all 32 pieces in their standard starting positions (White on ranks 1 & 2, Black on ranks 7 & 8).
-  - [ ] Ensure all initial component construction and board painting adhere to Swing thread-safety guidelines (`SwingUtilities.invokeLater`).
+  - [x] Implement `GUIController` to act as the mediator between the underlying `Board` / `Piece` data model and the Swing UI.
+  - [x] Populate the initial visual board: place all 32 pieces in their standard starting positions (White on ranks 1 & 2, Black on ranks 7 & 8).
+  - [x] Ensure all initial component construction and board painting adhere to Swing thread-safety guidelines (`SwingUtilities.invokeLater`).
 - **Dev 4 (Towsif - QA & Setup):**
   - [x] Set up Phase 2 test scaffolding in `test/gui/` to verify headless component initialization and state-to-view mapping.
   - [x] Create Phase 2 documentation structure and screenshot checklist (`docs/PHASE2_REPORT_CHECKLIST.md`).
