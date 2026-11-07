@@ -1,24 +1,65 @@
 package gui;
 
 import board.Board;
+import board.Position;
 import gui.board.BoardPanel;
+import pieces.Color;
+import pieces.Piece;
+
 import javax.swing.SwingUtilities;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Connects the GUI's board model to its Swing view.
+ * Connects the GUI's board model to its Swing view and coordinates gameplay state.
  *
- * <p>Milestone 1 provides initial placement, reset, and model-to-view refresh.
- * It does not apply the console game's movement rules. Construct the controller
- * and call its mutating methods on the Swing event dispatch thread (EDT).
- * The controller does not create a window, so it can be tested headlessly.</p>
+ * <p>Orchestrates board initialization, model-to-view synchronization, unrestricted piece
+ * movement, opponent piece capture handling, and active player turn tracking. All state-mutating
+ * operations enforce execution on the Swing Event Dispatch Thread (EDT).</p>
  *
- * @author Dev 3 (Sabid)
+ * @author Dev 3 (Sabid - Architecture) &amp; Dev 1 (Rayed - Capture Logic &amp; Turn State)
  */
 public final class GUIController {
+
+    /**
+     * Listener invoked whenever the active player turn or status text changes.
+     */
+    @FunctionalInterface
+    public interface StatusListener {
+        /**
+         * Invoked when the status message or active turn changes.
+         *
+         * @param statusMessage updated status text
+         */
+        void onStatusChanged(String statusMessage);
+    }
+
+    /**
+     * Listener invoked whenever a piece is captured on the board.
+     */
+    @FunctionalInterface
+    public interface CaptureListener {
+        /**
+         * Invoked when a piece is captured on the board.
+         *
+         * @param capturedPiece the captured Piece instance
+         * @param targetPosition board position where the piece was captured
+         */
+        void onPieceCaptured(Piece capturedPiece, Position targetPosition);
+    }
+
     /** Board model used by this GUI session. */
     private Board board;
     /** View displaying the session's board. */
     private final BoardPanel boardPanel;
+    /** Active player whose turn it is to move. */
+    private Color currentTurn = Color.WHITE;
+    /** The most recently captured piece, or null if no capture has occurred yet. */
+    private Piece lastCapturedPiece;
+    /** Registered status listeners notified on turn and state changes. */
+    private final List<StatusListener> statusListeners = new ArrayList<>();
+    /** Registered capture listeners notified when an opponent piece is captured. */
+    private final List<CaptureListener> captureListeners = new ArrayList<>();
 
     /**
      * Connects an existing board and view without resetting the supplied position.
@@ -39,7 +80,7 @@ public final class GUIController {
     }
 
     /**
-     * Initializes all 32 starting pieces and clears stale visual selections.
+     * Initializes all 32 starting pieces, resets the turn to White, and clears stale selections.
      * Existing pieces and captures are reset through {@link Board#initialize()}.
      *
      * @throws IllegalStateException if called outside the EDT
@@ -47,13 +88,16 @@ public final class GUIController {
     public void startNewGame() {
         requireEventDispatchThread();
         board.initialize();
+        currentTurn = Color.WHITE;
+        lastCapturedPiece = null;
         boardPanel.clearHighlights();
         refreshBoard();
+        notifyStatusListeners();
     }
 
     /**
      * Displays a replacement board without changing its pieces or moved flags.
-     * This is the integration point for a future load-game action.
+     * Resets active turn to White and clears previous capture history.
      *
      * @param board replacement board model
      * @throws IllegalArgumentException if the replacement is null
@@ -65,8 +109,11 @@ public final class GUIController {
             throw new IllegalArgumentException("Board must not be null.");
         }
         this.board = board;
+        this.currentTurn = Color.WHITE;
+        this.lastCapturedPiece = null;
         boardPanel.clearHighlights();
         refreshBoard();
+        notifyStatusListeners();
     }
 
     /**
@@ -100,6 +147,241 @@ public final class GUIController {
      */
     public BoardPanel getBoardPanel() {
         return boardPanel;
+    }
+
+    /**
+     * Returns the active player whose turn it is to move.
+     *
+     * @return current active turn Color (WHITE or BLACK)
+     */
+    public Color getCurrentTurn() {
+        return currentTurn;
+    }
+
+    /**
+     * Sets the active player turn directly.
+     *
+     * @param turn the player Color whose turn it should be; must not be null
+     * @throws IllegalArgumentException if turn is null
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public void setCurrentTurn(Color turn) {
+        requireEventDispatchThread();
+        if (turn == null) {
+            throw new IllegalArgumentException("Turn color cannot be null.");
+        }
+        this.currentTurn = turn;
+        notifyStatusListeners();
+    }
+
+    /**
+     * Toggles the active player turn between White and Black and notifies status listeners.
+     *
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public void switchTurn() {
+        requireEventDispatchThread();
+        this.currentTurn = (currentTurn == Color.WHITE) ? Color.BLACK : Color.WHITE;
+        notifyStatusListeners();
+    }
+
+    /**
+     * Returns a standardized turn status string ("White's Turn" or "Black's Turn").
+     *
+     * @return turn status string
+     */
+    public String getTurnStatusText() {
+        return (currentTurn == Color.WHITE) ? "White's Turn" : "Black's Turn";
+    }
+
+    /**
+     * Returns the current status bar message.
+     *
+     * @return status message representing active turn
+     */
+    public String getStatusMessage() {
+        return getTurnStatusText();
+    }
+
+    /**
+     * Retrieves the piece captured in the most recent move, if any.
+     *
+     * @return the last captured {@link Piece}, or null if none
+     */
+    public Piece getLastCapturedPiece() {
+        return lastCapturedPiece;
+    }
+
+    /**
+     * Captures and removes the piece currently occupying the specified position.
+     *
+     * <p>Removes the piece from the underlying {@link Board} model, clears its icon
+     * immediately from the display, records the capture, and notifies capture listeners.</p>
+     *
+     * @param target position of the piece to capture
+     * @return the captured {@link Piece}, or null if the square was unoccupied
+     * @throws IllegalArgumentException if target is null or off-board
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public Piece capturePiece(Position target) {
+        requireEventDispatchThread();
+        if (target == null || !target.isOnBoard()) {
+            throw new IllegalArgumentException("Target position must be on the board: " + target);
+        }
+        Piece targetPiece = board.getPiece(target);
+        if (targetPiece == null) {
+            return null;
+        }
+        board.recordCapture(targetPiece);
+        board.setPiece(target, null);
+        this.lastCapturedPiece = targetPiece;
+        boardPanel.updateSquare(target);
+        notifyCaptureListeners(targetPiece, target);
+        return targetPiece;
+    }
+
+    /**
+     * Moves a piece from a starting square to a destination square, executing piece
+     * captures and turn switching.
+     *
+     * <p>If the destination square contains an opponent piece, the captured piece is removed
+     * from the board model and its icon is cleared immediately from the display. If the destination
+     * contains a friendly piece (same color), the move is rejected. Upon successful movement or
+     * capture, the active turn switches and status listeners are notified.</p>
+     *
+     * @param from starting square containing the piece to move
+     * @param to destination target square
+     * @return the captured {@link Piece} if an opponent piece was captured; null otherwise
+     * @throws IllegalArgumentException if either position is null or off-board,
+     *         if the starting square has no piece, if from and to are the same square,
+     *         or if attempting to capture a friendly piece
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public Piece movePiece(Position from, Position to) {
+        requireEventDispatchThread();
+        if (from == null || to == null) {
+            throw new IllegalArgumentException("From and to positions must not be null.");
+        }
+        if (!from.isOnBoard() || !to.isOnBoard()) {
+            throw new IllegalArgumentException("Positions must be on the board: from=" + from + ", to=" + to);
+        }
+        if (from.equals(to)) {
+            throw new IllegalArgumentException("Cannot move a piece to its own square: " + from);
+        }
+
+        Piece movingPiece = board.getPiece(from);
+        if (movingPiece == null) {
+            throw new IllegalArgumentException("No piece at starting position: " + from);
+        }
+
+        Piece targetPiece = board.getPiece(to);
+        if (targetPiece != null && targetPiece.getColor() == movingPiece.getColor()) {
+            throw new IllegalArgumentException("Cannot capture friendly piece at " + to);
+        }
+
+        Piece captured = board.movePiece(from, to);
+        this.lastCapturedPiece = captured;
+
+        boardPanel.clearHighlights();
+        refreshBoard();
+
+        if (captured != null) {
+            notifyCaptureListeners(captured, to);
+        }
+
+        switchTurn();
+        return captured;
+    }
+
+    /**
+     * Alias for {@link #movePiece(Position, Position)} supporting alternative caller conventions.
+     *
+     * @param from starting square
+     * @param to destination square
+     * @return the captured {@link Piece}, or null if no capture occurred
+     * @throws IllegalArgumentException if move positions or conditions are invalid
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public Piece executeMove(Position from, Position to) {
+        return movePiece(from, to);
+    }
+
+    /**
+     * Adds a status listener to receive turn and status update notifications.
+     *
+     * @param listener listener to register; must not be null
+     * @throws IllegalArgumentException if listener is null
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public void addStatusListener(StatusListener listener) {
+        requireEventDispatchThread();
+        if (listener == null) {
+            throw new IllegalArgumentException("Status listener must not be null.");
+        }
+        if (!statusListeners.contains(listener)) {
+            statusListeners.add(listener);
+        }
+    }
+
+    /**
+     * Removes a previously registered status listener.
+     *
+     * @param listener listener to unregister
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public void removeStatusListener(StatusListener listener) {
+        requireEventDispatchThread();
+        statusListeners.remove(listener);
+    }
+
+    /**
+     * Adds a capture listener to receive notifications when pieces are captured.
+     *
+     * @param listener listener to register; must not be null
+     * @throws IllegalArgumentException if listener is null
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public void addCaptureListener(CaptureListener listener) {
+        requireEventDispatchThread();
+        if (listener == null) {
+            throw new IllegalArgumentException("Capture listener must not be null.");
+        }
+        if (!captureListeners.contains(listener)) {
+            captureListeners.add(listener);
+        }
+    }
+
+    /**
+     * Removes a previously registered capture listener.
+     *
+     * @param listener listener to unregister
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public void removeCaptureListener(CaptureListener listener) {
+        requireEventDispatchThread();
+        captureListeners.remove(listener);
+    }
+
+    /**
+     * Broadcasts the current status message to all registered status listeners.
+     */
+    private void notifyStatusListeners() {
+        String message = getStatusMessage();
+        for (StatusListener listener : statusListeners) {
+            listener.onStatusChanged(message);
+        }
+    }
+
+    /**
+     * Broadcasts a piece capture event to all registered capture listeners.
+     *
+     * @param captured the captured piece
+     * @param targetPosition position where the capture occurred
+     */
+    private void notifyCaptureListeners(Piece captured, Position targetPosition) {
+        for (CaptureListener listener : captureListeners) {
+            listener.onPieceCaptured(captured, targetPosition);
+        }
     }
 
     /**
