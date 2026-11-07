@@ -85,7 +85,7 @@ public class ChessFrame extends JFrame {
         statusPanel.setBackground(new Color(32, 34, 38));
         statusPanel.setBorder(BorderFactory.createEmptyBorder(6, 14, 6, 14));
 
-        statusLabel = new JLabel("Team Zero Chess | Phase 2 GUI Initialized | White to move", SwingConstants.LEFT);
+        statusLabel = new JLabel("Click a piece, then a square; or drag and drop. Esc cancels.", SwingConstants.LEFT);
         statusLabel.setForeground(new Color(220, 224, 230));
         statusLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
         statusPanel.add(statusLabel, BorderLayout.CENTER);
