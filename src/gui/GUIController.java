@@ -1,13 +1,15 @@
 package gui;
 
 import board.Board;
+import board.Position;
+import pieces.Piece;
 import gui.board.BoardPanel;
 import javax.swing.SwingUtilities;
 
 /**
  * Connects the GUI's board model to its Swing view.
  *
- * <p>Milestone 1 provides initial placement, reset, and model-to-view refresh.
+ * <p>Provides placement, reset, refresh, and unrestricted Phase 2 mouse moves.
  * It does not apply the console game's movement rules. Construct the controller
  * and call its mutating methods on the Swing event dispatch thread (EDT).
  * The controller does not create a window, so it can be tested headlessly.</p>
@@ -19,6 +21,10 @@ public final class GUIController {
     private Board board;
     /** View displaying the session's board. */
     private final BoardPanel boardPanel;
+    /** Selected source square, or null. */
+    private Position selected;
+    /** Mouse gesture adapter shared by all board components. */
+    private final BoardMouseHandler mouseHandler;
 
     /**
      * Connects an existing board and view without resetting the supplied position.
@@ -35,6 +41,7 @@ public final class GUIController {
         }
         this.board = board;
         this.boardPanel = boardPanel;
+        mouseHandler = new BoardMouseHandler(this);
         refreshBoard();
     }
 
@@ -46,6 +53,7 @@ public final class GUIController {
      */
     public void startNewGame() {
         requireEventDispatchThread();
+        cancelSelection();
         board.initialize();
         boardPanel.clearHighlights();
         refreshBoard();
@@ -64,6 +72,7 @@ public final class GUIController {
         if (board == null) {
             throw new IllegalArgumentException("Board must not be null.");
         }
+        cancelSelection();
         this.board = board;
         boardPanel.clearHighlights();
         refreshBoard();
@@ -81,6 +90,64 @@ public final class GUIController {
         } else {
             boardPanel.updateFromBoard();
         }
+    }
+
+    /**
+     * Selects a piece or attempts a move from the current selection.
+     * @param target clicked square, or null for the board margin
+     */
+    public void clickSquare(Position target) {
+        requireEventDispatchThread();
+        if (selected != null) {
+            movePiece(selected, target);
+        } else {
+            selectSquare(target);
+        }
+    }
+
+    /**
+     * Selects an occupied square and clears previous selection feedback.
+     * @param target source square, or null to clear selection
+     */
+    public void selectSquare(Position target) {
+        requireEventDispatchThread();
+        boardPanel.clearHighlights();
+        selected = target != null && target.isOnBoard() && board.getPiece(target) != null
+                ? target : null;
+        if (selected != null) boardPanel.getSquarePanel(selected).setSelected(true);
+    }
+
+    /**
+     * Cancels selection and any pending mouse gesture without changing the model.
+     */
+    public void cancelSelection() {
+        requireEventDispatchThread();
+        mouseHandler.cancel();
+        selectSquare(null);
+    }
+
+    /**
+     * Moves without chess legality or turn restrictions, as required by Phase 2.
+     * Same-square moves, empty sources and friendly captures are rejected.
+     * Opposing captures are recorded by the existing Board implementation.
+     * This is the shared integration point for future turn and endgame handling.
+     * @param from source coordinate
+     * @param to destination coordinate
+     * @return true if the model changed
+     */
+    public boolean movePiece(Position from, Position to) {
+        requireEventDispatchThread();
+        cancelSelection();
+        if (from == null || to == null || !from.isOnBoard() || !to.isOnBoard()
+                || from.equals(to)) return false;
+        Piece moving = board.getPiece(from);
+        Piece target = board.getPiece(to);
+        if (moving == null || (target != null && target.getColor() == moving.getColor())) {
+            return false;
+        }
+        board.movePiece(from, to);
+        refreshBoard();
+        return true;
     }
 
     /**
