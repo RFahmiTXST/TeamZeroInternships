@@ -2,15 +2,21 @@ package test.gui;
 
 import board.Board;
 import board.Position;
+import gui.GUIController;
 import gui.board.BoardPanel;
 import gui.board.SquarePanel;
 import test.TestUtils;
 
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JRootPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -100,9 +106,70 @@ public final class BoardPanelTest {
         panel.clearHighlights();
         TestUtils.assertEquals(false, a1.isHighlighted(), "Clear highlights resets explicit highlight");
 
+        checkMovementFeedback();
+
         a1.setSize(40, 40);
         a1.dispatchEvent(new ComponentEvent(a1, ComponentEvent.COMPONENT_RESIZED));
         JLabel iconLabel = (JLabel) a1.getComponent(0);
         TestUtils.assertEquals(true, iconLabel.getIcon().getIconWidth() <= 40, "Piece icon fits a small square");
     }
+
+    /** Checks selection, drag tracking, and view updates after a capture. */
+    private static void checkMovementFeedback() {
+        Board board = new Board();
+        board.initialize();
+        BoardPanel panel = new BoardPanel(board);
+        new GUIController(board, panel);
+        JRootPane root = new JRootPane();
+        root.setContentPane(panel);
+        root.setSize(720, 720);
+        layoutChildren(root);
+
+        Position from = new Position(1, 4);
+        Position target = new Position(6, 4);
+        Object pawn = board.getPiece(from);
+        Component label = panel.getSquarePanel(from).getComponent(0);
+        Point start = new Point(label.getWidth() / 2, label.getHeight() / 2);
+        Point end = SwingUtilities.convertPoint(panel.getSquarePanel(target),
+                20, 20, label);
+        dispatchMouse(label, MouseEvent.MOUSE_PRESSED, start, MouseEvent.BUTTON1);
+        dispatchMouse(label, MouseEvent.MOUSE_DRAGGED, end, MouseEvent.NOBUTTON);
+        TestUtils.assertEquals(true, panel.getSquarePanel(from).isSelected(),
+                "Dragging highlights the selected source");
+        Component[] ghosts = root.getLayeredPane().getComponentsInLayer(JLayeredPane.DRAG_LAYER);
+        TestUtils.assertEquals(1, ghosts.length, "Drag displays one floating icon");
+        if (ghosts.length == 1) {
+            Point pointer = SwingUtilities.convertPoint(label, end, root.getLayeredPane());
+            TestUtils.assertEquals(pointer, new Point(ghosts[0].getX() + ghosts[0].getWidth() / 2,
+                    ghosts[0].getY() + ghosts[0].getHeight() / 2),
+                    "Floating icon follows the pointer");
+        }
+        dispatchMouse(label, MouseEvent.MOUSE_RELEASED, end, MouseEvent.BUTTON1);
+        TestUtils.assertEquals(null, panel.getSquarePanel(from).getPiece(),
+                "Capture refresh clears the source view");
+        TestUtils.assertEquals(pawn, panel.getSquarePanel(target).getPiece(),
+                "Capture refresh replaces the destination view");
+        TestUtils.assertEquals(false, panel.getSquarePanel(from).isSelected(),
+                "Drop clears selection feedback");
+        TestUtils.assertEquals(0, root.getLayeredPane().getComponentsInLayer(JLayeredPane.DRAG_LAYER).length,
+                "Drop removes floating icon");
+    }
+
+    /** Lays out the hierarchy for headless pointer hit testing. */
+    private static void layoutChildren(Container container) {
+        container.doLayout();
+        for (Component child : container.getComponents()) {
+            if (child instanceof Container) {
+                layoutChildren((Container) child);
+            }
+        }
+    }
+
+    /** Sends a mouse event to the piece label. */
+    private static void dispatchMouse(Component component, int id, Point point, int button) {
+        int modifiers = id == MouseEvent.MOUSE_DRAGGED ? MouseEvent.BUTTON1_DOWN_MASK : 0;
+        component.dispatchEvent(new MouseEvent(component, id, System.currentTimeMillis(),
+                modifiers, point.x, point.y, 1, false, button));
+    }
+
 }
