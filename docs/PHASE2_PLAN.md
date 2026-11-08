@@ -107,9 +107,9 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
   - [x] Ensure captured pieces disappear immediately and cleanly from the board.
   - [x] Maintain active player turn tracking (e.g., status bar showing "White's Turn" / "Black's Turn").
 - **Dev 4 (Towsif - Endgame Notification & Winner Declaration - 10%):**
-  - [ ] Implement King capture detection: detect whenever the piece being captured is an instance of `King`.
-  - [ ] Display modal dialog (`JOptionPane.showMessageDialog`) declaring the winning player (e.g., *"Game Over! White captured Black's King and wins!"*).
-  - [ ] Ensure the game terminates cleanly upon closing or confirming the dialog (as mandated by Phase 2 instructions).
+  - [x] Implement King capture detection: detect whenever the piece being captured is an instance of `King`.
+  - [x] Display modal dialog (`JOptionPane.showMessageDialog`) declaring the winning player (e.g., *"Game Over! White captured Black's King and wins!"*).
+  - [x] Ensure the game terminates cleanly upon closing or confirming the dialog (as mandated by Phase 2 instructions).
 
 🧪 **Manual Tests for M2:**
 - **Click-and-move:** Click a piece on `E2`, verify highlight appears; click `E5`, verify piece moves to `E5`.

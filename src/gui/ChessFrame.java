@@ -78,6 +78,9 @@ public class ChessFrame extends JFrame {
         // Center: Chessboard panel
         this.boardPanel = new BoardPanel(board);
         this.controller = new GUIController(board, boardPanel);
+        // Dev 4 M2: show winner and exit only when a King is captured.
+        KingCaptureHandler kingCaptureHandler = new KingCaptureHandler(this);
+        controller.addCaptureListener(kingCaptureHandler::onPieceCaptured);
         add(boardPanel, BorderLayout.CENTER);
 
         // South: Status bar panel

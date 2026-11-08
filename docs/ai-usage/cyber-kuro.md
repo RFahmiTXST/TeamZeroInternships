@@ -156,24 +156,51 @@ en passant remain outside the implemented Phase 1 scope.
 
 I used ChatGPT to review the Phase 2 plan and existing Swing GUI classes, plan headless GUI tests, prepare cross-platform build scripts, and organize the screenshot checklist. I reviewed and tested the changes locally.
 
-### Work Completed
+### Implementation
 
-- Added `test/gui/GuiSmokeTest.java` for headless GUI component and board-to-view tests.
-- Registered the GUI tests in `TestRunner.java`.
-- Added PowerShell and Bash verification scripts in `scripts/`.
-- Created `docs/PHASE2_REPORT_CHECKLIST.md`.
-- Verified the initial Swing chessboard manually.
+- Created `src/gui/KingCaptureHandler.java` to detect King captures and determine the winning player.
+- Reused `DialogHelper.showEndgameDialog()` for displaying winner announcements.
+- Implemented application termination after the dialog is dismissed.
+- Prevented duplicate endgame announcements.
+- Created `test/gui/KingCaptureHandlerTest.java` with 22 assertions.
+- Registered the new test suite in `test/TestRunner.java`.
+- Integrated the handler into `ChessFrame.java` using `GUIController.addCaptureListener()`.
 
-### Verification
+### Integration and Debugging
 
-- PowerShell compilation and tests: PASS.
-- Git Bash compilation and tests: PASS.
-- Shared assertions: 639 passed, 0 failed.
-- Utils assertions: 28 passed, 0 failed.
-- Total: 667 passed, 0 failed.
-- Swing GUI launched successfully.
-- Verified the 8x8 board, alternating square colors, all 32 starting pieces, and coordinate labels.
+- Synchronized my feature branch with the latest `dev`.
+- Resolved the merge conflict in `TestRunner.java`.
+- Preserved Dev 1's `CaptureAndTurnTest`, Dev 3's `MouseMovementTest`, and my `KingCaptureHandlerTest`.
+- Integrated the King-capture handler with the existing mouse movement and capture functionality.
+- Verified the changes without modifying the underlying chess movement rules.
 
-### Scope
+### Automated Testing
 
-This milestone covers GUI testing, build verification, and documentation. Mouse controls, captures, and additional game features are assigned to later milestones.
+- Shared assertions: **956 passed, 0 failed**.
+- Utils assertions: **28 passed, 0 failed**.
+- Total assertions: **984 passed, 0 failed**.
+- Standalone King-capture tests: **22 passed, 0 failed**.
+- Java 17-compatible compilation: **Successful**.
+- Regression test exit code: **0**.
+
+### Manual GUI Testing
+
+**Test 1 — White Victory**
+- Launched the Swing GUI.
+- Moved the White Queen from D1 to E8 to capture the Black King.
+- Verified that the correct White victory dialog appeared.
+- Confirmed that the application terminated after clicking OK.
+
+**Test 2 — Black Victory**
+- Relaunched the Swing GUI.
+- Moved the Black Queen from D8 to E1 to capture the White King.
+- Verified that the correct Black victory dialog appeared.
+- Confirmed that the application terminated after clicking OK.
+
+### Final Result
+
+All three assigned Dev 4 Phase 2 Milestone 2 responsibilities were implemented and verified:
+
+- [x] Detect King captures.
+- [x] Display the correct winner using a modal dialog.
+- [x] Terminate the application after the dialog is dismissed.
