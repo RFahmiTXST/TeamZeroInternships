@@ -2,20 +2,27 @@ package gui;
 
 import board.Board;
 import gui.board.BoardPanel;
+import gui.board.BoardSize;
+import gui.dialogs.SettingsDialog;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 
 /**
  * Main application window for the Phase 2 Graphical User Interface (GUI).
@@ -44,6 +51,10 @@ public class ChessFrame extends JFrame {
     private final BoardPanel boardPanel;
     /** The status label displayed in the southern footer panel. */
     private final JLabel statusLabel;
+    /** The toolbar settings button. */
+    private final JButton settingsButton;
+    /** Cached customization settings dialog. */
+    private SettingsDialog settingsDialog;
 
     /**
      * Constructs a new ChessFrame with a fresh, initialized standard chess board.
@@ -74,6 +85,17 @@ public class ChessFrame extends JFrame {
         setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
         setPreferredSize(new Dimension(740, 780));
         setLayout(new BorderLayout());
+
+        // North: Top toolbar with gear customization button
+        JPanel topToolbar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 4));
+        topToolbar.setBackground(new Color(32, 34, 38));
+        this.settingsButton = new JButton("⚙ Settings");
+        settingsButton.setFocusable(false);
+        settingsButton.setToolTipText("Open Customization Settings (Ctrl+,)");
+        settingsButton.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        settingsButton.addActionListener(e -> openSettingsDialog());
+        topToolbar.add(settingsButton);
+        add(topToolbar, BorderLayout.NORTH);
 
         // Center: Chessboard panel
         this.boardPanel = new BoardPanel(board);
@@ -114,11 +136,24 @@ public class ChessFrame extends JFrame {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu gameMenu = new JMenu("Game");
+        JMenuItem settingsItem = new JMenuItem("Settings...");
+        settingsItem.setMnemonic('S');
+        settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        settingsItem.addActionListener(e -> openSettingsDialog());
+        gameMenu.add(settingsItem);
+        gameMenu.addSeparator();
+
         JMenuItem exitItem = new JMenuItem("Exit");
         exitItem.addActionListener(e -> System.exit(0));
         gameMenu.add(exitItem);
-
         menuBar.add(gameMenu);
+
+        JMenu optionsMenu = new JMenu("Options");
+        JMenuItem appearanceItem = new JMenuItem("Appearance & Settings...");
+        appearanceItem.addActionListener(e -> openSettingsDialog());
+        optionsMenu.add(appearanceItem);
+        menuBar.add(optionsMenu);
+
         return menuBar;
     }
 
@@ -196,6 +231,55 @@ public class ChessFrame extends JFrame {
      */
     public boolean movePiece(board.Position from, board.Position to) {
         return controller.movePiece(from, to);
+    }
+
+    /**
+     * Opens the customization settings dialog window centered over this frame.
+     */
+    public void openSettingsDialog() {
+        if (settingsDialog == null || !settingsDialog.isDisplayable()) {
+            settingsDialog = new SettingsDialog(this, boardPanel);
+        }
+        settingsDialog.setLocationRelativeTo(this);
+        settingsDialog.setVisible(true);
+    }
+
+    /**
+     * Gets the active SettingsDialog instance, creating one if not yet initialized.
+     *
+     * @return the SettingsDialog instance
+     */
+    public SettingsDialog getSettingsDialog() {
+        if (settingsDialog == null) {
+            settingsDialog = new SettingsDialog(this, boardPanel);
+        }
+        return settingsDialog;
+    }
+
+    /**
+     * Gets the toolbar gear settings button.
+     *
+     * @return JButton settings button
+     */
+    public JButton getSettingsButton() {
+        return settingsButton;
+    }
+
+    /**
+     * Dynamically updates the window sizing and layout to accommodate a new BoardSize preset.
+     *
+     * @param size target BoardSize preset
+     */
+    public void applyBoardSize(BoardSize size) {
+        if (size != null) {
+            boardPanel.setBoardSize(size);
+            int targetDim = size.getDimension();
+            int frameW = Math.max(MIN_WIDTH, targetDim + 60);
+            int frameH = Math.max(MIN_HEIGHT, targetDim + 120);
+            setPreferredSize(new Dimension(frameW, frameH));
+            pack();
+            setLocationRelativeTo(null);
+        }
     }
 }
 
