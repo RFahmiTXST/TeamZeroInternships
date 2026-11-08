@@ -138,3 +138,25 @@ The compiler retains seven existing Swing serialization/constructor warnings.
 
 **Scope:** M1 only. Mouse movement, capture events, and history remain later
 milestones. Abid's pending board-layout PR was not merged. No push performed.
+
+
+## 2026-11-06 - Phase 2 M2 mouse controls
+
+Request: self-review and merge M1, then implement my M2 contribution.
+Codex assisted the review; this was not independent peer approval. PR #21 was
+merged after integration passed 855 headless / 865 desktop assertions and
+strict source Javadoc.
+
+Codex implemented click selection and unrestricted moves in GUIController;
+BoardMouseHandler translates events from squares and piece labels, adds a
+floating drag icon, handles resized coordinates, and cancels on Escape,
+outside drops, reset and model replacement. Existing Board.movePiece records
+opposing captures. Friendly captures and same-square moves are rejected.
+The status bar now describes controls instead of claiming turn tracking.
+
+Validation: Java 17-compatible build passed; 884 headless / 894 desktop
+assertions passed, including 28 Utils assertions each. MouseMovementTest adds
+29 checks using actual component events. Strict source Javadoc passed with
+-private -Xdoclint:all -Werror. User verified the GUI manually and authorized committing, pushing and opening a PR into dev. This contribution does not merge M2 into dev.
+Teammates still own turns and the king-capture popup/termination; M3 history
+is not included. Only Sabid's M2 checklist entries were checked.

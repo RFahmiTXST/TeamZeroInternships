@@ -174,6 +174,44 @@ public class Board {
     }
 
     /**
+     * Records a captured piece in the captured pieces list.
+     *
+     * @param piece the piece that was captured
+     * @throws IllegalArgumentException if piece is null
+     */
+    public void recordCapture(Piece piece) {
+        if (piece == null) {
+            throw new IllegalArgumentException("Captured piece cannot be null");
+        }
+        capturedPieces.add(piece);
+    }
+
+    /**
+     * Gets a list of all pieces captured during this game in capture order.
+     *
+     * @return a defensive copy of the captured pieces list
+     */
+    public List<Piece> getCapturedPieces() {
+        return new ArrayList<>(capturedPieces);
+    }
+
+    /**
+     * Gets a list of captured pieces filtered by piece color.
+     *
+     * @param color the color of captured pieces to retrieve
+     * @return a new list containing captured pieces of the specified color
+     */
+    public List<Piece> getCapturedPieces(Color color) {
+        List<Piece> pieces = new ArrayList<>();
+        for (Piece piece : capturedPieces) {
+            if (piece.getColor() == color) {
+                pieces.add(piece);
+            }
+        }
+        return pieces;
+    }
+
+    /**
      * Gets a list of all active pieces of a specific color.
      * 
      * @param color The color to look for.

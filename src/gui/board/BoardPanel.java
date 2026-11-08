@@ -165,6 +165,17 @@ public class BoardPanel extends JPanel {
     }
 
     /**
+     * Synchronizes a single square's visual state with the domain board model.
+     *
+     * @param pos the board position to synchronize
+     */
+    public void updateSquare(Position pos) {
+        if (pos != null && pos.isOnBoard()) {
+            squarePanels[pos.getRow()][pos.getColumn()].setPiece(board.getPiece(pos));
+        }
+    }
+
+    /**
      * Replaces the active domain board model and repaints the board.
      *
      * @param newBoard the new Board model to display
