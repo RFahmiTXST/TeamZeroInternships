@@ -53,8 +53,36 @@ public final class PieceIconManager {
     /** Drop shadow color. */
     private static final java.awt.Color SHADOW_COLOR = new java.awt.Color(0, 0, 0, 45);
 
+    /** Currently active piece rendering style. */
+    private static volatile PieceStyle currentPieceStyle = PieceStyle.CLASSIC_VECTOR;
+
     /** Private constructor to prevent instantiation of utility manager. */
     private PieceIconManager() { }
+
+    /**
+     * Gets the currently active piece rendering style.
+     *
+     * @return active PieceStyle
+     */
+    public static PieceStyle getPieceStyle() {
+        return currentPieceStyle;
+    }
+
+    /**
+     * Sets the active piece rendering style and purges the icon cache.
+     *
+     * @param style the new visual style; must not be null
+     * @throws IllegalArgumentException if style is null
+     */
+    public static void setPieceStyle(PieceStyle style) {
+        if (style == null) {
+            throw new IllegalArgumentException("PieceStyle cannot be null.");
+        }
+        if (currentPieceStyle != style) {
+            currentPieceStyle = style;
+            clearCache();
+        }
+    }
 
     /**
      * Retrieves the visual icon for a domain Piece at the default size.
@@ -100,13 +128,42 @@ public final class PieceIconManager {
      * @return the rendered ImageIcon
      */
     public static Icon getPieceIcon(Color color, char symbol, int size) {
+        return getPieceIcon(color, symbol, size, currentPieceStyle);
+    }
+
+    /**
+     * Retrieves the visual icon for a given color, piece symbol, target dimension, and style.
+     *
+     * @param color the side color (WHITE or BLACK)
+     * @param symbol the piece symbol character ('P', 'R', 'N', 'B', 'Q', 'K')
+     * @param size icon width and height in pixels (must be positive)
+     * @param style the visual rendering style to use (if null, uses active style)
+     * @return the rendered ImageIcon, or null if invalid inputs
+     */
+    public static Icon getPieceIcon(Color color, char symbol, int size, PieceStyle style) {
         if (color == null || size <= 0) {
             return null;
         }
+        PieceStyle targetStyle = style != null ? style : currentPieceStyle;
         char normalizedSymbol = Character.toUpperCase(symbol);
-        String key = color.name() + "_" + normalizedSymbol + "_" + size;
+        String key = targetStyle.name() + "_" + color.name() + "_" + normalizedSymbol + "_" + size;
 
-        return ICON_CACHE.computeIfAbsent(key, k -> new ImageIcon(renderPieceImage(color, normalizedSymbol, size)));
+        return ICON_CACHE.computeIfAbsent(key, k -> new ImageIcon(renderPieceImage(color, normalizedSymbol, size, targetStyle)));
+    }
+
+    /**
+     * Retrieves the visual icon for a domain Piece scaled to the specified size and style.
+     *
+     * @param piece the chess piece domain object; if null, returns null
+     * @param size icon width and height in pixels
+     * @param style the visual rendering style to use
+     * @return the rendered ImageIcon, or null if piece is null
+     */
+    public static Icon getPieceIcon(Piece piece, int size, PieceStyle style) {
+        if (piece == null) {
+            return null;
+        }
+        return getPieceIcon(piece.getColor(), piece.getSymbol(), size, style);
     }
 
     /**
@@ -117,7 +174,7 @@ public final class PieceIconManager {
     }
 
     /**
-     * Renders a piece image procedurally using Java2D vector paths.
+     * Renders a piece image procedurally using Java2D vector paths with the active style.
      *
      * @param color the piece color
      * @param symbol normalized uppercase piece symbol
@@ -125,6 +182,19 @@ public final class PieceIconManager {
      * @return a high-resolution, anti-aliased BufferedImage
      */
     public static BufferedImage renderPieceImage(Color color, char symbol, int size) {
+        return renderPieceImage(color, symbol, size, currentPieceStyle);
+    }
+
+    /**
+     * Renders a piece image procedurally using Java2D vector paths with a specified style.
+     *
+     * @param color the piece color
+     * @param symbol normalized uppercase piece symbol
+     * @param size target pixel dimension
+     * @param style the visual rendering style to apply
+     * @return a high-resolution, anti-aliased BufferedImage
+     */
+    public static BufferedImage renderPieceImage(Color color, char symbol, int size, PieceStyle style) {
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
 
@@ -134,33 +204,64 @@ public final class PieceIconManager {
         g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
+        PieceStyle activeStyle = style != null ? style : currentPieceStyle;
         boolean isWhite = (color == Color.WHITE);
-        java.awt.Color fillColor = isWhite ? WHITE_PIECE_FILL : BLACK_PIECE_FILL;
-        java.awt.Color shadeColor = isWhite ? WHITE_PIECE_SHADE : BLACK_PIECE_SHADE;
-        java.awt.Color strokeColor = isWhite ? WHITE_PIECE_STROKE : BLACK_PIECE_STROKE;
+        java.awt.Color fillColor;
+        java.awt.Color shadeColor;
+        java.awt.Color strokeColor;
+        float strokeWidth;
+        java.awt.Color shadowColor;
+        boolean showSpecular;
 
-        float strokeWidth = Math.max(1.5f, size * 0.035f);
+        switch (activeStyle) {
+            case MINIMALIST:
+                fillColor = isWhite ? new java.awt.Color(255, 255, 255) : new java.awt.Color(34, 37, 42);
+                shadeColor = fillColor;
+                strokeColor = isWhite ? new java.awt.Color(30, 32, 38) : new java.awt.Color(90, 96, 108);
+                strokeWidth = Math.max(1.2f, size * 0.026f);
+                shadowColor = new java.awt.Color(0, 0, 0, 0);
+                showSpecular = false;
+                break;
+            case HIGH_CONTRAST:
+                fillColor = isWhite ? new java.awt.Color(255, 255, 255) : new java.awt.Color(0, 0, 0);
+                shadeColor = isWhite ? new java.awt.Color(235, 235, 235) : new java.awt.Color(20, 20, 20);
+                strokeColor = isWhite ? new java.awt.Color(0, 0, 0) : new java.awt.Color(255, 215, 0);
+                strokeWidth = Math.max(2.4f, size * 0.052f);
+                shadowColor = new java.awt.Color(0, 0, 0, 0);
+                showSpecular = isWhite;
+                break;
+            case CLASSIC_VECTOR:
+            default:
+                fillColor = isWhite ? WHITE_PIECE_FILL : BLACK_PIECE_FILL;
+                shadeColor = isWhite ? WHITE_PIECE_SHADE : BLACK_PIECE_SHADE;
+                strokeColor = isWhite ? WHITE_PIECE_STROKE : BLACK_PIECE_STROKE;
+                strokeWidth = Math.max(1.5f, size * 0.035f);
+                shadowColor = SHADOW_COLOR;
+                showSpecular = true;
+                break;
+        }
+
         BasicStroke stroke = new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 
         // Draw procedural piece shape
         switch (symbol) {
             case 'P':
-                drawPawn(g2, size, fillColor, shadeColor, strokeColor, stroke, isWhite);
+                drawPawn(g2, size, fillColor, shadeColor, strokeColor, stroke, isWhite, shadowColor, showSpecular);
                 break;
             case 'R':
-                drawRook(g2, size, fillColor, shadeColor, strokeColor, stroke, isWhite);
+                drawRook(g2, size, fillColor, shadeColor, strokeColor, stroke, isWhite, shadowColor, showSpecular);
                 break;
             case 'N':
-                drawKnight(g2, size, fillColor, shadeColor, strokeColor, stroke, isWhite);
+                drawKnight(g2, size, fillColor, shadeColor, strokeColor, stroke, isWhite, shadowColor, showSpecular);
                 break;
             case 'B':
-                drawBishop(g2, size, fillColor, shadeColor, strokeColor, stroke, isWhite);
+                drawBishop(g2, size, fillColor, shadeColor, strokeColor, stroke, isWhite, shadowColor, showSpecular);
                 break;
             case 'Q':
-                drawQueen(g2, size, fillColor, shadeColor, strokeColor, stroke, isWhite);
+                drawQueen(g2, size, fillColor, shadeColor, strokeColor, stroke, isWhite, shadowColor, showSpecular);
                 break;
             case 'K':
-                drawKing(g2, size, fillColor, shadeColor, strokeColor, stroke, isWhite);
+                drawKing(g2, size, fillColor, shadeColor, strokeColor, stroke, isWhite, shadowColor, showSpecular);
                 break;
             default:
                 drawFallback(g2, size, color, symbol);
@@ -181,14 +282,19 @@ public final class PieceIconManager {
      * @param strokeColor outline stroke color
      * @param stroke stroke style
      * @param isWhite true if White piece, false if Black
+     * @param shadowColor drop shadow color (transparent if disabled)
+     * @param showSpecular true to draw specular lighting
      */
     private static void drawPawn(Graphics2D g2, int size, java.awt.Color fill, java.awt.Color shade,
-                                 java.awt.Color strokeColor, BasicStroke stroke, boolean isWhite) {
+                                 java.awt.Color strokeColor, BasicStroke stroke, boolean isWhite,
+                                 java.awt.Color shadowColor, boolean showSpecular) {
         double s = size;
 
         // Shadow
-        g2.setColor(SHADOW_COLOR);
-        g2.fill(new Ellipse2D.Double(s * 0.22, s * 0.84, s * 0.56, s * 0.10));
+        if (shadowColor != null && shadowColor.getAlpha() > 0) {
+            g2.setColor(shadowColor);
+            g2.fill(new Ellipse2D.Double(s * 0.22, s * 0.84, s * 0.56, s * 0.10));
+        }
 
         // Pedestal base
         RoundRectangle2D base = new RoundRectangle2D.Double(s * 0.25, s * 0.78, s * 0.50, s * 0.10, s * 0.04, s * 0.04);
@@ -212,7 +318,9 @@ public final class PieceIconManager {
         fillAndStroke(g2, head, fill, strokeColor, stroke);
 
         // Accent specular highlight
-        drawSpecularHighlight(g2, s * 0.40, s * 0.20, s * 0.10, isWhite);
+        if (showSpecular) {
+            drawSpecularHighlight(g2, s * 0.40, s * 0.20, s * 0.10, isWhite);
+        }
     }
 
     /**
@@ -225,14 +333,19 @@ public final class PieceIconManager {
      * @param strokeColor outline stroke color
      * @param stroke stroke style
      * @param isWhite true if White piece, false if Black
+     * @param shadowColor drop shadow color (transparent if disabled)
+     * @param showSpecular true to draw specular lighting
      */
     private static void drawRook(Graphics2D g2, int size, java.awt.Color fill, java.awt.Color shade,
-                                 java.awt.Color strokeColor, BasicStroke stroke, boolean isWhite) {
+                                 java.awt.Color strokeColor, BasicStroke stroke, boolean isWhite,
+                                 java.awt.Color shadowColor, boolean showSpecular) {
         double s = size;
 
         // Shadow
-        g2.setColor(SHADOW_COLOR);
-        g2.fill(new Ellipse2D.Double(s * 0.18, s * 0.84, s * 0.64, s * 0.10));
+        if (shadowColor != null && shadowColor.getAlpha() > 0) {
+            g2.setColor(shadowColor);
+            g2.fill(new Ellipse2D.Double(s * 0.18, s * 0.84, s * 0.64, s * 0.10));
+        }
 
         // Base
         RoundRectangle2D base = new RoundRectangle2D.Double(s * 0.20, s * 0.76, s * 0.60, s * 0.12, s * 0.04, s * 0.04);
@@ -264,7 +377,9 @@ public final class PieceIconManager {
         parapet.closePath();
         fillAndStroke(g2, parapet, fill, strokeColor, stroke);
 
-        drawSpecularHighlight(g2, s * 0.28, s * 0.42, s * 0.12, isWhite);
+        if (showSpecular) {
+            drawSpecularHighlight(g2, s * 0.28, s * 0.42, s * 0.12, isWhite);
+        }
     }
 
     /**
@@ -277,14 +392,19 @@ public final class PieceIconManager {
      * @param strokeColor outline stroke color
      * @param stroke stroke style
      * @param isWhite true if White piece, false if Black
+     * @param shadowColor drop shadow color (transparent if disabled)
+     * @param showSpecular true to draw specular lighting
      */
     private static void drawKnight(Graphics2D g2, int size, java.awt.Color fill, java.awt.Color shade,
-                                   java.awt.Color strokeColor, BasicStroke stroke, boolean isWhite) {
+                                   java.awt.Color strokeColor, BasicStroke stroke, boolean isWhite,
+                                   java.awt.Color shadowColor, boolean showSpecular) {
         double s = size;
 
         // Shadow
-        g2.setColor(SHADOW_COLOR);
-        g2.fill(new Ellipse2D.Double(s * 0.18, s * 0.84, s * 0.64, s * 0.10));
+        if (shadowColor != null && shadowColor.getAlpha() > 0) {
+            g2.setColor(shadowColor);
+            g2.fill(new Ellipse2D.Double(s * 0.18, s * 0.84, s * 0.64, s * 0.10));
+        }
 
         // Base
         RoundRectangle2D base = new RoundRectangle2D.Double(s * 0.22, s * 0.77, s * 0.56, s * 0.11, s * 0.04, s * 0.04);
@@ -311,7 +431,9 @@ public final class PieceIconManager {
         // Nostril indicator
         g2.fill(new Ellipse2D.Double(s * 0.25, s * 0.40, s * 0.04, s * 0.04));
 
-        drawSpecularHighlight(g2, s * 0.48, s * 0.30, s * 0.12, isWhite);
+        if (showSpecular) {
+            drawSpecularHighlight(g2, s * 0.48, s * 0.30, s * 0.12, isWhite);
+        }
     }
 
     /**
@@ -324,14 +446,19 @@ public final class PieceIconManager {
      * @param strokeColor outline stroke color
      * @param stroke stroke style
      * @param isWhite true if White piece, false if Black
+     * @param shadowColor drop shadow color (transparent if disabled)
+     * @param showSpecular true to draw specular lighting
      */
     private static void drawBishop(Graphics2D g2, int size, java.awt.Color fill, java.awt.Color shade,
-                                   java.awt.Color strokeColor, BasicStroke stroke, boolean isWhite) {
+                                   java.awt.Color strokeColor, BasicStroke stroke, boolean isWhite,
+                                   java.awt.Color shadowColor, boolean showSpecular) {
         double s = size;
 
         // Shadow
-        g2.setColor(SHADOW_COLOR);
-        g2.fill(new Ellipse2D.Double(s * 0.20, s * 0.84, s * 0.60, s * 0.10));
+        if (shadowColor != null && shadowColor.getAlpha() > 0) {
+            g2.setColor(shadowColor);
+            g2.fill(new Ellipse2D.Double(s * 0.20, s * 0.84, s * 0.60, s * 0.10));
+        }
 
         // Base
         RoundRectangle2D base = new RoundRectangle2D.Double(s * 0.22, s * 0.76, s * 0.56, s * 0.11, s * 0.04, s * 0.04);
@@ -358,7 +485,9 @@ public final class PieceIconManager {
         g2.setStroke(stroke);
         g2.drawLine((int) (s * 0.44), (int) (s * 0.32), (int) (s * 0.56), (int) (s * 0.44));
 
-        drawSpecularHighlight(g2, s * 0.40, s * 0.35, s * 0.10, isWhite);
+        if (showSpecular) {
+            drawSpecularHighlight(g2, s * 0.40, s * 0.35, s * 0.10, isWhite);
+        }
     }
 
     /**
@@ -371,14 +500,19 @@ public final class PieceIconManager {
      * @param strokeColor outline stroke color
      * @param stroke stroke style
      * @param isWhite true if White piece, false if Black
+     * @param shadowColor drop shadow color (transparent if disabled)
+     * @param showSpecular true to draw specular lighting
      */
     private static void drawQueen(Graphics2D g2, int size, java.awt.Color fill, java.awt.Color shade,
-                                  java.awt.Color strokeColor, BasicStroke stroke, boolean isWhite) {
+                                  java.awt.Color strokeColor, BasicStroke stroke, boolean isWhite,
+                                  java.awt.Color shadowColor, boolean showSpecular) {
         double s = size;
 
         // Shadow
-        g2.setColor(SHADOW_COLOR);
-        g2.fill(new Ellipse2D.Double(s * 0.16, s * 0.85, s * 0.68, s * 0.10));
+        if (shadowColor != null && shadowColor.getAlpha() > 0) {
+            g2.setColor(shadowColor);
+            g2.fill(new Ellipse2D.Double(s * 0.16, s * 0.85, s * 0.68, s * 0.10));
+        }
 
         // Base
         RoundRectangle2D base = new RoundRectangle2D.Double(s * 0.20, s * 0.77, s * 0.60, s * 0.11, s * 0.04, s * 0.04);
@@ -406,7 +540,9 @@ public final class PieceIconManager {
         fillAndStroke(g2, new Ellipse2D.Double(s * 0.50 - r, s * 0.26 - r, r * 2, r * 2), shade, strokeColor, stroke);
         fillAndStroke(g2, new Ellipse2D.Double(s * 0.82 - r, s * 0.30 - r, r * 2, r * 2), shade, strokeColor, stroke);
 
-        drawSpecularHighlight(g2, s * 0.42, s * 0.46, s * 0.15, isWhite);
+        if (showSpecular) {
+            drawSpecularHighlight(g2, s * 0.42, s * 0.46, s * 0.15, isWhite);
+        }
     }
 
     /**
@@ -419,14 +555,19 @@ public final class PieceIconManager {
      * @param strokeColor outline stroke color
      * @param stroke stroke style
      * @param isWhite true if White piece, false if Black
+     * @param shadowColor drop shadow color (transparent if disabled)
+     * @param showSpecular true to draw specular lighting
      */
     private static void drawKing(Graphics2D g2, int size, java.awt.Color fill, java.awt.Color shade,
-                                 java.awt.Color strokeColor, BasicStroke stroke, boolean isWhite) {
+                                 java.awt.Color strokeColor, BasicStroke stroke, boolean isWhite,
+                                 java.awt.Color shadowColor, boolean showSpecular) {
         double s = size;
 
         // Shadow
-        g2.setColor(SHADOW_COLOR);
-        g2.fill(new Ellipse2D.Double(s * 0.16, s * 0.85, s * 0.68, s * 0.10));
+        if (shadowColor != null && shadowColor.getAlpha() > 0) {
+            g2.setColor(shadowColor);
+            g2.fill(new Ellipse2D.Double(s * 0.16, s * 0.85, s * 0.68, s * 0.10));
+        }
 
         // Base
         RoundRectangle2D base = new RoundRectangle2D.Double(s * 0.20, s * 0.77, s * 0.60, s * 0.11, s * 0.04, s * 0.04);
@@ -457,7 +598,9 @@ public final class PieceIconManager {
         cross.append(new RoundRectangle2D.Double(cx - barW / 2, cy - barH / 2 - s * 0.02, barW, barH, 2, 2), false);
         fillAndStroke(g2, cross, isWhite ? WHITE_PIECE_FILL : BLACK_PIECE_FILL, strokeColor, stroke);
 
-        drawSpecularHighlight(g2, s * 0.40, s * 0.42, s * 0.14, isWhite);
+        if (showSpecular) {
+            drawSpecularHighlight(g2, s * 0.40, s * 0.42, s * 0.14, isWhite);
+        }
     }
 
     /**
