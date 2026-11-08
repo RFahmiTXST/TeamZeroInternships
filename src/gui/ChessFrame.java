@@ -85,12 +85,15 @@ public class ChessFrame extends JFrame {
         statusPanel.setBackground(new Color(32, 34, 38));
         statusPanel.setBorder(BorderFactory.createEmptyBorder(6, 14, 6, 14));
 
-        statusLabel = new JLabel("Click a piece, then a square; or drag and drop. Esc cancels.", SwingConstants.LEFT);
+        statusLabel = new JLabel(controller.getStatusMessage(), SwingConstants.LEFT);
         statusLabel.setForeground(new Color(220, 224, 230));
         statusLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
         statusPanel.add(statusLabel, BorderLayout.CENTER);
 
         add(statusPanel, BorderLayout.SOUTH);
+
+        // Register controller status updates with the frame status bar
+        controller.addStatusListener(this::setStatusMessage);
 
         // Top: Menu bar skeleton
         setJMenuBar(createMenuBarSkeleton());
@@ -170,6 +173,26 @@ public class ChessFrame extends JFrame {
      */
     public void refresh() {
         controller.refreshBoard();
+    }
+
+    /**
+     * Gets the active player turn Color from the controller.
+     *
+     * @return current active player Color
+     */
+    public pieces.Color getCurrentTurn() {
+        return controller.getCurrentTurn();
+    }
+
+    /**
+     * Executes a move on the underlying board and view through the controller.
+     *
+     * @param from starting square
+     * @param to destination square
+     * @return true if the move was executed; false if rejected
+     */
+    public boolean movePiece(board.Position from, board.Position to) {
+        return controller.movePiece(from, to);
     }
 }
 

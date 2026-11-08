@@ -103,9 +103,9 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
   - [ ] Implement smooth drag-and-drop feedback (dragged piece icon follows mouse pointer).
   - [ ] Implement board re-rendering logic: immediately clear the piece icon from the source square and draw it on the destination square.
 - **Dev 1 (Rayed - Capture Logic & Turn State):**
-  - [ ] Implement piece capture handling: if a destination square contains an opponent piece, remove the captured piece from the `Board` model and remove its icon from the display.
-  - [ ] Ensure captured pieces disappear immediately and cleanly from the board.
-  - [ ] Maintain active player turn tracking (e.g., status bar showing "White's Turn" / "Black's Turn").
+  - [x] Implement piece capture handling: if a destination square contains an opponent piece, remove the captured piece from the `Board` model and remove its icon from the display.
+  - [x] Ensure captured pieces disappear immediately and cleanly from the board.
+  - [x] Maintain active player turn tracking (e.g., status bar showing "White's Turn" / "Black's Turn").
 - **Dev 4 (Towsif - Endgame Notification & Winner Declaration - 10%):**
   - [ ] Implement King capture detection: detect whenever the piece being captured is an instance of `King`.
   - [ ] Display modal dialog (`JOptionPane.showMessageDialog`) declaring the winning player (e.g., *"Game Over! White captured Black's King and wins!"*).
