@@ -41,6 +41,8 @@ public class TestRunner {
         test.gui.GUIControllerTest.main(args);
         test.gui.CaptureAndTurnTest.main(args);
         test.gui.MouseMovementTest.main(args);
+        test.gui.KingCaptureHandlerTest.main(args);
+        test.gui.SettingsDialogTest.main(args);
 
         // Dev 4: Board, Player, and Piece integration tests
         board.BoardIntegrationTest.main(args);

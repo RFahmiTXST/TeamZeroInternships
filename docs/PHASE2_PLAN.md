@@ -107,9 +107,9 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
   - [x] Ensure captured pieces disappear immediately and cleanly from the board.
   - [x] Maintain active player turn tracking (e.g., status bar showing "White's Turn" / "Black's Turn").
 - **Dev 4 (Towsif - Endgame Notification & Winner Declaration - 10%):**
-  - [ ] Implement King capture detection: detect whenever the piece being captured is an instance of `King`.
-  - [ ] Display modal dialog (`JOptionPane.showMessageDialog`) declaring the winning player (e.g., *"Game Over! White captured Black's King and wins!"*).
-  - [ ] Ensure the game terminates cleanly upon closing or confirming the dialog (as mandated by Phase 2 instructions).
+  - [x] Implement King capture detection: detect whenever the piece being captured is an instance of `King`.
+  - [x] Display modal dialog (`JOptionPane.showMessageDialog`) declaring the winning player (e.g., *"Game Over! White captured Black's King and wins!"*).
+  - [x] Ensure the game terminates cleanly upon closing or confirming the dialog (as mandated by Phase 2 instructions).
 
 🧪 **Manual Tests for M2:**
 - **Click-and-move:** Click a piece on `E2`, verify highlight appears; click `E5`, verify piece moves to `E5`.
@@ -128,11 +128,11 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
   - [ ] Implement **Save Game**: open `JFileChooser`, serialize or format the game state (board matrix, captured pieces, turn, move history) into a `.chess` or text file.
   - [ ] Implement **Load Game**: open `JFileChooser`, parse selected save file, restore complete board state, move history, and UI views.
 - **Dev 1 (Rayed - Extra Feature 2: Settings Window for Customization):**
-  - [ ] Design and implement `SettingsDialog` (`JDialog`) accessible via menu bar or toolbar gear icon.
-  - [ ] Add **Board Background Color/Style** selector (e.g., Classic Wood, Modern Gray, Slate Blue, Forest Green).
-  - [ ] Add **Chess Piece Style/Color** selector (e.g., Classic vector, Minimalist, High-contrast).
-  - [ ] Add **Board Size** selector (e.g., Small 480x480, Medium 640x640, Large 800x800).
-  - [ ] Implement real-time **Apply** button: dynamically updates board colors, piece icons, and window dimensions without restarting or losing the ongoing game state.
+  - [x] Design and implement `SettingsDialog` (`JDialog`) accessible via menu bar or toolbar gear icon.
+  - [x] Add **Board Background Color/Style** selector (e.g., Classic Wood, Modern Gray, Slate Blue, Forest Green).
+  - [x] Add **Chess Piece Style/Color** selector (e.g., Classic vector, Minimalist, High-contrast).
+  - [x] Add **Board Size** selector (e.g., Small 480x480, Medium 640x640, Large 800x800).
+  - [x] Implement real-time **Apply** button: dynamically updates board colors, piece icons, and window dimensions without restarting or losing the ongoing game state.
 - **Dev 3 (Sabid - Extra Feature 3: Game History Panel):**
   - [ ] Create `HistoryPanel` (`JPanel`) positioned adjacent to the chessboard in a `BorderLayout.EAST` container.
   - [ ] Implement a scrollable `JTable` or `JList` logging move history in real-time (turn number, piece moved, start square, destination square, capture indicator).

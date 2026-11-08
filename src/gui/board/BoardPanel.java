@@ -50,6 +50,12 @@ public class BoardPanel extends JPanel {
     /** The current domain board model. */
     private Board board;
 
+    /** Currently active visual board theme. */
+    private BoardTheme currentTheme = BoardTheme.CLASSIC_WOOD;
+
+    /** Currently active board size preset. */
+    private BoardSize currentBoardSize = BoardSize.MEDIUM;
+
     /**
      * Constructs a BoardPanel initialized with the given Board model.
      *
@@ -142,6 +148,9 @@ public class BoardPanel extends JPanel {
         int width = Math.max(0, getWidth() - insets.left - insets.right);
         int height = Math.max(0, getHeight() - insets.top - insets.bottom);
         int available = Math.max(0, Math.min(width - LABEL_SIZE, height - LABEL_SIZE));
+        if (currentBoardSize != null) {
+            available = Math.min(available, currentBoardSize.getDimension());
+        }
         int cell = Math.max(0, (available - 2 * GRID_BORDER) / BOARD_SIZE);
         int gridSize = cell == 0 ? 0 : cell * BOARD_SIZE + 2 * GRID_BORDER;
         int x = insets.left + Math.max(0, (width - LABEL_SIZE - gridSize) / 2) + LABEL_SIZE;
@@ -221,6 +230,56 @@ public class BoardPanel extends JPanel {
             return null;
         }
         return squarePanels[row][column];
+    }
+
+    /**
+     * Applies a preset visual board theme and refreshes all squares.
+     *
+     * @param theme the BoardTheme to apply; must not be null
+     * @throws IllegalArgumentException if theme is null
+     */
+    public void setTheme(BoardTheme theme) {
+        if (theme == null) {
+            throw new IllegalArgumentException("BoardTheme must not be null.");
+        }
+        this.currentTheme = theme;
+        setThemeColors(theme.getLightColor(), theme.getDarkColor());
+    }
+
+    /**
+     * Gets the currently active visual board theme.
+     *
+     * @return active BoardTheme
+     */
+    public BoardTheme getTheme() {
+        return currentTheme;
+    }
+
+    /**
+     * Configures the visual chessboard grid size preset and revalidates layout.
+     *
+     * @param size target BoardSize preset; must not be null
+     * @throws IllegalArgumentException if size is null
+     */
+    public void setBoardSize(BoardSize size) {
+        if (size == null) {
+            throw new IllegalArgumentException("BoardSize must not be null.");
+        }
+        this.currentBoardSize = size;
+        int target = size.getDimension();
+        int total = target + LABEL_SIZE + 2 * GRID_BORDER + 20;
+        setPreferredSize(new Dimension(total, total));
+        revalidate();
+        repaint();
+    }
+
+    /**
+     * Gets the currently active BoardSize preset.
+     *
+     * @return active BoardSize
+     */
+    public BoardSize getBoardSize() {
+        return currentBoardSize;
     }
 
     /**
