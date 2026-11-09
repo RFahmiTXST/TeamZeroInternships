@@ -49,6 +49,21 @@ public final class GUIController {
         void onPieceCaptured(Piece capturedPiece, Position targetPosition);
     }
 
+    /** Receives immutable move-history snapshots on the EDT. */
+    @FunctionalInterface
+    public interface HistoryListener {
+        /**
+         * Refreshes history after a successful move or reset.
+         * @param entries immutable chronological history
+         */
+        void onHistoryChanged(List<HistoryEntry> entries);
+    }
+
+    /** Completed GUI moves; one entry per accepted gesture. */
+    private final List<HistoryEntry> history = new ArrayList<>();
+    /** Observers displaying completed moves. */
+    private final List<HistoryListener> historyListeners = new ArrayList<>();
+
     /** Board model used by this GUI session. */
     private Board board;
     /** View displaying the session's board. */
@@ -99,6 +114,7 @@ public final class GUIController {
         lastCapturedPiece = null;
         boardPanel.clearHighlights();
         refreshBoard();
+        clearHistory();
         notifyStatusListeners();
     }
 
@@ -121,6 +137,7 @@ public final class GUIController {
         this.lastCapturedPiece = null;
         boardPanel.clearHighlights();
         refreshBoard();
+        clearHistory();
         notifyStatusListeners();
     }
 
@@ -324,6 +341,11 @@ public final class GUIController {
         boardPanel.clearHighlights();
         refreshBoard();
 
+        history.add(new HistoryEntry(history.size() + 1, moving.getColor().toString(),
+                moving.getClass().getSimpleName(), from.toString(), to.toString(),
+                captured == null ? "" : captured.getColor() + " " + captured.getClass().getSimpleName()));
+        notifyHistoryListeners();
+
         if (captured != null) {
             notifyCaptureListeners(captured, to);
         }
@@ -398,6 +420,51 @@ public final class GUIController {
     public void removeCaptureListener(CaptureListener listener) {
         requireEventDispatchThread();
         captureListeners.remove(listener);
+    }
+
+    /**
+     * Returns a snapshot that cannot change with future moves.
+     * @return immutable chronological move history
+     */
+    public List<HistoryEntry> getHistory() {
+        requireEventDispatchThread();
+        return List.copyOf(history);
+    }
+
+    /**
+     * Registers a history observer and supplies its initial snapshot.
+     * @param listener observer; must not be null
+     */
+    public void addHistoryListener(HistoryListener listener) {
+        requireEventDispatchThread();
+        if (listener == null) throw new IllegalArgumentException("History listener must not be null.");
+        if (!historyListeners.contains(listener)) {
+            historyListeners.add(listener);
+            listener.onHistoryChanged(getHistory());
+        }
+    }
+
+    /**
+     * Unregisters a history observer.
+     * @param listener observer to remove
+     */
+    public void removeHistoryListener(HistoryListener listener) {
+        requireEventDispatchThread();
+        historyListeners.remove(listener);
+    }
+
+    /** Clears stale history when a new board session starts. */
+    private void clearHistory() {
+        history.clear();
+        notifyHistoryListeners();
+    }
+
+    /** Publishes a stable snapshot before capture handlers may exit the application. */
+    private void notifyHistoryListeners() {
+        List<HistoryEntry> snapshot = getHistory();
+        for (HistoryListener listener : List.copyOf(historyListeners)) {
+            listener.onHistoryChanged(snapshot);
+        }
     }
 
     /**

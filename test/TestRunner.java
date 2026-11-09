@@ -41,6 +41,7 @@ public class TestRunner {
         test.gui.GUIControllerTest.main(args);
         test.gui.CaptureAndTurnTest.main(args);
         test.gui.MouseMovementTest.main(args);
+        test.gui.HistoryPanelTest.main(args);
         test.gui.KingCaptureHandlerTest.main(args);
         test.gui.SettingsDialogTest.main(args);
 
