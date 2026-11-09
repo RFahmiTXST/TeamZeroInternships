@@ -8,6 +8,8 @@ import pieces.Piece;
 
 import javax.swing.SwingUtilities;
 import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -58,6 +60,20 @@ public final class GUIController {
          */
         void onHistoryChanged(List<HistoryEntry> entries);
     }
+
+    /**
+     * Reversible state retained for each successful GUI move.
+     * @param from original square
+     * @param to destination square
+     * @param moving moved piece
+     * @param captured captured piece, if any
+     * @param movedBefore movement flag before the move
+     * @param turnBefore active turn before the move
+     */
+    private record UndoEntry(Position from, Position to, Piece moving, Piece captured,
+                             boolean movedBefore, Color turnBefore) { }
+    /** Most recent reversible move first. */
+    private final Deque<UndoEntry> undoEntries = new ArrayDeque<>();
 
     /** Completed GUI moves; one entry per accepted gesture. */
     private final List<HistoryEntry> history = new ArrayList<>();
@@ -335,7 +351,10 @@ public final class GUIController {
             return false;
         }
 
+        boolean movedBefore = moving.hasMoved();
+        Color turnBefore = currentTurn;
         Piece captured = board.movePiece(from, to);
+        undoEntries.push(new UndoEntry(from, to, moving, captured, movedBefore, turnBefore));
         this.lastCapturedPiece = captured;
 
         boardPanel.clearHighlights();
@@ -423,6 +442,27 @@ public final class GUIController {
     }
 
     /**
+     * Reverses the last successful GUI move and notifies the view and history.
+     * @return true if a move was undone
+     * @throws IllegalStateException if called off the EDT or board state changed externally
+     */
+    public boolean undoLastMove() {
+        requireEventDispatchThread();
+        if (undoEntries.isEmpty()) return false;
+        UndoEntry entry = undoEntries.peek();
+        board.undoMove(entry.from(), entry.to(), entry.moving(), entry.captured(), entry.movedBefore());
+        undoEntries.pop();
+        history.remove(history.size() - 1);
+        currentTurn = entry.turnBefore();
+        lastCapturedPiece = undoEntries.isEmpty() ? null : undoEntries.peek().captured();
+        cancelSelection();
+        refreshBoard();
+        notifyHistoryListeners();
+        notifyStatusListeners();
+        return true;
+    }
+
+    /**
      * Returns a snapshot that cannot change with future moves.
      * @return immutable chronological move history
      */
@@ -455,6 +495,7 @@ public final class GUIController {
 
     /** Clears stale history when a new board session starts. */
     private void clearHistory() {
+        undoEntries.clear();
         history.clear();
         notifyHistoryListeners();
     }

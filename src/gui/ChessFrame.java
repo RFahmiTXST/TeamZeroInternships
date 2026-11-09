@@ -3,6 +3,7 @@ package gui;
 import board.Board;
 import gui.board.BoardPanel;
 import gui.board.BoardSize;
+import gui.board.CapturedPiecesPanel;
 import gui.dialogs.SettingsDialog;
 
 import javax.swing.BorderFactory;
@@ -53,6 +54,10 @@ public class ChessFrame extends JFrame {
     private final JLabel statusLabel;
     /** Sidebar showing completed moves. */
     private final HistoryPanel historyPanel;
+    /** Displays captured pieces alongside the move history. */
+    private final CapturedPiecesPanel capturedPanel;
+    /** Reverses the latest move. */
+    private final JButton undoButton;
     /** The toolbar settings button. */
     private final JButton settingsButton;
     /** Cached customization settings dialog. */
@@ -107,7 +112,19 @@ public class ChessFrame extends JFrame {
         controller.addCaptureListener(kingCaptureHandler::onPieceCaptured);
         add(boardPanel, BorderLayout.CENTER);
         historyPanel = new HistoryPanel();
-        controller.addHistoryListener(historyPanel::setHistory);
+        capturedPanel = new CapturedPiecesPanel();
+        undoButton = new JButton("Undo");
+        undoButton.addActionListener(event -> controller.undoLastMove());
+        JPanel actions = new JPanel(new BorderLayout());
+        actions.add(capturedPanel, BorderLayout.CENTER);
+        actions.add(undoButton, BorderLayout.SOUTH);
+        historyPanel.add(actions, BorderLayout.SOUTH);
+        controller.addHistoryListener(entries -> {
+            historyPanel.setHistory(entries);
+            capturedPanel.refresh(controller.getBoard());
+            undoButton.setEnabled(!entries.isEmpty());
+        });
+        controller.addCaptureListener((piece, position) -> capturedPanel.refresh(controller.getBoard()));
         add(historyPanel, BorderLayout.EAST);
 
         // South: Status bar panel

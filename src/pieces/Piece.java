@@ -66,6 +66,16 @@ public abstract class Piece {
     }
 
     /**
+     * Restores a previously saved position and movement flag for undo.
+     * @param previousPosition position before the move
+     * @param previouslyMoved whether the piece had moved before the move
+     */
+    public void restoreState(Position previousPosition, boolean previouslyMoved) {
+        this.position = previousPosition;
+        this.moved = previouslyMoved;
+    }
+
+    /**
      * Checks if a given piece is an opponent.
      * 
      * @param other The piece to check against.
