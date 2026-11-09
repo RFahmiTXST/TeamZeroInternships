@@ -69,9 +69,11 @@ public final class GUIController {
      * @param captured captured piece, if any
      * @param movedBefore movement flag before the move
      * @param turnBefore active turn before the move
+     * @param lastCapturedBefore capture state before the move
      */
     private record UndoEntry(Position from, Position to, Piece moving, Piece captured,
-                             boolean movedBefore, Color turnBefore) { }
+                             boolean movedBefore, Color turnBefore,
+                             Piece lastCapturedBefore) { }
     /** Most recent reversible move first. */
     private final Deque<UndoEntry> undoEntries = new ArrayDeque<>();
 
@@ -357,8 +359,10 @@ public final class GUIController {
 
         boolean movedBefore = moving.hasMoved();
         Color turnBefore = currentTurn;
+        Piece previousCapture = lastCapturedPiece;
         Piece captured = board.movePiece(from, to);
-        undoEntries.push(new UndoEntry(from, to, moving, captured, movedBefore, turnBefore));
+        undoEntries.push(new UndoEntry(from, to, moving, captured, movedBefore,
+                turnBefore, previousCapture));
         this.lastCapturedPiece = captured;
 
         boardPanel.clearHighlights();
@@ -468,7 +472,7 @@ public final class GUIController {
         undoEntries.pop();
         history.remove(history.size() - 1);
         currentTurn = entry.turnBefore();
-        lastCapturedPiece = undoEntries.isEmpty() ? null : undoEntries.peek().captured();
+        lastCapturedPiece = entry.lastCapturedBefore();
         cancelSelection();
         refreshBoard();
         notifyHistoryListeners();

@@ -79,10 +79,15 @@ public final class UndoTest {
         controller.startNewGame();
         TestUtils.assertEquals(false, controller.undoLastMove(), "New game clears undo state");
         controller.movePiece(e2, e4);
-        controller.capturePiece(new Position(6, 0));
+        Piece directlyCaptured = controller.capturePiece(new Position(6, 0));
         TestUtils.assertEquals(false, controller.canUndo(), "Direct capture invalidates older undo records");
         TestUtils.assertEquals(false, controller.undoLastMove(), "Undo after direct capture is harmless");
         TestUtils.assertEquals(1, controller.getHistory().size(), "Direct capture preserves prior move history");
+        controller.movePiece(e4, new Position(4, 4));
+        TestUtils.assertEquals(null, controller.getLastCapturedPiece(), "Quiet move clears latest capture");
+        controller.undoLastMove();
+        TestUtils.assertEquals(directlyCaptured, controller.getLastCapturedPiece(),
+                "Undo restores capture state from before the move");
         controller.setBoard(new Board());
         TestUtils.assertEquals(false, controller.undoLastMove(), "Board replacement clears undo state");
         if (!GraphicsEnvironment.isHeadless()) checkFrameButton();
