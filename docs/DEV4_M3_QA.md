@@ -21,11 +21,13 @@ Scope: File menu (Save Game, Load Game), Game menu (New Game), board/turn/histor
 - [x] King capture still shows the winner dialog and exits on dismissal.
 - [ ] Coordinate with Dev 2: when Undo is merged, ensure loading clears stale Undo records and resets the Undo button; test rack/history/turn together.
 
-## Test results (fill in only after running locally)
+## Test results
 
-- Compiler exit code:
-- TestRunner shared assertions:
-- Utils assertions:
-- Javadoc exit code:
-- Manual save/load result:
-- Reviewer:
+- Compiler exit code: 0
+- TestRunner shared assertions: 1094 passed, 0 failed
+- Utils assertions: 28 passed, 0 failed
+- Total assertions: 1122 passed, 0 failed
+- Javadoc exit code: 0
+- Javadoc warnings: 0
+- Manual save/load result: PASS
+- Reviewer: Pending
