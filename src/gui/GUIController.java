@@ -423,6 +423,41 @@ public final class GUIController {
     }
 
     /**
+     * Restores a fully parsed saved game, including captured pieces, turn and history.
+     * Loading does not fire capture listeners or announce a winner.
+     *
+     * @param restoredBoard independent Board reconstructed from the save file
+     * @param restoredTurn next active player
+     * @param restoredHistory chronological move records
+     * @throws IllegalArgumentException if the supplied session is invalid
+     * @throws IllegalStateException if called outside the Swing EDT
+     */
+    public void restoreSession(Board restoredBoard, Color restoredTurn,
+                               List<HistoryEntry> restoredHistory) {
+        requireEventDispatchThread();
+        if (restoredBoard == null || restoredTurn == null || restoredHistory == null) {
+            throw new IllegalArgumentException("Restored board, turn and history are required.");
+        }
+        List<HistoryEntry> restored = List.copyOf(restoredHistory);
+        for (int i = 0; i < restored.size(); i++) {
+            if (restored.get(i).number() != i + 1) {
+                throw new IllegalArgumentException("Restored history numbering is invalid.");
+            }
+        }
+        cancelSelection();
+        this.board = restoredBoard;
+        this.currentTurn = restoredTurn;
+        List<Piece> captured = restoredBoard.getCapturedPieces();
+        this.lastCapturedPiece = captured.isEmpty() ? null : captured.get(captured.size() - 1);
+        history.clear();
+        history.addAll(restored);
+        boardPanel.clearHighlights();
+        refreshBoard();
+        notifyHistoryListeners();
+        notifyStatusListeners();
+    }
+
+    /**
      * Returns a snapshot that cannot change with future moves.
      * @return immutable chronological move history
      */

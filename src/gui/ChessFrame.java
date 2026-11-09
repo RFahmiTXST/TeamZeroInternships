@@ -139,8 +139,12 @@ public class ChessFrame extends JFrame {
      */
     private JMenuBar createMenuBarSkeleton() {
         JMenuBar menuBar = new JMenuBar();
+        GameMenuActions gameMenuActions = new GameMenuActions(this, controller);
+        menuBar.add(gameMenuActions.createFileMenu());
 
         JMenu gameMenu = new JMenu("Game");
+        gameMenu.add(gameMenuActions.createNewGameItem());
+        gameMenu.addSeparator();
         JMenuItem settingsItem = new JMenuItem("Settings...");
         settingsItem.setMnemonic('S');
         settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
