@@ -160,3 +160,31 @@ assertions passed, including 28 Utils assertions each. MouseMovementTest adds
 -private -Xdoclint:all -Werror. User verified the GUI manually and authorized committing, pushing and opening a PR into dev. This contribution does not merge M2 into dev.
 Teammates still own turns and the king-capture popup/termination; M3 history
 is not included. Only Sabid's M2 checklist entries were checked.
+
+
+## 2026-11-08 - Phase 2 M3 move history
+
+User requested fetching team changes, verifying completion and starting M3.
+Verified merged dev 2bcbe23: Rayed's capture/turn PR #23, Towsif's endgame PR #24,
+Abid's feedback verification PR #25 and Rayed's settings PR #26 are merged.
+Baseline passed 1066 headless / 1119 desktop assertions. Seven existing Swing
+compiler warnings remain; these are not a new regression. Abid's M2 checklist
+is stale even though the implementation and PR #25 verification are present.
+
+Codex implemented immutable HistoryEntry snapshots, controller history observers,
+and a read-only scrollable HistoryPanel in the frame's EAST region. Accepted
+moves record actual piece color/type, origin, destination and capture; rejected
+moves do not create entries. Reset/replacement clears history. Entries are
+published before capture callbacks so winning moves appear before the modal
+endgame dialog. Window sizing reserves sidebar space for all settings presets.
+
+Final verification: Java 17-targeted compilation, 1088 headless / 1149 desktop
+assertions, and strict source Javadoc passed. New checks cover immutable
+snapshots, captures, event ordering, reset/replacement, listener lifecycle,
+read-only cells, 60-row scrolling, frame wiring and all board-size presets.
+This is automated verification; no new manual live-GUI confirmation is claimed.
+
+Scope: Sabid's history panel only. Undo/captured rack remain Abid's work;
+New/Save/Load remain Towsif's work. Future load/undo must restore controller
+history together with board state; setBoard currently clears history rather
+than pretending to recover it. User authorized committing and pushing after checking conflicts. Latest dev was 2bcbe23 and matched the local base; all six source/test files matched the verified build. M3 is not merged into dev.
