@@ -315,10 +315,14 @@ public final class GUIController {
         if (targetPiece == null) {
             return null;
         }
+        // A direct capture is not a recorded move, so older undo records
+        // cannot safely be replayed against the changed board.
+        undoEntries.clear();
         board.recordCapture(targetPiece);
         board.setPiece(target, null);
         this.lastCapturedPiece = targetPiece;
         boardPanel.updateSquare(target);
+        notifyHistoryListeners();
         notifyCaptureListeners(targetPiece, target);
         return targetPiece;
     }
@@ -439,6 +443,16 @@ public final class GUIController {
     public void removeCaptureListener(CaptureListener listener) {
         requireEventDispatchThread();
         captureListeners.remove(listener);
+    }
+
+    /**
+     * Reports whether a recorded move can currently be undone.
+     * @return true if an undo record is available
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public boolean canUndo() {
+        requireEventDispatchThread();
+        return !undoEntries.isEmpty();
     }
 
     /**

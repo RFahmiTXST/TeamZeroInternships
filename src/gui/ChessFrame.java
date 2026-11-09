@@ -122,7 +122,7 @@ public class ChessFrame extends JFrame {
         controller.addHistoryListener(entries -> {
             historyPanel.setHistory(entries);
             capturedPanel.refresh(controller.getBoard());
-            undoButton.setEnabled(!entries.isEmpty());
+            undoButton.setEnabled(controller.canUndo());
         });
         controller.addCaptureListener((piece, position) -> capturedPanel.refresh(controller.getBoard()));
         add(historyPanel, BorderLayout.EAST);
@@ -259,6 +259,11 @@ public class ChessFrame extends JFrame {
      */
     public boolean movePiece(board.Position from, board.Position to) {
         return controller.movePiece(from, to);
+    }
+
+    /** Refreshes captured-piece icons after a change in piece appearance. */
+    public void refreshCapturedPieces() {
+        capturedPanel.refresh(controller.getBoard());
     }
 
     /**

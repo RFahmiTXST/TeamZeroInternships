@@ -10,6 +10,9 @@ import java.awt.GraphicsEnvironment;
 import javax.swing.JButton;
 import gui.board.BoardPanel;
 import gui.board.CapturedPiecesPanel;
+import gui.pieces.PieceIconManager;
+import gui.pieces.PieceStyle;
+import javax.swing.JPanel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JLabel;
@@ -76,6 +79,10 @@ public final class UndoTest {
         controller.startNewGame();
         TestUtils.assertEquals(false, controller.undoLastMove(), "New game clears undo state");
         controller.movePiece(e2, e4);
+        controller.capturePiece(new Position(6, 0));
+        TestUtils.assertEquals(false, controller.canUndo(), "Direct capture invalidates older undo records");
+        TestUtils.assertEquals(false, controller.undoLastMove(), "Undo after direct capture is harmless");
+        TestUtils.assertEquals(1, controller.getHistory().size(), "Direct capture preserves prior move history");
         controller.setBoard(new Board());
         TestUtils.assertEquals(false, controller.undoLastMove(), "Board replacement clears undo state");
         if (!GraphicsEnvironment.isHeadless()) checkFrameButton();
@@ -96,9 +103,38 @@ public final class UndoTest {
             button.doClick();
             TestUtils.assertEquals(piece, frame.getBoard().getPiece(from), "Button restores piece");
             TestUtils.assertEquals(false, button.isEnabled(), "Undo button disables after final undo");
+            frame.getController().movePiece(from, new Position(6, 3));
+            frame.getController().capturePiece(new Position(6, 0));
+            TestUtils.assertEquals(false, button.isEnabled(), "Direct capture disables stale undo button");
+            CapturedPiecesPanel rack = findRack(frame);
+            TestUtils.assertEquals(true, rack != null, "Captured rack is in the frame");
+            if (rack != null) {
+                JPanel blackRack = (JPanel) rack.getComponent(3);
+                JLabel icon = (JLabel) blackRack.getComponent(0);
+                Piece captured = frame.getBoard().getCapturedPieces(Color.BLACK).get(0);
+                frame.getSettingsDialog().getPieceStyleComboBox().setSelectedItem(PieceStyle.MINIMALIST);
+                frame.getSettingsDialog().applySettings();
+                JLabel updated = (JLabel) blackRack.getComponent(0);
+                TestUtils.assertEquals(PieceIconManager.getPieceIcon(captured, 28, PieceStyle.MINIMALIST),
+                        updated.getIcon(), "Settings immediately refresh captured piece icons");
+                TestUtils.assertEquals(false, icon == updated, "Rack rebuilt after style change");
+            }
         } finally {
+            PieceIconManager.setPieceStyle(PieceStyle.CLASSIC_VECTOR);
             frame.dispose();
         }
+    }
+
+    /** Finds the capture rack. @param component root @return rack or null */
+    private static CapturedPiecesPanel findRack(Component component) {
+        if (component instanceof CapturedPiecesPanel) return (CapturedPiecesPanel) component;
+        if (component instanceof Container) {
+            for (Component child : ((Container) component).getComponents()) {
+                CapturedPiecesPanel found = findRack(child);
+                if (found != null) return found;
+            }
+        }
+        return null;
     }
 
     /** Finds the undo button in the component tree. @param component root @return button or null */
