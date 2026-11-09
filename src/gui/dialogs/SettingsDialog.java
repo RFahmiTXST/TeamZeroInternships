@@ -389,6 +389,7 @@ public final class SettingsDialog extends JDialog {
         if (ownerWindow instanceof ChessFrame) {
             ChessFrame frame = (ChessFrame) ownerWindow;
             frame.applyBoardSize(selectedSize);
+            frame.refreshCapturedPieces();
         } else if (ownerWindow != null) {
             ownerWindow.pack();
         }
