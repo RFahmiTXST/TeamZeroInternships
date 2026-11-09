@@ -51,6 +51,8 @@ public class ChessFrame extends JFrame {
     private final BoardPanel boardPanel;
     /** The status label displayed in the southern footer panel. */
     private final JLabel statusLabel;
+    /** Sidebar showing completed moves. */
+    private final HistoryPanel historyPanel;
     /** The toolbar settings button. */
     private final JButton settingsButton;
     /** Cached customization settings dialog. */
@@ -82,8 +84,8 @@ public class ChessFrame extends JFrame {
             throw new IllegalArgumentException("Board model must not be null.");
         }
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-        setPreferredSize(new Dimension(740, 780));
+        setMinimumSize(new Dimension(MIN_WIDTH + HistoryPanel.PANEL_WIDTH, MIN_HEIGHT));
+        setPreferredSize(new Dimension(740 + HistoryPanel.PANEL_WIDTH, 780));
         setLayout(new BorderLayout());
 
         // North: Top toolbar with gear customization button
@@ -104,6 +106,9 @@ public class ChessFrame extends JFrame {
         KingCaptureHandler kingCaptureHandler = new KingCaptureHandler(this);
         controller.addCaptureListener(kingCaptureHandler::onPieceCaptured);
         add(boardPanel, BorderLayout.CENTER);
+        historyPanel = new HistoryPanel();
+        controller.addHistoryListener(historyPanel::setHistory);
+        add(historyPanel, BorderLayout.EAST);
 
         // South: Status bar panel
         JPanel statusPanel = new JPanel(new BorderLayout());
@@ -183,6 +188,12 @@ public class ChessFrame extends JFrame {
     public BoardPanel getBoardPanel() {
         return boardPanel;
     }
+
+    /**
+     * Returns the sidebar containing completed moves.
+     * @return history panel
+     */
+    public HistoryPanel getHistoryPanel() { return historyPanel; }
 
     /**
      * Gets the footer status label component.
@@ -274,7 +285,7 @@ public class ChessFrame extends JFrame {
         if (size != null) {
             boardPanel.setBoardSize(size);
             int targetDim = size.getDimension();
-            int frameW = Math.max(MIN_WIDTH, targetDim + 60);
+            int frameW = Math.max(MIN_WIDTH, targetDim + 60) + HistoryPanel.PANEL_WIDTH;
             int frameH = Math.max(MIN_HEIGHT, targetDim + 120);
             setPreferredSize(new Dimension(frameW, frameH));
             pack();

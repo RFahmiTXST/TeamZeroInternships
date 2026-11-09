@@ -134,9 +134,9 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
   - [x] Add **Board Size** selector (e.g., Small 480x480, Medium 640x640, Large 800x800).
   - [x] Implement real-time **Apply** button: dynamically updates board colors, piece icons, and window dimensions without restarting or losing the ongoing game state.
 - **Dev 3 (Sabid - Extra Feature 3: Game History Panel):**
-  - [ ] Create `HistoryPanel` (`JPanel`) positioned adjacent to the chessboard in a `BorderLayout.EAST` container.
-  - [ ] Implement a scrollable `JTable` or `JList` logging move history in real-time (turn number, piece moved, start square, destination square, capture indicator).
-  - [ ] Auto-scroll to the latest move as moves occur.
+  - [x] Create `HistoryPanel` (`JPanel`) positioned adjacent to the chessboard in a `BorderLayout.EAST` container.
+  - [x] Implement a scrollable `JTable` or `JList` logging move history in real-time (turn number, piece moved, start square, destination square, capture indicator).
+  - [x] Auto-scroll to the latest move as moves occur.
 - **Dev 2 (Abid - Extra Feature 3: Captured Pieces Rack & Undo Action):**
   - [ ] Implement visual Captured Pieces displays in the side panel (displaying captured White and Black pieces with counts/icons).
   - [ ] Implement **Undo Button**: maintain a move history stack (Memento or Command pattern).
