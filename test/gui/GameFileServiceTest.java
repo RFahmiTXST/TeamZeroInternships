@@ -44,6 +44,8 @@ public final class GameFileServiceTest {
             Board board = new Board();
             board.initialize();
             GUIController controller = new GUIController(board, new BoardPanel(board));
+            gui.board.CapturedPiecesPanel rack = new gui.board.CapturedPiecesPanel();
+            controller.addHistoryListener(entries -> rack.refresh(controller.getBoard()));
             List<List<HistoryEntry>> updates = new ArrayList<>();
             controller.addHistoryListener(updates::add);
 
@@ -90,6 +92,9 @@ public final class GameFileServiceTest {
             check(0, controller.getHistory().size(), "New Game clears history");
             check(0, controller.getBoard().getCapturedPieces().size(), "New Game clears captures");
             check(Color.WHITE, controller.getCurrentTurn(), "New Game resets turn");
+            check(true, controller.movePiece(new Position(1, 0), new Position(3, 0)),
+                    "Old session has a reversible move before Load");
+            check(true, controller.canUndo(), "Old session undo record exists");
             int[] captureEvents = {0};
             controller.addCaptureListener((piece, position) -> captureEvents[0]++);
             controller.restoreSession(loaded.board(), loaded.turn(), loaded.history());
@@ -97,9 +102,16 @@ public final class GameFileServiceTest {
             check(expectedHistory, controller.getHistory(), "Load restores live history");
             check(3, updates.get(updates.size() - 1).size(), "History listener receives restored rows");
             check(1, controller.getBoard().getCapturedPieces().size(), "Load restores live captured list");
+            check("Captured Black (1)",
+                    ((javax.swing.JLabel) rack.getComponent(2)).getText(),
+                    "Captured rack refreshes after Load");
             check(true, controller.getBoardPanel().getSquarePanel(new Position(4, 4))
                     .getPiece() instanceof Pawn, "Board panel displays loaded piece");
             check(0, captureEvents[0], "Loading does not trigger capture/endgame callbacks");
+            check(false, controller.canUndo(), "Load clears prior undo records");
+            check(false, controller.undoLastMove(), "Stale Undo cannot modify loaded game");
+            check(expectedHistory, controller.getHistory(),
+                    "Rejected stale Undo preserves loaded history");
 
             // Reject invalid files without mutating the active session.
             Files.writeString(file, "format=UNKNOWN\n", StandardCharsets.UTF_8);

@@ -8,6 +8,8 @@ import pieces.Piece;
 
 import javax.swing.SwingUtilities;
 import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -58,6 +60,22 @@ public final class GUIController {
          */
         void onHistoryChanged(List<HistoryEntry> entries);
     }
+
+    /**
+     * Reversible state retained for each successful GUI move.
+     * @param from original square
+     * @param to destination square
+     * @param moving moved piece
+     * @param captured captured piece, if any
+     * @param movedBefore movement flag before the move
+     * @param turnBefore active turn before the move
+     * @param lastCapturedBefore capture state before the move
+     */
+    private record UndoEntry(Position from, Position to, Piece moving, Piece captured,
+                             boolean movedBefore, Color turnBefore,
+                             Piece lastCapturedBefore) { }
+    /** Most recent reversible move first. */
+    private final Deque<UndoEntry> undoEntries = new ArrayDeque<>();
 
     /** Completed GUI moves; one entry per accepted gesture. */
     private final List<HistoryEntry> history = new ArrayList<>();
@@ -299,10 +317,14 @@ public final class GUIController {
         if (targetPiece == null) {
             return null;
         }
+        // A direct capture is not a recorded move, so older undo records
+        // cannot safely be replayed against the changed board.
+        undoEntries.clear();
         board.recordCapture(targetPiece);
         board.setPiece(target, null);
         this.lastCapturedPiece = targetPiece;
         boardPanel.updateSquare(target);
+        notifyHistoryListeners();
         notifyCaptureListeners(targetPiece, target);
         return targetPiece;
     }
@@ -335,7 +357,12 @@ public final class GUIController {
             return false;
         }
 
+        boolean movedBefore = moving.hasMoved();
+        Color turnBefore = currentTurn;
+        Piece previousCapture = lastCapturedPiece;
         Piece captured = board.movePiece(from, to);
+        undoEntries.push(new UndoEntry(from, to, moving, captured, movedBefore,
+                turnBefore, previousCapture));
         this.lastCapturedPiece = captured;
 
         boardPanel.clearHighlights();
@@ -423,14 +450,46 @@ public final class GUIController {
     }
 
     /**
-     * Restores a fully parsed saved game, including captured pieces, turn and history.
-     * Loading does not fire capture listeners or announce a winner.
+     * Reports whether a recorded move can currently be undone.
+     * @return true if an undo record is available
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public boolean canUndo() {
+        requireEventDispatchThread();
+        return !undoEntries.isEmpty();
+    }
+
+    /**
+     * Reverses the last successful GUI move and notifies the view and history.
+     * @return true if a move was undone
+     * @throws IllegalStateException if called off the EDT or board state changed externally
+     */
+    public boolean undoLastMove() {
+        requireEventDispatchThread();
+        if (undoEntries.isEmpty()) return false;
+        UndoEntry entry = undoEntries.peek();
+        board.undoMove(entry.from(), entry.to(), entry.moving(), entry.captured(), entry.movedBefore());
+        undoEntries.pop();
+        history.remove(history.size() - 1);
+        currentTurn = entry.turnBefore();
+        lastCapturedPiece = entry.lastCapturedBefore();
+        cancelSelection();
+        refreshBoard();
+        notifyHistoryListeners();
+        notifyStatusListeners();
+        return true;
+    }
+
+    /**
+     * Restores a validated saved game including board, turn, captures and history.
+     * Clears undo records from the prior session so stale moves cannot be replayed.
+     * Loading does not notify capture listeners or declare a winner.
      *
-     * @param restoredBoard independent Board reconstructed from the save file
-     * @param restoredTurn next active player
+     * @param restoredBoard board reconstructed from a file
+     * @param restoredTurn next player turn
      * @param restoredHistory chronological move records
-     * @throws IllegalArgumentException if the supplied session is invalid
-     * @throws IllegalStateException if called outside the Swing EDT
+     * @throws IllegalArgumentException if data is missing or invalid
+     * @throws IllegalStateException if called off the Swing event dispatch thread
      */
     public void restoreSession(Board restoredBoard, Color restoredTurn,
                                List<HistoryEntry> restoredHistory) {
@@ -445,6 +504,7 @@ public final class GUIController {
             }
         }
         cancelSelection();
+        undoEntries.clear();
         this.board = restoredBoard;
         this.currentTurn = restoredTurn;
         List<Piece> captured = restoredBoard.getCapturedPieces();
@@ -453,6 +513,7 @@ public final class GUIController {
         history.addAll(restored);
         boardPanel.clearHighlights();
         refreshBoard();
+        // Dev 2's frame observer updates history, captured rack and Undo button together.
         notifyHistoryListeners();
         notifyStatusListeners();
     }
@@ -490,6 +551,7 @@ public final class GUIController {
 
     /** Clears stale history when a new board session starts. */
     private void clearHistory() {
+        undoEntries.clear();
         history.clear();
         notifyHistoryListeners();
     }
