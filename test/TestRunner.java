@@ -44,6 +44,7 @@ public class TestRunner {
         test.gui.HistoryPanelTest.main(args);
         test.gui.UndoTest.main(args);
         test.gui.CapturedPiecesPanelTest.main(args);
+        test.gui.GameFileServiceTest.main(args);
         test.gui.KingCaptureHandlerTest.main(args);
         test.gui.SettingsDialogTest.main(args);
 

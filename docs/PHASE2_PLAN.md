@@ -123,10 +123,10 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
 **Goal:** Implement all three extra GUI features: Menu Bar controls (New/Save/Load), Settings Window for real-time appearance customization, and Game History Panel with an Undo button.
 
 - **Dev 4 (Towsif - Extra Feature 1: Menu Bar & Game Controls):**
-  - [ ] Implement top `JMenuBar` with `File` and `Game` menus.
-  - [ ] Implement **New Game**: prompts for confirmation, then resets the `Board` to initial setup, clears move history, resets captured pieces, and repaints the board.
-  - [ ] Implement **Save Game**: open `JFileChooser`, serialize or format the game state (board matrix, captured pieces, turn, move history) into a `.chess` or text file.
-  - [ ] Implement **Load Game**: open `JFileChooser`, parse selected save file, restore complete board state, move history, and UI views.
+  - [x] Implement top `JMenuBar` with `File` and `Game` menus.
+  - [x] Implement **New Game**: prompts for confirmation, then resets the `Board` to initial setup, clears move history, resets captured pieces, and repaints the board.
+  - [x] Implement **Save Game**: open `JFileChooser`, serialize or format the game state (board matrix, captured pieces, turn, move history) into a `.chess` or text file.
+  - [x] Implement **Load Game**: open `JFileChooser`, parse selected save file, restore complete board state, move history, and UI views.
 - **Dev 1 (Rayed - Extra Feature 2: Settings Window for Customization):**
   - [x] Design and implement `SettingsDialog` (`JDialog`) accessible via menu bar or toolbar gear icon.
   - [x] Add **Board Background Color/Style** selector (e.g., Classic Wood, Modern Gray, Slate Blue, Forest Green).

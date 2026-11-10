@@ -204,3 +204,45 @@ All three assigned Dev 4 Phase 2 Milestone 2 responsibilities were implemented a
 - [x] Detect King captures.
 - [x] Display the correct winner using a modal dialog.
 - [x] Terminate the application after the dialog is dismissed.
+
+## Phase 2 Milestone 3 — Game Controls
+
+### AI Tool Used
+OpenAI ChatGPT (GPT-6)
+
+### AI Assistance
+
+I used ChatGPT to review the Phase 2 M3 requirements, design the New Game, Save Game, and Load Game functionality, prepare automated tests, and integrate the implementation into the existing Swing GUI.
+
+I reviewed the implementation and tested it locally.
+
+### Implementation
+
+- Implemented File and Game menu controls.
+- Added New Game with confirmation before resetting.
+- Added Save Game using a .chess file format.
+- Added Load Game with file validation.
+- Preserved board positions, captured pieces, active turn, piece movement flags, and move history.
+- Integrated the functionality with GUIController and ChessFrame.
+- Added GameFileServiceTest to the regression suite.
+- Preserved the existing Settings and History Panel functionality.
+
+### Verification
+
+- Java 17-compatible compilation: PASS.
+- Shared assertions: 1094 passed, 0 failed.
+- Utils assertions: 28 passed, 0 failed.
+- Total assertions: 1122 passed, 0 failed.
+- Regression exit code: 0.
+
+### GUI Verification
+
+- Verified New Game, Save Game, and Load Game.
+- Verified saving and restoring a game after moves and captures.
+- Verified restoration of board state, captured pieces, turn, and move history.
+- Verified that New Game resets the board and history.
+- Verified file cancellation and invalid-file handling.
+
+### Result
+
+Completed and verified Dev 4's assigned M3 Game Controls functionality. Final pull request review and merge remain pending.
