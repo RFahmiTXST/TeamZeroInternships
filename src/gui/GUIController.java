@@ -481,6 +481,44 @@ public final class GUIController {
     }
 
     /**
+     * Restores a validated saved game including board, turn, captures and history.
+     * Clears undo records from the prior session so stale moves cannot be replayed.
+     * Loading does not notify capture listeners or declare a winner.
+     *
+     * @param restoredBoard board reconstructed from a file
+     * @param restoredTurn next player turn
+     * @param restoredHistory chronological move records
+     * @throws IllegalArgumentException if data is missing or invalid
+     * @throws IllegalStateException if called off the Swing event dispatch thread
+     */
+    public void restoreSession(Board restoredBoard, Color restoredTurn,
+                               List<HistoryEntry> restoredHistory) {
+        requireEventDispatchThread();
+        if (restoredBoard == null || restoredTurn == null || restoredHistory == null) {
+            throw new IllegalArgumentException("Restored board, turn and history are required.");
+        }
+        List<HistoryEntry> restored = List.copyOf(restoredHistory);
+        for (int i = 0; i < restored.size(); i++) {
+            if (restored.get(i).number() != i + 1) {
+                throw new IllegalArgumentException("Restored history numbering is invalid.");
+            }
+        }
+        cancelSelection();
+        undoEntries.clear();
+        this.board = restoredBoard;
+        this.currentTurn = restoredTurn;
+        List<Piece> captured = restoredBoard.getCapturedPieces();
+        this.lastCapturedPiece = captured.isEmpty() ? null : captured.get(captured.size() - 1);
+        history.clear();
+        history.addAll(restored);
+        boardPanel.clearHighlights();
+        refreshBoard();
+        // Dev 2's frame observer updates history, captured rack and Undo button together.
+        notifyHistoryListeners();
+        notifyStatusListeners();
+    }
+
+    /**
      * Returns a snapshot that cannot change with future moves.
      * @return immutable chronological move history
      */
