@@ -162,7 +162,7 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
   - [ ] Update project `README.md` with Phase 2 GUI launch instructions, feature descriptions, and screenshots.
   - [ ] Update personal AI usage log in `docs/ai-usage/cyber-kuro.md`.
 - **Dev 2 (Abid) & Dev 3 (Sabid):**
-  - [ ] Dev 2: Update personal AI usage log in `docs/ai-usage/ajv163.md` and complete peer review of GUI components.
+  - [x] Dev 2: Update personal AI usage log in `docs/ai-usage/ajv163.md` and complete peer review of GUI components.
   - [ ] Dev 3: Update personal AI usage log in `docs/ai-usage/sabid.md` and verify event handling edge cases (rapid clicks, dragging off-screen, etc.).
 - **All Members (Submission Deliverables Preparation):**
   - [ ] Capture the required submission screenshots:
