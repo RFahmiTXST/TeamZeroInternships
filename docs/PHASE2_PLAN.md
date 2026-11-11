@@ -79,7 +79,6 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
   - [x] Ensure all initial component construction and board painting adhere to Swing thread-safety guidelines (`SwingUtilities.invokeLater`).
 - **Dev 4 (Towsif - QA & Setup):**
   - [x] Set up Phase 2 test scaffolding in `test/gui/` to verify headless component initialization and state-to-view mapping.
-  - [x] Create Phase 2 documentation structure and screenshot checklist (`docs/PHASE2_REPORT_CHECKLIST.md`).
   - [x] Verify clean build scripts on PowerShell and bash (`javac` commands compiling both `src` and `test` under Java 17+).
 
 🧪 **Manual Tests for M1:**
@@ -158,9 +157,9 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
   - [ ] Manage the final Phase 2 Pull Request from `dev` to `main`.
   - [ ] Update personal AI usage log in `docs/ai-usage/RFahmiTXST.md`.
 - **Dev 4 (Towsif - QA Lead & Documentation):**
-  - [ ] Execute Javadoc generator with `-private -Xdoclint:all -Werror` across all packages (`gui`, `board`, `pieces`, `core`, `ui`, `utils`); ensure **0 warnings and 0 errors**.
-  - [ ] Update project `README.md` with Phase 2 GUI launch instructions, feature descriptions, and screenshots.
-  - [ ] Update personal AI usage log in `docs/ai-usage/cyber-kuro.md`.
+  - [x] Execute Javadoc generator with `-private -Xdoclint:all -Werror` across all packages (`gui`, `board`, `pieces`, `core`, `ui`, `utils`); ensure **0 warnings and 0 errors**.
+  - [x] Update project `README.md` with Phase 2 GUI launch instructions, feature descriptions, and screenshots.
+  - [x] Update personal AI usage log in `docs/ai-usage/cyber-kuro.md`.
 - **Dev 2 (Abid) & Dev 3 (Sabid):**
   - [ ] Dev 2: Update personal AI usage log in `docs/ai-usage/ajv163.md` and complete peer review of GUI components.
   - [ ] Dev 3: Update personal AI usage log in `docs/ai-usage/sabid.md` and verify event handling edge cases (rapid clicks, dragging off-screen, etc.).
