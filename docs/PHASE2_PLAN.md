@@ -79,7 +79,6 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
   - [x] Ensure all initial component construction and board painting adhere to Swing thread-safety guidelines (`SwingUtilities.invokeLater`).
 - **Dev 4 (Towsif - QA & Setup):**
   - [x] Set up Phase 2 test scaffolding in `test/gui/` to verify headless component initialization and state-to-view mapping.
-  - [x] Create Phase 2 documentation structure and screenshot checklist (`docs/PHASE2_REPORT_CHECKLIST.md`).
   - [x] Verify clean build scripts on PowerShell and bash (`javac` commands compiling both `src` and `test` under Java 17+).
 
 🧪 **Manual Tests for M1:**

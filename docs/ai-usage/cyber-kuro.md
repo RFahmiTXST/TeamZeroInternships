@@ -257,7 +257,7 @@ I used ChatGPT to inspect the merged application structure and organize the requ
 
 - Added Phase 2 desktop build, launch, headless test, Javadoc and console fallback instructions to `README.md` while keeping the Phase 1 documentation.
 - Documented click/drag movement, captures, the King-capture popup, New/Save/Load, settings, move history, captured-piece rack and Undo.
-- Created `scripts/verify-dev4-phase2-m4.ps1` to make compilation, regression testing and strict Javadoc audit reproducible.
+regression testing and strict Javadoc audit reproducible.
 - Prepared a screenshot list for the final Phase 2 PDF. Screenshots must be captured from the actual application before they can be marked complete.
 
 ### Final Verification (record actual results after running)

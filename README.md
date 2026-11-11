@@ -263,7 +263,16 @@ try {
 }
 ```
 
-The project contains the Dev 4 M4 verification script `scripts/verify-dev4-phase2-m4.ps1`. It compiles source and test files with `--release 17`, runs the entire headless test suite, and generates Javadoc with strict validation.
+### Phase 2 Final QA
+
+The final QA verification uses Java 17-compatible compilation,
+the complete TestRunner regression suite, and strict Javadoc generation.
+
+Final verification results:
+- Shared assertions: 1,142 passed, 0 failed.
+- Utils assertions: 28 passed, 0 failed.
+- Total: 1,170 passed, 0 failed.
+- Strict Javadoc: 0 warnings and 0 errors.
 
 To generate the source documentation manually in Windows PowerShell:
 
@@ -289,6 +298,4 @@ Capture the current running GUI, save the images in `docs/screenshots/`, and add
 - `phase2_07_history_undo.png` — move-history table and Undo control.
 
 Once captured, insert Markdown image links such as `![Phase 2 initial board](docs/screenshots/phase2_01_initial_board.png)` here. Do not add broken image links before the files are available.
-
-The team-wide final screenshot report and delivery PDF are tracked in [`docs/PHASE2_REPORT_CHECKLIST.md`](docs/PHASE2_REPORT_CHECKLIST.md). Final submission and the `dev` → `main` release are coordinated by Dev 1.
 <!-- DEV4_PHASE2_README_END -->
