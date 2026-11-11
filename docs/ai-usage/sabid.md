@@ -224,3 +224,77 @@ Sabid's QA report and retained the standalone entry point to avoid shared-runner
 edits. No manual physical mouse/monitor testing is claimed. Three-file scope
 has no path overlap with Rayed's pending PR #30. Final shared submission work
 remains separate from Sabid's completed event QA.
+
+## Task-by-task prompt summaries - Phases 1 and 2
+
+Added retrospectively on 2026-11-10. Sabid reports prompting another AI for
+individual tasks before bringing work here. The wording below was reconstructed
+from the milestone tasks and available project record; it is not a transcript
+or a set of verified quotations from that other conversation. It summarizes
+possible task-level requests, rather than establishing their exact wording,
+order or dates. The entries above remain the record of implementation and
+verification performed with Codex; this supplement does not replace those
+attributions or imply that Codex only verified independently written code.
+
+### Phase 1 - Milestone 1: utilities and parsing
+
+1. Explain how to normalize move input by trimming whitespace and standardizing letter case.
+2. Help implement move-format validation, including invalid or missing coordinates.
+3. Help convert chess coordinates into Position objects and input strings into Move objects.
+4. Help test valid input, invalid input and boundary cases, and explain the compile/run steps.
+
+### Phase 1 - Milestone 2: console interface and player moves
+
+1. Help implement console messages for the welcome screen, board, current turn and errors.
+2. Help read a complete move from the console and connect board display to Board.render().
+3. Help implement Player.makeMove() with ownership and coordinate checks, rejecting same-square moves and friendly captures before delegating to Board.movePiece().
+4. Help test the player and console interface against the available Board implementation and identify integration dependencies.
+
+### Phase 1 - Milestone 3: game flow and team integration
+
+1. Help implement game startup, the play loop, turn switching and game termination.
+2. Help keep the same player's turn after invalid input or a rejected move, and handle quit and end-of-input cleanly.
+3. Help integrate movement legality with possibleMoves(board), respecting the team's assigned ownership of that logic.
+4. Help test turn order, captures, retries and restarting, then reconcile overlapping team changes without losing legality or special-move handling.
+
+### Phase 1 - Milestone 4: move notation and final QA
+
+1. Help implement readable Move.toString() output for ordinary moves, castling and promotion.
+2. Help add notation tests and verify the game with a scripted sequence of valid and invalid moves.
+3. Help check my documentation and Javadoc, record test results and identify remaining limitations.
+4. Help verify integration before committing my work, leaving the final team release to its assigned owner.
+
+### Phase 2 - Milestone 1: controller and starting position
+
+1. Help connect the Board model and BoardPanel through GUIController without mixing Swing concerns into the model.
+2. Help display all 32 pieces in their starting positions while preserving supplied board positions.
+3. Help implement refresh, reset and board replacement, with Swing mutations restricted to the event dispatch thread.
+4. Help test controller initialization and model-to-view synchronization before proceeding to mouse interaction.
+
+### Phase 2 - Milestone 2: mouse interaction
+
+1. Help implement click-to-select and click-to-move with selection feedback.
+2. Help implement drag-and-drop from squares and piece labels, translating coordinates correctly after resizing.
+3. Help show a floating drag icon and clean it up after a drop, Escape, reset or board replacement.
+4. Help test off-board drops, empty sources, friendly captures and repeated clicks while keeping movement unrestricted as required for Phase 2.
+5. Help integrate with teammates' capture and turn features without taking over their assigned implementation.
+
+### Phase 2 - Milestone 3: move history
+
+1. Help keep chronological move history in the controller and expose immutable snapshots to the view.
+2. Help build a read-only, scrollable history table with move number, piece, source, destination and capture details.
+3. Help record accepted moves exactly once, ignore rejected moves and clear stale history on reset or replacement.
+4. Help scroll to the latest entry and record a king-capturing move before the winner notification.
+5. Help verify compatibility with teammates' Undo, captured-piece rack, settings and Save/Load work without implementing their assigned features.
+
+### Phase 2 - Milestone 4: event-handling QA
+
+1. Help verify rapid clicks and repeated moves without duplicate history entries or inconsistent board state.
+2. Help test drops beyond every board edge at different window proportions and check drag-icon cleanup.
+3. Help test Escape, reset and board replacement during a gesture, including a stale mouse release afterward.
+4. After Save/Load integration, help verify that loading cancels an active selection or drag and that subsequent moves and Undo respect the loaded-session boundary.
+5. Help run the relevant tests, document the results in my own QA report and AI log, and check current branches for conflicts while preserving unrelated local work.
+
+These summaries distinguish the requested tasks from the evidence of what was
+implemented and tested. Exact earlier prompts would require the original other-AI
+conversation. Automated checks should not be described as manual GUI testing.
