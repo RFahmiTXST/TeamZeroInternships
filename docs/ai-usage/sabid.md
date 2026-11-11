@@ -188,3 +188,39 @@ Scope: Sabid's history panel only. Undo/captured rack remain Abid's work;
 New/Save/Load remain Towsif's work. Future load/undo must restore controller
 history together with board state; setBoard currently clears history rather
 than pretending to recover it. User authorized committing and pushing after checking conflicts. Latest dev was 2bcbe23 and matched the local base; all six source/test files matched the verified build. M3 is not merged into dev.
+
+## 2026-11-09 - Phase 2 M4 event-handling QA
+
+User asked to pull all team changes, update project memory and complete only
+Sabid's M4 scope while minimizing teammate conflicts. PR #27 history and #29
+Undo/rack are merged; dev is 91d5c1b. The earlier M3 status above is superseded.
+Towsif's PR #28 remains open and conflicting; no Save/Load implementation or
+teammate-owned documentation was changed.
+
+Codex added standalone SabidM4EventTest: 128 checks for rapid clicks, repeated
+Undo after mouse moves, off-board drops on every edge at three dimensions, and
+Escape/reset/replacement during active drags followed by stale releases and
+new valid gestures. All passed in headless and desktop modes. Java 17 build
+passed; existing suite passed 1,130 headless and 1,200 desktop assertions.
+No production changes were necessary. Automated events are not manual GUI QA.
+
+Added PHASE2_M4_QA_SABID.md with commands, results and remaining integration.
+The three contributed paths do not overlap current PR #28. Shared TestRunner,
+PHASE2_PLAN, README and teammate logs were left untouched. Final team delivery
+and Load-related regression checks remain pending integration of PR #28.
+
+## 2026-11-10 - M4 completion after Save/Load integration
+
+User requested pulling everything and completing Sabid's M4 without touching
+teammates' assignments or introducing conflicts. Updated to dev 4f635e3; PR #28
+is now merged, superseding the pending-integration note above. Added 14 checks
+to Sabid's standalone suite for restoreSession during selection/drag, stale
+releases, restored history/captures/turn, and Undo boundaries after loading.
+No Save/Load implementation or teammate files were changed.
+
+Java 17 build passed. All 142 event checks passed headless and desktop.
+Existing TestRunner passed 1,170 headless / 1,240 desktop assertions. Updated
+Sabid's QA report and retained the standalone entry point to avoid shared-runner
+edits. No manual physical mouse/monitor testing is claimed. Three-file scope
+has no path overlap with Rayed's pending PR #30. Final shared submission work
+remains separate from Sabid's completed event QA.
