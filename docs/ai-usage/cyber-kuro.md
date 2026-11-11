@@ -246,3 +246,30 @@ I reviewed the implementation and tested it locally.
 ### Result
 
 Completed and verified Dev 4's assigned M3 Game Controls functionality. Final pull request review and merge remain pending.
+
+## Phase 2 Milestone 4 — Final QA and Documentation
+
+### AI Assistance
+
+I used ChatGPT to inspect the merged application structure and organize the required screenshots and final documentation. I reviewed the suggested instructions against the existing GUI, menu, save/load, history and Undo implementations.
+
+### M4 Work Prepared
+
+- Added Phase 2 desktop build, launch, headless test, Javadoc and console fallback instructions to `README.md` while keeping the Phase 1 documentation.
+- Documented click/drag movement, captures, the King-capture popup, New/Save/Load, settings, move history, captured-piece rack and Undo.
+- Created `scripts/verify-dev4-phase2-m4.ps1` to make compilation, regression testing and strict Javadoc audit reproducible.
+- Prepared a screenshot list for the final Phase 2 PDF. Screenshots must be captured from the actual application before they can be marked complete.
+
+### Final Verification (record actual results after running)
+
+- Java compiler/version: Pending M4 audit.
+- Java 17-targeted compilation: Pending M4 audit.
+- Complete headless test suite: Pending M4 audit.
+- Strict Javadoc (`-private -Xdoclint:all -Werror`): Pending M4 audit.
+- Javadoc HTML inspection: Pending manual inspection.
+- GUI build and README launch check: Pending manual inspection.
+- Final screenshots and team submission PDF: Pending actual evidence.
+
+### Scope and Collaboration
+
+This M4 contribution focuses on Dev 4's QA and documentation responsibilities. Dev 1 owns architectural review and the final `dev` to `main` release. GUI screenshots, the submission PDF, and peer evaluations are team-wide responsibilities. Verification results and checklist items must be updated only after the corresponding tests are run.

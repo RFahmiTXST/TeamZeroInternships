@@ -193,3 +193,102 @@ See [Milestone 4 QA report](docs/M4_QA_SABID.md) for validation and remaining re
   [Interviews]         ==> 4
   [Offers]             => 0
   ```
+
+<!-- DEV4_PHASE2_README_START -->
+## Phase 2 — Swing Chess GUI
+
+Phase 2 adds a desktop GUI using Java Swing while retaining the Phase 1 console game. The desktop window opens by default on a machine with a graphical display. The GUI demonstrates the features assigned in `docs/PHASE2_PLAN.md`; it is **not a full tournament-rules chess engine**.
+
+### Requirements and quick start
+
+- JDK **17 or newer** with both `java` and `javac` accessible in the terminal.
+- A desktop environment for the Swing GUI. A headless environment runs the console fallback.
+- No external Java libraries, assets, or network connection are required to launch the GUI.
+
+**Windows PowerShell** — run from the repository root:
+
+```powershell
+New-Item -ItemType Directory -Force out | Out-Null
+$sources = (Get-ChildItem -Path .\src,.\test -Recurse -Filter *.java).FullName
+javac --release 17 -d out $sources
+if ($LASTEXITCODE -ne 0) { throw 'Compilation failed.' }
+java -cp out Main
+```
+
+If `javac` is missing from PATH but JDK 25 is installed at the known Windows location, use:
+
+```powershell
+$env:JAVA_HOME = 'C:\Program Files\Java\jdk-25'
+$env:Path = "$env:JAVA_HOME\bin;$env:Path"
+```
+
+**Bash (Linux or Git Bash with a working JDK)**:
+
+```bash
+mkdir -p out
+find src test -name '*.java' -print0 | xargs -0 javac --release 17 -d out
+java -cp out Main
+```
+
+For the original terminal game, use `java -cp out Main --console`. WSL requires a JDK installed in its Linux environment unless you intentionally use Git Bash with the Windows JDK.
+
+### GUI features and controls
+
+| Feature | How to use it |
+| --- | --- |
+| Board and pieces | Standard 8×8 starting setup, colored squares, file/rank labels, and scalable piece icons |
+| Click-to-move | Click a piece to select it, then click a destination square |
+| Drag-and-drop | Press and drag a piece to its destination; Escape cancels a pending drag |
+| Captures and turn | Capturing an opponent removes its piece; the status area displays the active turn |
+| King capture | Capturing a King displays a modal winner message; dismissing the message closes the application |
+| New Game | **Game → New Game** asks for confirmation before clearing the current session |
+| Save and Load | **File → Save Game / Load Game** uses versioned `.chess` files to preserve the board, captured pieces, turn, moved flags, and move history |
+| Appearance | **Game → Settings** or **Options → Appearance & Settings** changes themes, piece styles and board size |
+| Move history | The right sidebar lists accepted moves, captures, source and destination squares |
+| Captured pieces | The sidebar displays captured white and black pieces |
+| Undo | The **Undo** button reverses the latest reversible move and updates the board, capture display, turn and history |
+
+Phase 2 intentionally allows unrestricted destination moves rather than enforcing all standard chess rules. Invalid sources, off-board moves, same-square moves, and friendly captures are rejected. Undo is cleared on New Game and Load Game so moves from another session cannot be replayed.
+
+### Running automated tests and Javadoc
+
+**Windows PowerShell**:
+
+```powershell
+$env:JAVA_TOOL_OPTIONS = '-Djava.awt.headless=true'
+try {
+    java -ea -cp out TestRunner
+} finally {
+    Remove-Item Env:JAVA_TOOL_OPTIONS -ErrorAction SilentlyContinue
+}
+```
+
+The project contains the Dev 4 M4 verification script `scripts/verify-dev4-phase2-m4.ps1`. It compiles source and test files with `--release 17`, runs the entire headless test suite, and generates Javadoc with strict validation.
+
+To generate the source documentation manually in Windows PowerShell:
+
+```powershell
+javadoc -private -Xdoclint:all -Werror -encoding UTF-8 `
+    -d out/javadoc -sourcepath src `
+    -subpackages gui:board:pieces:core:ui:utils src/Main.java
+Start-Process '.\out\javadoc\index.html'
+```
+
+If `javadoc` is not on PATH, replace it with the full path to `javadoc.exe` in the installed JDK. Generated contents of `out/` are build artifacts, not repository source files.
+
+### Phase 2 screenshots and submission evidence
+
+Capture the current running GUI, save the images in `docs/screenshots/`, and add the images to this section **after** they exist. Required evidence:
+
+- `phase2_01_initial_board.png` — default chessboard and 32 starting pieces.
+- `phase2_02_moves_captures.png` — moved pieces and a captured-pieces rack with a history entry.
+- `phase2_03_king_capture_winner.png` — winner popup visible before clicking OK.
+- `phase2_04_game_menus.png` — File and Game menus showing New/Save/Load commands.
+- `phase2_05_save_load.png` — Save/Load workflow with restored board and history.
+- `phase2_06_settings.png` — settings dialog and a changed board style or size.
+- `phase2_07_history_undo.png` — move-history table and Undo control.
+
+Once captured, insert Markdown image links such as `![Phase 2 initial board](docs/screenshots/phase2_01_initial_board.png)` here. Do not add broken image links before the files are available.
+
+The team-wide final screenshot report and delivery PDF are tracked in [`docs/PHASE2_REPORT_CHECKLIST.md`](docs/PHASE2_REPORT_CHECKLIST.md). Final submission and the `dev` → `main` release are coordinated by Dev 1.
+<!-- DEV4_PHASE2_README_END -->

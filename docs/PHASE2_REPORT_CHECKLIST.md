@@ -30,9 +30,9 @@ Do not mark items complete until the actual screenshot or test evidence exists.
 
 ## Milestone 4: Final verification and submission
 
-- [ ] Compile all source and test files from a clean checkout.
-- [ ] Run the full automated test suite without failures.
-- [ ] Generate Javadoc with `-private -Xdoclint:all -Werror`, zero warnings.
+- [x] Compile all source and test files from a clean checkout.
+- [x] Run the full automated test suite without failures.
+- [x] Generate Javadoc with `-private -Xdoclint:all -Werror`, zero warnings.
 - [ ] Verify `out/javadoc/index.html` opens correctly.
 - [ ] Update README with GUI build, run, and test instructions.
 - [ ] Compile screenshots and design explanations into `Phase2_Submission_TeamZero.pdf`.
