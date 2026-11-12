@@ -188,3 +188,128 @@ Scope: Sabid's history panel only. Undo/captured rack remain Abid's work;
 New/Save/Load remain Towsif's work. Future load/undo must restore controller
 history together with board state; setBoard currently clears history rather
 than pretending to recover it. User authorized committing and pushing after checking conflicts. Latest dev was 2bcbe23 and matched the local base; all six source/test files matched the verified build. M3 is not merged into dev.
+
+## 2026-11-09 - Phase 2 M4 event-handling QA
+
+User asked to pull all team changes, update project memory and complete only
+Sabid's M4 scope while minimizing teammate conflicts. PR #27 history and #29
+Undo/rack are merged; dev is 91d5c1b. The earlier M3 status above is superseded.
+Towsif's PR #28 remains open and conflicting; no Save/Load implementation or
+teammate-owned documentation was changed.
+
+Codex added standalone SabidM4EventTest: 128 checks for rapid clicks, repeated
+Undo after mouse moves, off-board drops on every edge at three dimensions, and
+Escape/reset/replacement during active drags followed by stale releases and
+new valid gestures. All passed in headless and desktop modes. Java 17 build
+passed; existing suite passed 1,130 headless and 1,200 desktop assertions.
+No production changes were necessary. Automated events are not manual GUI QA.
+
+Added PHASE2_M4_QA_SABID.md with commands, results and remaining integration.
+The three contributed paths do not overlap current PR #28. Shared TestRunner,
+PHASE2_PLAN, README and teammate logs were left untouched. Final team delivery
+and Load-related regression checks remain pending integration of PR #28.
+
+## 2026-11-10 - M4 completion after Save/Load integration
+
+User requested pulling everything and completing Sabid's M4 without touching
+teammates' assignments or introducing conflicts. Updated to dev 4f635e3; PR #28
+is now merged, superseding the pending-integration note above. Added 14 checks
+to Sabid's standalone suite for restoreSession during selection/drag, stale
+releases, restored history/captures/turn, and Undo boundaries after loading.
+No Save/Load implementation or teammate files were changed.
+
+Java 17 build passed. All 142 event checks passed headless and desktop.
+Existing TestRunner passed 1,170 headless / 1,240 desktop assertions. Updated
+Sabid's QA report and retained the standalone entry point to avoid shared-runner
+edits. No manual physical mouse/monitor testing is claimed. Three-file scope
+has no path overlap with Rayed's pending PR #30. Final shared submission work
+remains separate from Sabid's completed event QA.
+
+## Task-by-task prompt summaries - Phases 1 and 2
+
+Added retrospectively on 2026-11-10. Sabid reports prompting another AI for
+individual tasks before bringing work here. The wording below was reconstructed
+from the milestone tasks and available project record; it is not a transcript
+or a set of verified quotations from that other conversation. It summarizes
+possible task-level requests, rather than establishing their exact wording,
+order or dates. The entries above remain the record of implementation and
+verification performed with Codex; this supplement does not replace those
+attributions or imply that Codex only verified independently written code.
+
+### Phase 1 - Milestone 1: utilities and parsing
+
+1. Explain how to normalize move input by trimming whitespace and standardizing letter case.
+2. Help implement move-format validation, including invalid or missing coordinates.
+3. Help convert chess coordinates into Position objects and input strings into Move objects.
+4. Help test valid input, invalid input and boundary cases, and explain the compile/run steps.
+
+### Phase 1 - Milestone 2: console interface and player moves
+
+1. Help implement console messages for the welcome screen, board, current turn and errors.
+2. Help read a complete move from the console and connect board display to Board.render().
+3. Help implement Player.makeMove() with ownership and coordinate checks, rejecting same-square moves and friendly captures before delegating to Board.movePiece().
+4. Help test the player and console interface against the available Board implementation and identify integration dependencies.
+
+### Phase 1 - Milestone 3: game flow and team integration
+
+1. Help implement game startup, the play loop, turn switching and game termination.
+2. Help keep the same player's turn after invalid input or a rejected move, and handle quit and end-of-input cleanly.
+3. Help integrate movement legality with possibleMoves(board), respecting the team's assigned ownership of that logic.
+4. Help test turn order, captures, retries and restarting, then reconcile overlapping team changes without losing legality or special-move handling.
+
+### Phase 1 - Milestone 4: move notation and final QA
+
+1. Help implement readable Move.toString() output for ordinary moves, castling and promotion.
+2. Help add notation tests and verify the game with a scripted sequence of valid and invalid moves.
+3. Help check my documentation and Javadoc, record test results and identify remaining limitations.
+4. Help verify integration before committing my work, leaving the final team release to its assigned owner.
+
+### Phase 2 - Milestone 1: controller and starting position
+
+1. Help connect the Board model and BoardPanel through GUIController without mixing Swing concerns into the model.
+2. Help display all 32 pieces in their starting positions while preserving supplied board positions.
+3. Help implement refresh, reset and board replacement, with Swing mutations restricted to the event dispatch thread.
+4. Help test controller initialization and model-to-view synchronization before proceeding to mouse interaction.
+
+### Phase 2 - Milestone 2: mouse interaction
+
+1. Help implement click-to-select and click-to-move with selection feedback.
+2. Help implement drag-and-drop from squares and piece labels, translating coordinates correctly after resizing.
+3. Help show a floating drag icon and clean it up after a drop, Escape, reset or board replacement.
+4. Help test off-board drops, empty sources, friendly captures and repeated clicks while keeping movement unrestricted as required for Phase 2.
+5. Help integrate with teammates' capture and turn features without taking over their assigned implementation.
+
+### Phase 2 - Milestone 3: move history
+
+1. Help keep chronological move history in the controller and expose immutable snapshots to the view.
+2. Help build a read-only, scrollable history table with move number, piece, source, destination and capture details.
+3. Help record accepted moves exactly once, ignore rejected moves and clear stale history on reset or replacement.
+4. Help scroll to the latest entry and record a king-capturing move before the winner notification.
+5. Help verify compatibility with teammates' Undo, captured-piece rack, settings and Save/Load work without implementing their assigned features.
+
+### Phase 2 - Milestone 4: event-handling QA
+
+1. Help verify rapid clicks and repeated moves without duplicate history entries or inconsistent board state.
+2. Help test drops beyond every board edge at different window proportions and check drag-icon cleanup.
+3. Help test Escape, reset and board replacement during a gesture, including a stale mouse release afterward.
+4. After Save/Load integration, help verify that loading cancels an active selection or drag and that subsequent moves and Undo respect the loaded-session boundary.
+5. Help run the relevant tests, document the results in my own QA report and AI log, and check current branches for conflicts while preserving unrelated local work.
+
+These summaries distinguish the requested tasks from the evidence of what was
+implemented and tested. Exact earlier prompts would require the original other-AI
+conversation. Automated checks should not be described as manual GUI testing.
+
+## 2026-11-11 - PR #31 saved-board regression correction
+
+Cyber-kuro correctly identified that GameFileService.snapshot retains the live
+mutable Board. The previous gesture test therefore did not demonstrate saved
+position restoration. At the user's request, Codex changed only Sabid's test
+and documentation: a real temporary .chess save/load now supplies an independent
+board, with cleanup in finally. Added explicit divergence, saved-position,
+view, moved-flag and captured-piece checks before and after stale gestures and
+Undo. Earlier 142-check results remain historical and should not be interpreted
+as proving independent-board restoration. No production-code fix was required.
+
+Validation: Java 17 compilation passed; 172 focused checks passed in each of
+headless and desktop modes. Existing TestRunner passed 1,170 headless and 1,240
+desktop assertions with zero failures. No new manual interaction is claimed.
