@@ -298,3 +298,18 @@ attributions or imply that Codex only verified independently written code.
 These summaries distinguish the requested tasks from the evidence of what was
 implemented and tested. Exact earlier prompts would require the original other-AI
 conversation. Automated checks should not be described as manual GUI testing.
+
+## 2026-11-11 - PR #31 saved-board regression correction
+
+Cyber-kuro correctly identified that GameFileService.snapshot retains the live
+mutable Board. The previous gesture test therefore did not demonstrate saved
+position restoration. At the user's request, Codex changed only Sabid's test
+and documentation: a real temporary .chess save/load now supplies an independent
+board, with cleanup in finally. Added explicit divergence, saved-position,
+view, moved-flag and captured-piece checks before and after stale gestures and
+Undo. Earlier 142-check results remain historical and should not be interpreted
+as proving independent-board restoration. No production-code fix was required.
+
+Validation: Java 17 compilation passed; 172 focused checks passed in each of
+headless and desktop modes. Existing TestRunner passed 1,170 headless and 1,240
+desktop assertions with zero failures. No new manual interaction is claimed.
