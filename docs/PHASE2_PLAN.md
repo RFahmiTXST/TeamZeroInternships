@@ -153,9 +153,9 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
 **Goal:** Complete code review and refactoring, run Javadoc audit with 0 warnings, capture all required screenshots, assemble the submission PDF, and perform final dev-to-main merge.
 
 - **Dev 1 (Rayed - Repo Owner):**
-  - [ ] Perform architectural review of all merged GUI code: ensure clean OOP, proper encapsulation, no code duplication, and strict separation between UI and domain models.
-  - [ ] Manage the final Phase 2 Pull Request from `dev` to `main`.
-  - [ ] Update personal AI usage log in `docs/ai-usage/RFahmiTXST.md`.
+  - [x] Perform architectural review of all merged GUI code: ensure clean OOP, proper encapsulation, no code duplication, and strict separation between UI and domain models.
+  - [x] Manage the final Phase 2 Pull Request from `dev` to `main`.
+  - [x] Update personal AI usage log in `docs/ai-usage/RFahmiTXST.md`.
 - **Dev 4 (Towsif - QA Lead & Documentation):**
   - [x] Execute Javadoc generator with `-private -Xdoclint:all -Werror` across all packages (`gui`, `board`, `pieces`, `core`, `ui`, `utils`); ensure **0 warnings and 0 errors**.
   - [x] Update project `README.md` with Phase 2 GUI launch instructions, feature descriptions, and screenshots.
@@ -163,14 +163,6 @@ The project rubric awards **20%** for implementing at least two extra GUI featur
 - **Dev 2 (Abid) & Dev 3 (Sabid):**
   - [x] Dev 2: Update personal AI usage log in `docs/ai-usage/ajv163.md` and complete peer review of GUI components.
   - [ ] Dev 3: Update personal AI usage log in `docs/ai-usage/sabid.md` and verify event handling edge cases (rapid clicks, dragging off-screen, etc.).
-- **All Members (Submission Deliverables Preparation):**
-  - [ ] Capture the required submission screenshots:
-    1. Screenshot of the GUI at the start of the game.
-    2. Screenshot of moving several pieces, with pieces getting captured.
-    3. Screenshot of capturing the King, displaying the pop-up window declaring the winner.
-    4. Screenshots of Extra Features: Menu bar (New/Save/Load in action), Settings customization window with dynamic theme changes, and History Panel with Undo button.
-  - [ ] Compile and review the final submission document (`Phase2_Submission_TeamZero.pdf`) containing all required screenshots and design explanations.
-  - [ ] Complete and submit peer contribution evaluations if required by course rubric.
 
 🧪 **Manual Tests for M4:**
 - Verify clean compilation from terminal: `javac -d out $(Get-ChildItem -Recurse -Filter *.java).FullName`.
