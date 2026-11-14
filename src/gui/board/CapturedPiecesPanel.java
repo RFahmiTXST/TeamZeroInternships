@@ -27,6 +27,10 @@ public final class CapturedPiecesPanel extends JPanel {
     /** Creates an empty captured-pieces display. */
     public CapturedPiecesPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        whiteCount.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+        whiteRack.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+        blackCount.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+        blackRack.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
         add(whiteCount);
         add(whiteRack);
         add(blackCount);
