@@ -174,6 +174,71 @@ public class Board {
     }
 
     /**
+     * Reverses the most recent move and restores its captured piece, if any.
+     *
+     * @param from original position of the moving piece
+     * @param to destination of the move being reversed
+     * @param moving the piece that moved
+     * @param captured the piece captured by that move, or null
+     * @param previouslyMoved the moving piece's saved movement flag
+     * @throws IllegalStateException if the board no longer matches the move
+     */
+    public void undoMove(Position from, Position to, Piece moving, Piece captured,
+                         boolean previouslyMoved) {
+        if (from == null || to == null || moving == null || !from.isOnBoard()
+                || !to.isOnBoard() || from.equals(to) || getPiece(from) != null
+                || getPiece(to) != moving || (captured != null
+                && (capturedPieces.isEmpty()
+                || capturedPieces.get(capturedPieces.size() - 1) != captured))) {
+            throw new IllegalStateException("Board no longer matches the move to undo");
+        }
+        if (captured != null) {
+            capturedPieces.remove(capturedPieces.size() - 1);
+        }
+        setPiece(from, moving);
+        setPiece(to, captured);
+        moving.restoreState(from, previouslyMoved);
+    }
+
+    /**
+     * Records a captured piece in the captured pieces list.
+     *
+     * @param piece the piece that was captured
+     * @throws IllegalArgumentException if piece is null
+     */
+    public void recordCapture(Piece piece) {
+        if (piece == null) {
+            throw new IllegalArgumentException("Captured piece cannot be null");
+        }
+        capturedPieces.add(piece);
+    }
+
+    /**
+     * Gets a list of all pieces captured during this game in capture order.
+     *
+     * @return a defensive copy of the captured pieces list
+     */
+    public List<Piece> getCapturedPieces() {
+        return new ArrayList<>(capturedPieces);
+    }
+
+    /**
+     * Gets a list of captured pieces filtered by piece color.
+     *
+     * @param color the color of captured pieces to retrieve
+     * @return a new list containing captured pieces of the specified color
+     */
+    public List<Piece> getCapturedPieces(Color color) {
+        List<Piece> pieces = new ArrayList<>();
+        for (Piece piece : capturedPieces) {
+            if (piece.getColor() == color) {
+                pieces.add(piece);
+            }
+        }
+        return pieces;
+    }
+
+    /**
      * Gets a list of all active pieces of a specific color.
      * 
      * @param color The color to look for.

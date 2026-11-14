@@ -149,3 +149,127 @@ I reviewed the changes and verified them locally.
 This milestone focused on QA and documentation.
 Ordinary-move king safety, checkmate, stalemate, and
 en passant remain outside the implemented Phase 1 scope.
+
+## Phase 2 Milestone 1 — GUI QA and Setup (2026-11-03)
+
+### AI Assistance
+
+I used ChatGPT to review the Phase 2 plan and existing Swing GUI classes, plan headless GUI tests, prepare cross-platform build scripts, and organize the screenshot checklist. I reviewed and tested the changes locally.
+
+### Implementation
+
+- Created `src/gui/KingCaptureHandler.java` to detect King captures and determine the winning player.
+- Reused `DialogHelper.showEndgameDialog()` for displaying winner announcements.
+- Implemented application termination after the dialog is dismissed.
+- Prevented duplicate endgame announcements.
+- Created `test/gui/KingCaptureHandlerTest.java` with 22 assertions.
+- Registered the new test suite in `test/TestRunner.java`.
+- Integrated the handler into `ChessFrame.java` using `GUIController.addCaptureListener()`.
+
+### Integration and Debugging
+
+- Synchronized my feature branch with the latest `dev`.
+- Resolved the merge conflict in `TestRunner.java`.
+- Preserved Dev 1's `CaptureAndTurnTest`, Dev 3's `MouseMovementTest`, and my `KingCaptureHandlerTest`.
+- Integrated the King-capture handler with the existing mouse movement and capture functionality.
+- Verified the changes without modifying the underlying chess movement rules.
+
+### Automated Testing
+
+- Shared assertions: **956 passed, 0 failed**.
+- Utils assertions: **28 passed, 0 failed**.
+- Total assertions: **984 passed, 0 failed**.
+- Standalone King-capture tests: **22 passed, 0 failed**.
+- Java 17-compatible compilation: **Successful**.
+- Regression test exit code: **0**.
+
+### Manual GUI Testing
+
+**Test 1 — White Victory**
+- Launched the Swing GUI.
+- Moved the White Queen from D1 to E8 to capture the Black King.
+- Verified that the correct White victory dialog appeared.
+- Confirmed that the application terminated after clicking OK.
+
+**Test 2 — Black Victory**
+- Relaunched the Swing GUI.
+- Moved the Black Queen from D8 to E1 to capture the White King.
+- Verified that the correct Black victory dialog appeared.
+- Confirmed that the application terminated after clicking OK.
+
+### Final Result
+
+All three assigned Dev 4 Phase 2 Milestone 2 responsibilities were implemented and verified:
+
+- [x] Detect King captures.
+- [x] Display the correct winner using a modal dialog.
+- [x] Terminate the application after the dialog is dismissed.
+
+## Phase 2 Milestone 3 — Game Controls
+
+### AI Tool Used
+OpenAI ChatGPT (GPT-6)
+
+### AI Assistance
+
+I used ChatGPT to review the Phase 2 M3 requirements, design the New Game, Save Game, and Load Game functionality, prepare automated tests, and integrate the implementation into the existing Swing GUI.
+
+I reviewed the implementation and tested it locally.
+
+### Implementation
+
+- Implemented File and Game menu controls.
+- Added New Game with confirmation before resetting.
+- Added Save Game using a .chess file format.
+- Added Load Game with file validation.
+- Preserved board positions, captured pieces, active turn, piece movement flags, and move history.
+- Integrated the functionality with GUIController and ChessFrame.
+- Added GameFileServiceTest to the regression suite.
+- Preserved the existing Settings and History Panel functionality.
+
+### Verification
+
+- Java 17-compatible compilation: PASS.
+- Shared assertions: 1094 passed, 0 failed.
+- Utils assertions: 28 passed, 0 failed.
+- Total assertions: 1122 passed, 0 failed.
+- Regression exit code: 0.
+
+### GUI Verification
+
+- Verified New Game, Save Game, and Load Game.
+- Verified saving and restoring a game after moves and captures.
+- Verified restoration of board state, captured pieces, turn, and move history.
+- Verified that New Game resets the board and history.
+- Verified file cancellation and invalid-file handling.
+
+### Result
+
+Completed and verified Dev 4's assigned M3 Game Controls functionality. Final pull request review and merge remain pending.
+
+## Phase 2 Milestone 4 — Final QA and Documentation
+
+### AI Assistance
+
+I used ChatGPT to inspect the merged application structure and organize the required screenshots and final documentation. I reviewed the suggested instructions against the existing GUI, menu, save/load, history and Undo implementations.
+
+### M4 Work Prepared
+
+- Added Phase 2 desktop build, launch, headless test, Javadoc and console fallback instructions to `README.md` while keeping the Phase 1 documentation.
+- Documented click/drag movement, captures, the King-capture popup, New/Save/Load, settings, move history, captured-piece rack and Undo.
+regression testing and strict Javadoc audit reproducible.
+- Prepared a screenshot list for the final Phase 2 PDF. Screenshots must be captured from the actual application before they can be marked complete.
+
+### Final Verification (record actual results after running)
+
+- Java compiler/version: Pending M4 audit.
+- Java 17-targeted compilation: Pending M4 audit.
+- Complete headless test suite: Pending M4 audit.
+- Strict Javadoc (`-private -Xdoclint:all -Werror`): Pending M4 audit.
+- Javadoc HTML inspection: Pending manual inspection.
+- GUI build and README launch check: Pending manual inspection.
+- Final screenshots and team submission PDF: Pending actual evidence.
+
+### Scope and Collaboration
+
+This M4 contribution focuses on Dev 4's QA and documentation responsibilities. Dev 1 owns architectural review and the final `dev` to `main` release. GUI screenshots, the submission PDF, and peer evaluations are team-wide responsibilities. Verification results and checklist items must be updated only after the corresponding tests are run.
