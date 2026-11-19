@@ -184,11 +184,11 @@ In Phase 1, we developed the domain rules (piece movement vectors, attack detect
   - [x] Refactor `GUIController.selectSquare(Position)`: allow selection only if the clicked square contains a piece matching `currentTurn`.
   - [x] Expose `GUIController.getLegalMovesForSelected()` so UI panels can query reachable squares.
 - **Dev 2 (Abid - Board Infrastructure & Visual Feedback):**
-  - [ ] Implement visual move hints on `BoardPanel` / `SquarePanel`:
+  - [x] Implement visual move hints on `BoardPanel` / `SquarePanel`:
     - Draw a subtle translucent green circle/dot on empty legal destination squares.
     - Draw a high-contrast target ring or corner bracket on opponent squares containing capturable pieces.
-  - [ ] Ensure selection highlights and move hints clear cleanly upon move completion or cancellation (<kbd>Esc</kbd> / clicking outside).
-  - [ ] Add `test/gui/MoveHintTest.java` verifying that hints render only on strictly legal squares.
+  - [x] Ensure selection highlights and move hints clear cleanly upon move completion or cancellation (<kbd>Esc</kbd> / clicking outside).
+  - [x] Add `test/gui/MoveHintTest.java` verifying that hints render only on strictly legal squares.
 - **Dev 3 (Sabid - Input Validation & Turn Enforcement):**
   - [ ] Refactor `GUIController.movePiece(Position from, Position to)`: reject any move where `to` is not in `board.getLegalMoves(from, currentTurn)`.
   - [ ] Reject illegal click-and-move and drag-and-drop attempts with non-destructive visual/audio feedback (e.g., flash square red or status bar warning: *"Illegal move: piece cannot move there"*).
