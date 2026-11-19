@@ -9,6 +9,7 @@ import pieces.Piece;
 import javax.swing.SwingUtilities;
 import java.util.ArrayList;
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 
@@ -174,7 +175,8 @@ public final class GUIController {
     }
 
     /**
-     * Selects a piece or attempts a move from the current selection.
+     * Selects a piece, switches selection to another friendly piece, deselects on repeat click,
+     * or attempts a move from the current selection.
      *
      * @param target clicked square, or null for the board margin
      * @throws IllegalStateException if called outside the EDT
@@ -182,6 +184,17 @@ public final class GUIController {
     public void clickSquare(Position target) {
         requireEventDispatchThread();
         if (selected != null) {
+            if (target != null && target.isOnBoard()) {
+                Piece pieceAtTarget = board.getPiece(target);
+                if (pieceAtTarget != null && pieceAtTarget.getColor() == currentTurn) {
+                    if (target.equals(selected)) {
+                        cancelSelection();
+                    } else {
+                        selectSquare(target);
+                    }
+                    return;
+                }
+            }
             movePiece(selected, target);
         } else {
             selectSquare(target);
@@ -189,7 +202,10 @@ public final class GUIController {
     }
 
     /**
-     * Selects an occupied square and clears previous selection feedback.
+     * Selects an occupied square matching the active player's turn and updates visual selection.
+     *
+     * <p>If target is null, off the board, unoccupied, or contains a piece belonging to the
+     * opponent, any existing selection and highlights are cleared.</p>
      *
      * @param target source square, or null to clear selection
      * @throws IllegalStateException if called outside the EDT
@@ -197,11 +213,15 @@ public final class GUIController {
     public void selectSquare(Position target) {
         requireEventDispatchThread();
         boardPanel.clearHighlights();
-        selected = target != null && target.isOnBoard() && board.getPiece(target) != null
-                ? target : null;
-        if (selected != null) {
-            boardPanel.getSquarePanel(selected).setSelected(true);
+        if (target != null && target.isOnBoard()) {
+            Piece piece = board.getPiece(target);
+            if (piece != null && piece.getColor() == currentTurn) {
+                selected = target;
+                boardPanel.getSquarePanel(selected).setSelected(true);
+                return;
+            }
         }
+        selected = null;
     }
 
     /**
@@ -213,6 +233,42 @@ public final class GUIController {
         requireEventDispatchThread();
         mouseHandler.cancel();
         selectSquare(null);
+    }
+
+    /**
+     * Returns the currently selected square coordinate, or null if no square is selected.
+     *
+     * @return currently selected Position, or null
+     */
+    public Position getSelected() {
+        return selected;
+    }
+
+    /**
+     * Returns an unmodifiable list of legal destination coordinates for the currently selected piece.
+     *
+     * <p>If no piece is selected, or if the selected piece has no legal moves, returns an empty list.</p>
+     *
+     * @return unmodifiable list of legal destination Positions for the selected piece
+     */
+    public List<Position> getLegalMovesForSelected() {
+        if (selected == null) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(board.getLegalMoves(selected, currentTurn));
+    }
+
+    /**
+     * Checks whether the specified target coordinate is a legal move for the currently selected piece.
+     *
+     * @param target the target board coordinate to check
+     * @return true if a piece is selected and target is in its legal moves; false otherwise
+     */
+    public boolean isLegalMoveForSelected(Position target) {
+        if (selected == null || target == null || !target.isOnBoard()) {
+            return false;
+        }
+        return board.getLegalMoves(selected, currentTurn).contains(target);
     }
 
     /**
