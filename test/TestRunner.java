@@ -29,6 +29,10 @@ public class TestRunner {
         core.AttackDetectorTest.main(args);
         core.CastlingTest.main(args);
 
+        // Dev 1: Milestone 1 Legal Moves & King Safety tests
+        System.out.println("\nRunning Dev 1 M1 Legal Move tests...\n");
+        core.LegalMoveTest.main(args);
+
         // Dev 1: Rook, Bishop, Queen and Knight tests
         System.out.println("\nRunning other piece movement tests...\n");
         pieces.PieceMovementTest.main(args);
@@ -39,6 +43,7 @@ public class TestRunner {
         test.gui.BoardPanelTest.main(args);
         test.gui.GuiSmokeTest.main(args);
         test.gui.GUIControllerTest.main(args);
+        test.gui.Dev1M1Test.main(args);
         test.gui.CaptureAndTurnTest.main(args);
         test.gui.MouseMovementTest.main(args);
         test.gui.HistoryPanelTest.main(args);
