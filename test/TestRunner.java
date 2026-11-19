@@ -44,6 +44,7 @@ public class TestRunner {
         test.gui.GuiSmokeTest.main(args);
         test.gui.GUIControllerTest.main(args);
         test.gui.Dev1M1Test.main(args);
+        test.gui.MoveHintTest.main(args);
         test.gui.CaptureAndTurnTest.main(args);
         test.gui.MouseMovementTest.main(args);
         test.gui.HistoryPanelTest.main(args);

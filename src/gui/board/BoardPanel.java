@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.util.List;
 
 /**
  * Renders the 8x8 chessboard grid with perimeter coordinate labels and square components.
@@ -305,7 +306,19 @@ public class BoardPanel extends JPanel {
             for (int c = 0; c < BOARD_SIZE; c++) {
                 squarePanels[r][c].setSelected(false);
                 squarePanels[r][c].setHighlighted(false);
+                squarePanels[r][c].setMoveHint(false);
             }
+        }
+    }
+
+    /**
+     * Displays markers for legal destinations supplied by the controller.
+     * @param destinations legal destination coordinates
+     */
+    public void showMoveHints(List<Position> destinations) {
+        for (Position position : destinations) {
+            SquarePanel square = getSquarePanel(position);
+            if (square != null) square.setMoveHint(true);
         }
     }
 }
