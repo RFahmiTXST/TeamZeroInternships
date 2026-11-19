@@ -97,3 +97,34 @@
 **Prompt / Question Asked:** "Pull thew latest code from the repo and verify the comment aginst the repo code for the existing PR from dev to main. Are there changes necessary?"\
 **Code / Idea Used:** Verified `GameFileService.java` implementation against reviewer comments. Qualified the safe file I/O documentation to explain that `GameFileService.save()` attempts atomic move via `StandardCopyOption.ATOMIC_MOVE` and catches `AtomicMoveNotSupportedException` to fall back to `StandardCopyOption.REPLACE_EXISTING`. Qualified delivery status and test metrics in `docs/ARCHITECTURE_REVIEW.md` to distinguish automated test suites and clearly record pending Phase 2 delivery checklist items (GUI screenshots in `docs/screenshots/`, submission PDF report, team evaluations).\
 **Result / Modification:** Updated `docs/ARCHITECTURE_REVIEW.md` to accurately reflect implementation details and checklist status, resolving the changes requested on PR #34.
+
+---
+
+# Phase 3: Integrated GUI Chess Game & AI Opponent Engine
+
+## Milestone 1: Core Rule Integration, Move Validation & Legal Move Querying
+
+**Task / Method:** Verifying implementation of `Board.getLegalMoves(Position, Color)`, `Board.wouldExposeKing(Position, Position, Color)`, `GUIController.selectSquare(Position)` and `GUIController.clickSquare(Position)` for active turn enforcement and selection switching, and evaluating `GUIController.getLegalMovesForSelected()`, `GUIController.isLegalMoveForSelected(Position)`, and `GUIController.getSelected()` (`src/board/Board.java`, `src/gui/GUIController.java`, `test/core/LegalMoveTest.java`, `test/gui/Dev1M1Test.java`, `test/TestRunner.java`).\
+**Prompt / Question Asked:** "Suppose you are an expert Java software developer. Task: Verify that the milestone 1 tasks for dev 1 (Rayed) mentioned in PHASE3_PLAN.md were correctly implemented and there's no bugs, errors or issues."\
+**Code / Idea Used:**\
+The AI verified the developer's core rule integration, selection logic, and automated test suites:
+- **King Safety Simulation (`Board.java`):** Verified `wouldExposeKing(Position from, Position to, Color color)` and alias `wouldLeaveInCheck()`. Confirmed atomic hypothetical move simulation on the board grid with guaranteed state restoration in a `finally` block (`piece.restoreState(from, wasMoved)`, restoring board squares, with zero mutation to captured lists, undo stacks, or move histories).
+- **Legal Move Filtering (`Board.java`):** Verified `getLegalMoves(Position position, Color color)` and overloaded `getLegalMoves(Position position)`. Confirmed that raw geometric moves from `piece.possibleMoves(this)` are strictly filtered by King safety (`!wouldExposeKing`), and that an opponent's King is never returned as a legal capture target.
+- **Turn-Restricted Selection (`GUIController.java`):** Verified `selectSquare(Position)` enforces that a piece can only be selected if its color matches `currentTurn`. Clears selection and highlights when clicking empty squares, off-board coordinates, or opponent pieces.
+- **Selection Switching & Deselection (`GUIController.java`):** Verified `clickSquare(Position)` seamlessly switches selection when clicking another piece of the active player's color, and deselects upon clicking the currently selected piece a second time.
+- **Public Querying APIs (`GUIController.java`):** Verified `getSelected()`, `getLegalMovesForSelected()` (returning an unmodifiable list of valid destinations for UI hint rendering), and `isLegalMoveForSelected(Position target)` for fast boolean target validation.
+- **Comprehensive Test Scaffolding:** Evaluated two dedicated test suites:
+  - `test/core/LegalMoveTest.java`: Verified starting piece legality, pinned piece restrictions (file and diagonal pins), King safety (prohibiting moves into check or adjacent to enemy King, blocking defended piece captures), in-check evasion filtering (interposition and threat capture), and simulation immutability.
+  - `test/gui/Dev1M1Test.java`: Verified turn-restricted selection, friendly selection switching, self-click deselect, unmodifiable legal move lists, and Swing EDT safety.
+
+**Result / Modification:**\
+The AI confirmed that all code and architectural concepts were implemented correctly with zero bugs or logical errors:
+- **Build & Quality:** Compiled cleanly with zero errors under JDK 17 (`-Xlint:all`). Full strict Javadoc audit (`-private -Xdoclint:all -Werror`) produced **0 warnings and 0 errors**.
+- **Automated Verification:** All **1,265 test assertions** (1,237 shared + 28 Utils) passed with zero failures. Existing GUI regression suites (`BoardPanelTest`, `CaptureAndTurnTest`, `HistoryPanelTest`, `MouseMovementTest`, `SettingsDialogTest`, `UndoTest`) maintained a **100% pass rate**.
+- **Architectural Integrity:** Preserved **100% domain layer decoupling** (zero AWT/Swing imports in `board` and `pieces`) and enforced Swing Event Dispatch Thread (EDT) safety on all state mutations.
+- **Milestone Tracking:** Marked Dev 1's Milestone 1 tasks complete in `docs/PHASE3_PLAN.md`.
+
+**Task / Method:** Organizing industry-grade Git commits for Phase 3 Milestone 1.\
+**Prompt / Question Asked:** "Suppose you are a dev-ops expert with substantial experience managing Git repositories. Task: Create industry grade (short and reasonable) commits for the Phase 3 milestone 1 code changes for Dev 1 (Rayed). Make sure not to push the commit to the remote repository, I'll verify and push it myself."\
+**Code / Idea Used:** Applied Conventional Commits standards to structure 5 atomic, granular commits separating Phase 3 master planning and WBS (`docs(plan)`), King safety hypothetical move simulation and legal move filtering (`feat(board)`), turn-restricted piece selection and legal move querying (`feat(gui)`), dedicated unit and integration test suites (`test(m1)`), and personal AI usage documentation (`docs(dev1)`).\
+**Result / Modification:** Created 5 structured, traceable commits on `feature/RFahmiTXST` (`19a4425`, `cea0b4a`, `ec70256`, `1eb4de9`, `aef3478`) with descriptive multi-line messages without pushing to the remote repository, verified clean and ready for review and push.

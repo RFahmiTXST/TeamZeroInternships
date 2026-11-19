@@ -290,5 +290,107 @@ public class Board {
         }
         return false;
     }
+
+    /**
+     * Checks if executing a hypothetical move would leave or expose the friendly King in check.
+     *
+     * <p>Executes a trial move directly on the board grid, checks if the King of the specified
+     * color is under attack, and restores the board state in a finally block without any permanent
+     * side-effects.</p>
+     *
+     * @param from the starting position of the moving piece
+     * @param to the target destination position
+     * @param color the color of the moving player
+     * @return true if moving from to would leave or expose the friendly King in check; false otherwise
+     */
+    public boolean wouldExposeKing(Position from, Position to, Color color) {
+        if (from == null || to == null || !from.isOnBoard() || !to.isOnBoard() || color == null) {
+            return true;
+        }
+        Piece movingPiece = getPiece(from);
+        if (movingPiece == null || movingPiece.getColor() != color) {
+            return true;
+        }
+        Piece captured = getPiece(to);
+        boolean wasMoved = movingPiece.hasMoved();
+        try {
+            squares[from.getRow()][from.getColumn()] = null;
+            squares[to.getRow()][to.getColumn()] = movingPiece;
+            movingPiece.move(to);
+            return isCheck(color);
+        } finally {
+            squares[from.getRow()][from.getColumn()] = movingPiece;
+            squares[to.getRow()][to.getColumn()] = captured;
+            movingPiece.restoreState(from, wasMoved);
+        }
+    }
+
+    /**
+     * Convenience alias for {@link #wouldExposeKing(Position, Position, Color)}.
+     *
+     * @param from the starting position
+     * @param to the destination position
+     * @param color the player's color
+     * @return true if the move would leave the friendly King in check; false otherwise
+     */
+    public boolean wouldLeaveInCheck(Position from, Position to, Color color) {
+        return wouldExposeKing(from, to, color);
+    }
+
+    /**
+     * Calculates all strictly legal moves for the piece at the given position,
+     * ensuring that no move leaves the friendly King in check and an opponent King is never captured.
+     *
+     * @param position the board coordinate of the piece to move
+     * @param color the color of the player whose turn it is
+     * @return a list of legal destination positions; empty if position is invalid, empty,
+     *         or piece does not belong to the specified color
+     */
+    public List<Position> getLegalMoves(Position position, Color color) {
+        if (position == null || !position.isOnBoard() || color == null) {
+            return new ArrayList<>();
+        }
+        Piece piece = getPiece(position);
+        if (piece == null || piece.getColor() != color) {
+            return new ArrayList<>();
+        }
+        List<Position> candidates = piece.possibleMoves(this);
+        if (candidates == null || candidates.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<Position> legalMoves = new ArrayList<>();
+        for (Position target : candidates) {
+            if (target == null || !target.isOnBoard()) {
+                continue;
+            }
+            // In standard chess rules, an opponent's King cannot be captured
+            Piece destPiece = getPiece(target);
+            if (destPiece instanceof King) {
+                continue;
+            }
+            if (!wouldExposeKing(position, target, color)) {
+                legalMoves.add(target);
+            }
+        }
+        return legalMoves;
+    }
+
+    /**
+     * Calculates all strictly legal moves for the piece at the given position,
+     * using the color of the piece occupying that square.
+     *
+     * @param position the board coordinate of the piece to move
+     * @return a list of legal destination positions; empty if position is empty or invalid
+     */
+    public List<Position> getLegalMoves(Position position) {
+        if (position == null || !position.isOnBoard()) {
+            return new ArrayList<>();
+        }
+        Piece piece = getPiece(position);
+        if (piece == null) {
+            return new ArrayList<>();
+        }
+        return getLegalMoves(position, piece.getColor());
+    }
 }
 
