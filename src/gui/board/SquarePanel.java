@@ -11,6 +11,10 @@ import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.BasicStroke;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusAdapter;
@@ -64,6 +68,11 @@ public class SquarePanel extends JPanel {
     private boolean hovered;
     /** Whether this square has keyboard focus. */
     private boolean focused;
+    /** Whether this square is a legal destination for the selected piece. */
+    private boolean moveHint;
+
+    /** Color used for legal move markers. */
+    private static final Color MOVE_HINT_COLOR = new Color(35, 150, 75, 180);
 
     /**
      * Constructs a SquarePanel at the given board position.
@@ -199,6 +208,48 @@ public class SquarePanel extends JPanel {
      */
     public boolean isHighlighted() {
         return highlighted;
+    }
+
+    /**
+     * Sets the legal destination marker for this square.
+     * @param moveHint whether to display a destination marker
+     */
+    public void setMoveHint(boolean moveHint) {
+        this.moveHint = moveHint;
+        repaint();
+    }
+
+    /**
+     * Reports whether this square displays a legal destination marker.
+     * @return true when the marker is visible
+     */
+    public boolean hasMoveHint() {
+        return moveHint;
+    }
+
+    /** Paints the marker above the piece icon so capture targets remain visible. */
+    @Override
+    protected void paintChildren(Graphics graphics) {
+        super.paintChildren(graphics);
+        if (!moveHint) return;
+        Graphics2D g = (Graphics2D) graphics.create();
+        try {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setColor(MOVE_HINT_COLOR);
+            int side = Math.min(getWidth(), getHeight());
+            if (currentPiece == null) {
+                int diameter = Math.max(4, side / 4);
+                g.fillOval((getWidth() - diameter) / 2, (getHeight() - diameter) / 2,
+                        diameter, diameter);
+            } else {
+                int inset = Math.max(4, side / 12);
+                g.setStroke(new BasicStroke(Math.max(2f, side / 18f)));
+                g.drawOval(inset, inset, Math.max(0, getWidth() - 2 * inset),
+                        Math.max(0, getHeight() - 2 * inset));
+            }
+        } finally {
+            g.dispose();
+        }
     }
 
     /**
