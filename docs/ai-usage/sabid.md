@@ -1,6 +1,6 @@
 # AI Usage Log: Sabid Mahmud (Dev 3)
 
-## Milestone 1 — Utility Methods
+## Phase 1, Milestone 1 — Utility Methods
 
 **Task / Method:** Implement input validation and parsing methods in `Utils.java`.
 
@@ -10,7 +10,7 @@
 
 **Result / Modification:** Reviewed and implemented the methods in `Utils.java`, then committed the changes.
 
-## Milestone 1 — Utility Testing
+## Phase 1, Milestone 1 — Utility Testing
 
 **Task / Method:** Create and run tests for `Utils.java`.
 
@@ -22,7 +22,7 @@
 
 
 
-## Milestone 2 — Console Interface Implementation
+## Phase 1, Milestone 2 — Console Interface Implementation
 
 **Task / Method:** Implement console interaction methods in `ConsoleUI.java`.
 
@@ -33,7 +33,7 @@
 **Result / Modification:** Implemented all five methods, successfully compiled the project using JDK 21, and manually tested `showWelcome()`, `showTurn()`, `promptMove()`, and `showError()` using JShell. Committed and pushed the changes to `feature/sabidmahmud01` in commit `fbb9c4f`.
 
 **Pending Work:** `showBoard()` still requires integration testing after Abid implements `Board.render()`. `Player.makeMove()` also remains unfinished because `Board.movePiece()` has not yet been implemented.
-# 2026-10-20 — Complete Dev 3 Milestone 2
+## 2026-10-20 — Complete Dev 3 Milestone 2
 
 **Request:** Finish my part after reviewing Abid's Board implementation.
 
@@ -225,7 +225,7 @@ edits. No manual physical mouse/monitor testing is claimed. Three-file scope
 has no path overlap with Rayed's pending PR #30. Final shared submission work
 remains separate from Sabid's completed event QA.
 
-## Task-by-task prompt summaries - Phases 1 and 2
+## Retrospective prompt summaries for Phases 1 and 2
 
 Added retrospectively on 2026-11-10. Sabid reports prompting another AI for
 individual tasks before bringing work here. The wording below was reconstructed
@@ -313,3 +313,28 @@ as proving independent-board restoration. No production-code fix was required.
 Validation: Java 17 compilation passed; 172 focused checks passed in each of
 headless and desktop modes. Existing TestRunner passed 1,170 headless and 1,240
 desktop assertions with zero failures. No new manual interaction is claimed.
+
+## 2026-11-22 — Phase 3, Milestone 1: GUI move validation (planning)
+
+**Request (summary):** Sabid supplied the Phase 3 instructions and asked to work incrementally on his assigned part and keep an AI usage log.
+
+**AI assistance:** Codex compared the instructions with the Dev 3 assignment and inspected `GUIController.movePiece` and `Board.getLegalMoves`. Codex suggested checking whether the board's legal destinations for the current player contain the requested destination before recording or applying the move.
+
+**At the planning step:** Codex suggested the guard. The follow-up below records its implementation.
+**Follow-up request:** After receiving the suggested edit, Sabid asked Codex to apply it. Codex edited GUIController.movePiece to check the board's legal destinations before changing game state, then compiled the sources and tests for Java 17. A focused controller check confirmed rejection of a wrong-turn move and E2-E5, preservation of board, turn and history on rejection, and acceptance of E2-E4 with one history entry and Black to move. The shared runner stopped in the older mouse movement test, which expects an unrestricted three-rank pawn move.
+
+## 2026-11-22 — Phase 3 mouse movement regression test
+
+**Request:** "ok update my old mouse movement test for Phase 3 and rerun the tests. Keep the AI log updated and don’t touch my teammates’ parts."
+
+**AI assistance and changes:** Codex revised MouseMovementTest to send actual click and drag events: reject E2-E5, click E2-E4, reject D7-D4, drag D7-D5, and capture E4xD5. Assertions cover board and view updates, turn and history, drag cleanup, and gesture cancellation. This step changed the mouse test and this log.
+
+**Verification:** Compiled source and tests for Java 17. Standalone headless MouseMovementTest printed 38 passes and zero failures. The shared headless TestRunner reported seven failed assertions in BoardPanelTest, CaptureAndTurnTest and HistoryPanelTest before stopping in HistoryPanelTest, which expects E2-E5 to create a history row and then reads the empty table. Later suites did not run.
+
+## 2026-11-22 — Phase 3 Milestone 1 completion and push check
+
+**Request (summary):** Sabid asked Codex to finish his Milestone 1 work, review the personal log, and verify the project before pushing.
+
+**Changes made by Codex:** Routed rejected moves through the existing status bar listener so click and drag users see the warning and current turn. Updated the history tests to use E2-E4, D7-D5, E4xD5 and check capture notification ordering. Updated the event regression fixtures to alternate legal knight moves and use a legal pawn capture for save/load. The earlier Phase 1 and 2 task summaries remain labeled as retrospective.
+
+**Verification:** All sources and tests compiled for Java 17. Headless mouse movement (40 checks), history (21 checks), and saved-board/gesture regressions (172 checks) passed. The shared runner reported 11 failures in BoardPanelTest, CaptureAndTurnTest, UndoTest, and GameFileServiceTest, then stopped in the save/load test. The nine suites following it were run individually and exited successfully without reported failed assertions. Publication is pending a passing team suite.

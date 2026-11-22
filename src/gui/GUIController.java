@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Connects the GUI's board model to its Swing view and coordinates gameplay state.
  *
- * <p>Orchestrates board initialization, model-to-view synchronization, unrestricted Phase 2
+ * <p>Orchestrates board initialization, model-to-view synchronization, turn-based
  * mouse gestures (click-and-move and drag-and-drop), opponent piece capture handling, and active
  * player turn tracking. All state-mutating operations enforce execution on the Swing Event
  * Dispatch Thread (EDT).</p>
@@ -386,7 +386,7 @@ public final class GUIController {
     }
 
     /**
-     * Moves a piece without chess legality or turn restrictions, as required by Phase 2.
+     * Moves a piece to a legal destination for the current player.
      *
      * <p>Same-square moves, empty sources, off-board coordinates, and friendly captures are
      * rejected without modifying the board or throwing exceptions, allowing mouse gestures
@@ -405,14 +405,14 @@ public final class GUIController {
         cancelSelection();
         if (from == null || to == null || !from.isOnBoard() || !to.isOnBoard()
                 || from.equals(to)) {
+            notifyStatusListeners("Illegal move. " + getTurnStatusText());
+            return false;
+        }
+        if (!board.getLegalMoves(from, currentTurn).contains(to)) {
+            notifyStatusListeners("Illegal move. " + getTurnStatusText());
             return false;
         }
         Piece moving = board.getPiece(from);
-        Piece target = board.getPiece(to);
-        if (moving == null || (target != null && target.getColor() == moving.getColor())) {
-            return false;
-        }
-
         boolean movedBefore = moving.hasMoved();
         Color turnBefore = currentTurn;
         Piece previousCapture = lastCapturedPiece;
@@ -624,7 +624,11 @@ public final class GUIController {
      * Broadcasts the current status message to all registered status listeners.
      */
     private void notifyStatusListeners() {
-        String message = getStatusMessage();
+        notifyStatusListeners(getStatusMessage());
+    }
+
+    /** Sends feedback to the status bar. @param message text to display */
+    private void notifyStatusListeners(String message) {
         for (StatusListener listener : statusListeners) {
             listener.onStatusChanged(message);
         }

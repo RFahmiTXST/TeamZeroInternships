@@ -27,30 +27,32 @@ public final class HistoryPanelTest {
         HistoryPanel panel = new HistoryPanel();
         c.addHistoryListener(panel::setHistory);
         check(0, panel.getTable().getRowCount(), "History starts empty");
-        c.clickSquare(new Position(1,4)); c.clickSquare(new Position(4,4));
+        c.clickSquare(new Position(1,4)); c.clickSquare(new Position(3,4));
         check(1, panel.getTable().getRowCount(), "Click path records exactly one move");
         HistoryEntry first = c.getHistory().get(0);
-        check(new HistoryEntry(1,"WHITE","Pawn","E2","E5",""), first, "Full move details recorded");
+        check(new HistoryEntry(1,"WHITE","Pawn","E2","E4",""), first, "Full move details recorded");
         List<HistoryEntry> snapshot = c.getHistory();
         boolean immutable = false;
         try { snapshot.clear(); } catch (UnsupportedOperationException expected) { immutable = true; }
         check(true, immutable, "History snapshot cannot be edited");
-        c.movePiece(new Position(4,4),new Position(6,4));
-        check(2, panel.getTable().getRowCount(), "Capture adds one row");
-        check("BLACK Pawn", c.getHistory().get(1).captured(), "Captured color and type recorded");
-        check("WHITE", c.getHistory().get(1).side(), "Actual piece color recorded despite turn indicator");
-        check("E5", first.to(), "Earlier entry does not follow mutable piece");
+        c.movePiece(new Position(6,3), new Position(4,3)); // D7-D5
+        int[] captures = {0};
+        c.addCaptureListener((piece, position) -> {
+            captures[0]++;
+            check(3, panel.getTable().getRowCount(), "Capture appears before callback");
+        });
+        c.movePiece(new Position(3,4), new Position(4,3)); // E4xD5
+        check(1, captures[0], "Capture notified once");
+        check("BLACK Pawn", c.getHistory().get(2).captured(), "Captured color and type recorded");
+        check("WHITE", c.getHistory().get(2).side(), "Capturing side recorded");
+        check("E4", first.to(), "Earlier entry keeps original destination");
         check(1, snapshot.size(), "Earlier snapshot remains stable");
-        c.movePiece(new Position(6,4),new Position(0,4));
+        c.movePiece(new Position(4,3),new Position(5,3)); // White attempts a second turn
         c.movePiece(null,new Position(0,4));
-        c.refreshBoard(); c.switchTurn();
-        check(2,c.getHistory().size(), "Rejected moves and refresh do not create history");
+        c.refreshBoard();
+        check(3,c.getHistory().size(), "Rejected moves and refresh do not create history");
         check(false,panel.getTable().isCellEditable(0,0), "History cells are read-only");
-        check(1,panel.getTable().getSelectedRow(), "Latest entry selected");
-        c.addCaptureListener((piece, position) -> check(3,panel.getTable().getRowCount(),
-                "Winning move appears before endgame callback"));
-        c.movePiece(new Position(6,4),new Position(7,4));
-        check("BLACK King", c.getHistory().get(2).captured(), "King capture recorded");
+        check(2,panel.getTable().getSelectedRow(), "Latest entry selected");
         c.startNewGame();
         check(0,c.getHistory().size(), "New game clears controller history");
         check(0,panel.getTable().getRowCount(), "New game clears table");
