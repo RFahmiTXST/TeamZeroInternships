@@ -194,12 +194,12 @@ In Phase 1, we developed the domain rules (piece movement vectors, attack detect
   - [ ] Reject illegal click-and-move and drag-and-drop attempts with non-destructive visual/audio feedback (e.g., flash square red or status bar warning: *"Illegal move: piece cannot move there"*).
   - [ ] Ensure active turn strictly alternates between White and Black on legal moves, and never changes on rejected moves.
 - **Dev 4 (Towsif - QA & Setup):**
-  - [ ] Build test scaffolding in `test/core/LegalMoveTest.java` verifying:
+  - [x] Build test scaffolding in `test/core/LegalMoveTest.java` verifying:
     - Piece obstacle collisions (Rook, Bishop, Queen blocked by friendly/enemy pieces).
     - Knight jump capabilities over obstacles.
     - Pawn single/double advance and diagonal captures.
     - Turn enforcement: White cannot move Black pieces and vice-versa.
-  - [ ] Ensure all M1 code compiles cleanly under `javac --release 17 -Xlint:all`.
+  - [x] Ensure all M1 code compiles cleanly under `javac --release 17 -Xlint:all`.
 
 🧪 **Verification & Tests for Milestone 1:**
 - **Turn Restriction Test:** Click Black pawn on E7 on turn 1 (White's turn); verify selection is rejected and status bar indicates *"It is White's turn"*.
