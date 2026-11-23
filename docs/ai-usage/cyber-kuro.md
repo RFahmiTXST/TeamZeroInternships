@@ -273,3 +273,29 @@ regression testing and strict Javadoc audit reproducible.
 ### Scope and Collaboration
 
 This M4 contribution focuses on Dev 4's QA and documentation responsibilities. Dev 1 owns architectural review and the final `dev` to `main` release. GUI screenshots, the submission PDF, and peer evaluations are team-wide responsibilities. Verification results and checklist items must be updated only after the corresponding tests are run.
+
+## Phase 3 Milestone 1 — Legal Movement and Turn Enforcement QA
+
+### AI Assistance
+Used ChatGPT to review the Phase 3 plan, identify existing
+interfaces, and design regression tests without modifying
+teammates' production code.
+
+### Implementation
+- Added Dev4M1RulesTest.java with 54 movement assertions.
+- Added Dev4M1TurnTest.java with 34 GUI assertions.
+- Registered core rules coverage through LegalMoveTest.java.
+- Tested Rook, Bishop, Queen, Knight, and Pawn movement.
+- Tested obstacle blocking, captures, and piece ownership.
+- Tested invalid moves, turn switching, history preservation,
+  and Undo-state preservation.
+
+### Verification
+- Core rules: 54 passed, 0 failed.
+- GUI turn tests: 34 assertions executed.
+- GUI turn tests returned exit code 1 against the current dev.
+- Failures identify missing Phase 3 GUI move restrictions.
+- Full successful GUI verification depends on Dev 3 PR #38.
+
+### Result
+Completed Dev 4's M1 regression test implementation.
