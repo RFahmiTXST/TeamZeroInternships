@@ -40,6 +40,7 @@ public final class LegalMoveTest {
         testEnemyKingCannotBeCaptured();
         testWouldExposeKingPreservesBoardState();
         testOverloadedGetLegalMoves();
+        Dev4M1RulesTest.main(args);
     }
 
     /**
