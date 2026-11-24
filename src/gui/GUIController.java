@@ -167,6 +167,7 @@ public final class GUIController {
      */
     public void refreshBoard() {
         requireEventDispatchThread();
+        cancelSelection();
         if (boardPanel.getBoard() != board) {
             boardPanel.setBoard(board);
         } else {
@@ -218,6 +219,7 @@ public final class GUIController {
             if (piece != null && piece.getColor() == currentTurn) {
                 selected = target;
                 boardPanel.getSquarePanel(selected).setSelected(true);
+                boardPanel.showMoveHints(getLegalMovesForSelected());
                 return;
             }
         }
@@ -311,6 +313,7 @@ public final class GUIController {
         if (turn == null) {
             throw new IllegalArgumentException("Turn color cannot be null.");
         }
+        cancelSelection();
         this.currentTurn = turn;
         notifyStatusListeners();
     }
@@ -322,6 +325,7 @@ public final class GUIController {
      */
     public void switchTurn() {
         requireEventDispatchThread();
+        cancelSelection();
         this.currentTurn = (currentTurn == Color.WHITE) ? Color.BLACK : Color.WHITE;
         notifyStatusListeners();
     }
