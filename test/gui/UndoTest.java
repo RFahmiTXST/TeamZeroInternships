@@ -83,7 +83,7 @@ public final class UndoTest {
         TestUtils.assertEquals(false, controller.canUndo(), "Direct capture invalidates older undo records");
         TestUtils.assertEquals(false, controller.undoLastMove(), "Undo after direct capture is harmless");
         TestUtils.assertEquals(1, controller.getHistory().size(), "Direct capture preserves prior move history");
-        controller.movePiece(e4, new Position(4, 4));
+        TestUtils.assertEquals(true, controller.movePiece(d7, d5), "Black plays a quiet move");
         TestUtils.assertEquals(null, controller.getLastCapturedPiece(), "Quiet move clears latest capture");
         controller.undoLastMove();
         TestUtils.assertEquals(directlyCaptured, controller.getLastCapturedPiece(),
@@ -108,7 +108,8 @@ public final class UndoTest {
             button.doClick();
             TestUtils.assertEquals(piece, frame.getBoard().getPiece(from), "Button restores piece");
             TestUtils.assertEquals(false, button.isEnabled(), "Undo button disables after final undo");
-            frame.getController().movePiece(from, new Position(6, 3));
+            frame.getController().movePiece(from, to);
+            TestUtils.assertEquals(true, button.isEnabled(), "New move enables undo before direct capture");
             frame.getController().capturePiece(new Position(6, 0));
             TestUtils.assertEquals(false, button.isEnabled(), "Direct capture disables stale undo button");
             CapturedPiecesPanel rack = findRack(frame);
