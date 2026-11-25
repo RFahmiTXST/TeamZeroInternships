@@ -42,16 +42,21 @@ public final class SabidM4EventTest {
         Position e2 = new Position(1, 4), e4 = new Position(3, 4);
         Object pawn = board.getPiece(e2);
         // Back-to-back press/release events must produce exactly one move per pair.
+        Position[] knightCycle = {new Position(0, 1), new Position(7, 1),
+                new Position(2, 2), new Position(5, 2)};
+        Object whiteKnight = board.getPiece(knightCycle[0]);
+        Object blackKnight = board.getPiece(knightCycle[1]);
         for (int i = 0; i < 40; i++) {
-            Position from = i % 2 == 0 ? e2 : e4;
-            Position to = i % 2 == 0 ? e4 : e2;
+            Position from = knightCycle[i % 4];
+            Position to = knightCycle[(i + 2) % 4];
             click(panel, from); click(panel, to);
-            check(board.getPiece(to) == pawn, "rapid click destination " + i);
+            check(board.getPiece(to) == (i % 2 == 0 ? whiteKnight : blackKnight), "rapid click destination " + i);
             check(controller.getHistory().size() == i + 1, "rapid click history " + i);
         }
         check(history.getTable().getRowCount() == 40, "table tracks rapid moves");
         for (int i = 0; i < 40; i++) controller.undoLastMove();
-        check(board.getPiece(e2) == pawn && !board.getPiece(e2).hasMoved(), "undo rapid moves restores initial piece");
+        check(board.getPiece(knightCycle[0]) == whiteKnight && !board.getPiece(knightCycle[0]).hasMoved()
+                && board.getPiece(knightCycle[1]) == blackKnight && !board.getPiece(knightCycle[1]).hasMoved(), "undo rapid moves restores initial piece");
         check(history.getTable().getRowCount() == 0, "undo clears rapid history");
 
         for (int[] size : new int[][] {{520, 600}, {1000, 550}, {900, 1000}}) {
@@ -86,15 +91,19 @@ public final class SabidM4EventTest {
         // Round-trip through a real file: snapshot alone retains the mutable live board.
         for (boolean drag : new boolean[] {false, true}) {
             controller.startNewGame();
-            controller.movePiece(new Position(1, 0), new Position(6, 0));
+            Position a2 = new Position(1, 0), a4 = new Position(3, 0);
+            Position b5 = new Position(4, 1), b6 = new Position(5, 1);
+            controller.movePiece(a2, a4);
+            controller.movePiece(new Position(6, 1), b5);
+            controller.movePiece(a4, b5);
+            controller.movePiece(new Position(6, 0), new Position(5, 0));
             GameFileService.GameState saved = savedCopy(controller);
             check(saved.board() != controller.getBoard(), "file load creates independent board " + drag);
-            controller.movePiece(new Position(6, 0), new Position(5, 0));
-            check(controller.getBoard().getPiece(new Position(6, 0)) == null
-                    && controller.getBoard().getPiece(new Position(5, 0)) != null,
+            controller.movePiece(b5, b6);
+            controller.movePiece(new Position(6, 7), new Position(5, 7));
+            check(controller.getBoard().getPiece(b5) == null && controller.getBoard().getPiece(b6) != null,
                     "live game diverges from saved position " + drag);
-            check(saved.board().getPiece(new Position(6, 0)) != null
-                    && saved.board().getPiece(new Position(5, 0)) == null,
+            check(saved.board().getPiece(b5) != null && saved.board().getPiece(b6) == null,
                     "saved board unaffected by subsequent move " + drag);
             Component source = label(panel, e2);
             Point end = SwingUtilities.convertPoint(panel.getSquarePanel(e4), 10, 10, source);
@@ -109,13 +118,13 @@ public final class SabidM4EventTest {
             checkSavedPosition(controller, drag);
             check(controller.getBoard().getPiece(e4) == null, "load cancels old gesture " + drag);
             check(ghosts(root) == 0 && !panel.getSquarePanel(e2).isSelected(), "load clears drag and selection " + drag);
-            check(controller.getHistory().equals(saved.history()) && history.getTable().getRowCount() == 1,
+            check(controller.getHistory().equals(saved.history()) && history.getTable().getRowCount() == 4,
                     "load preserves saved history after stale gesture " + drag);
             check(!controller.canUndo() && !controller.undoLastMove(), "load prevents undo into old session " + drag);
             check(controller.getBoard().getCapturedPieces().size() == 1 && controller.getCurrentTurn() == saved.turn(),
                     "stale gesture preserves loaded capture and turn " + drag);
             click(panel, e2); click(panel, e4);
-            check(controller.getHistory().size() == 2 && controller.canUndo(), "new gesture works after load " + drag);
+            check(controller.getHistory().size() == 5 && controller.canUndo(), "new gesture works after load " + drag);
             controller.undoLastMove();
             check(controller.getHistory().equals(saved.history()) && !controller.canUndo(), "undo stops at loaded session boundary " + drag);
             checkSavedPosition(controller, drag);
@@ -136,17 +145,17 @@ public final class SabidM4EventTest {
     }
     private static void checkSavedPosition(GUIController controller, boolean drag) {
         Board loaded = controller.getBoard();
-        Piece pawn = loaded.getPiece(new Position(6, 0));
+        Piece pawn = loaded.getPiece(new Position(4, 1));
         check(pawn instanceof Pawn && pawn.getColor() == Color.WHITE && pawn.hasMoved()
-                && pawn.getPosition().equals(new Position(6, 0)), "saved A7 pawn restored " + drag);
-        check(loaded.getPiece(new Position(1, 0)) == null && loaded.getPiece(new Position(5, 0)) == null,
-                "saved A2 and A6 empty " + drag);
-        check(controller.getBoardPanel().getSquarePanel(new Position(6, 0)).getPiece() == pawn,
+                && pawn.getPosition().equals(new Position(4, 1)), "saved B5 pawn restored " + drag);
+        check(loaded.getPiece(new Position(1, 0)) == null && loaded.getPiece(new Position(5, 1)) == null,
+                "saved A2 and B6 empty " + drag);
+        check(controller.getBoardPanel().getSquarePanel(new Position(4, 1)).getPiece() == pawn,
                 "loaded board view matches saved position " + drag);
         check(loaded.getCapturedPieces().size() == 1
                 && loaded.getCapturedPieces().get(0) instanceof Pawn
                 && loaded.getCapturedPieces().get(0).getColor() == Color.BLACK
-                && !loaded.getCapturedPieces().get(0).hasMoved(), "saved captured pawn restored " + drag);
+                && loaded.getCapturedPieces().get(0).hasMoved(), "saved captured pawn restored " + drag);
     }
     private static int ghosts(JRootPane root) { return root.getLayeredPane().getComponentsInLayer(JLayeredPane.DRAG_LAYER).length; }
     private static Component label(BoardPanel panel, Position position) { return panel.getSquarePanel(position).getComponent(0); }

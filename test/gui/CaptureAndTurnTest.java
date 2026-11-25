@@ -50,7 +50,7 @@ public final class CaptureAndTurnTest {
                 testPieceCaptureHandling();
                 testDirectCapturePieceMethod();
                 testFriendlyCaptureRejection();
-                testKingCaptureDetection();
+                testKingCaptureRejected();
                 testResetAndSetBoardRestoresTurn();
                 testFrameStatusBarIntegration();
 
@@ -288,8 +288,8 @@ public final class CaptureAndTurnTest {
                 "No piece captured on rejected move");
     }
 
-    /** Verifies King capture detection for Dev 4 milestone 2 endgame integration. */
-    private static void testKingCaptureDetection() {
+    /** Verifies an attacked king stays on the board when its capture is attempted. */
+    private static void testKingCaptureRejected() {
         Board board = new Board();
         BoardPanel panel = new BoardPanel(board);
         GUIController controller = new GUIController(board, panel);
@@ -302,15 +302,14 @@ public final class CaptureAndTurnTest {
         board.setPiece(kingPos, blackKing);
         controller.refreshBoard();
 
-        boolean moved = controller.movePiece(bishopPos, kingPos);
-        Piece captured = controller.getLastCapturedPiece();
-
-        TestUtils.assertEquals(true, moved, "King capture move executes successfully");
-        TestUtils.assertEquals(true, captured instanceof King,
-                "Captured piece identified as King instance");
-        TestUtils.assertEquals(blackKing, captured, "Captured piece matches Black King");
-        TestUtils.assertEquals(blackKing, controller.getLastCapturedPiece(),
-                "getLastCapturedPiece returns Black King");
+        TestUtils.assertEquals(false, controller.movePiece(bishopPos, kingPos), "King capture rejected");
+        TestUtils.assertEquals(blackKing, board.getPiece(kingPos), "King stays on its square");
+        TestUtils.assertEquals(whiteBishop, board.getPiece(bishopPos), "Bishop stays on its square");
+        TestUtils.assertEquals(Color.WHITE, controller.getCurrentTurn(), "Rejected king capture preserves turn");
+        TestUtils.assertEquals(null, controller.getLastCapturedPiece(), "No latest capture recorded");
+        TestUtils.assertEquals(0, board.getCapturedPieces().size(), "Captured list stays empty");
+        TestUtils.assertEquals(0, controller.getHistory().size(), "No move recorded");
+        TestUtils.assertEquals(false, controller.canUndo(), "No undo record created");
     }
 
     /** Verifies that startNewGame and setBoard reset turn state and capture history. */

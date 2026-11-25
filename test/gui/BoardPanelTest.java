@@ -119,14 +119,16 @@ public final class BoardPanelTest {
         Board board = new Board();
         board.initialize();
         BoardPanel panel = new BoardPanel(board);
-        new GUIController(board, panel);
+        GUIController controller = new GUIController(board, panel);
         JRootPane root = new JRootPane();
         root.setContentPane(panel);
         root.setSize(720, 720);
         layoutChildren(root);
 
-        Position from = new Position(1, 4);
-        Position target = new Position(6, 4);
+        Position from = new Position(3, 4);
+        Position target = new Position(4, 3);
+        TestUtils.assertEquals(true, controller.movePiece(new Position(1, 4), from), "White advances to E4");
+        TestUtils.assertEquals(true, controller.movePiece(new Position(6, 3), target), "Black advances to D5");
         Object pawn = board.getPiece(from);
         Component label = panel.getSquarePanel(from).getComponent(0);
         Point start = new Point(label.getWidth() / 2, label.getHeight() / 2);

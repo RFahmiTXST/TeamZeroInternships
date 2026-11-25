@@ -49,15 +49,15 @@ public final class GameFileServiceTest {
             List<List<HistoryEntry>> updates = new ArrayList<>();
             controller.addHistoryListener(updates::add);
 
-            // Make three unrestricted moves, including a capture.
+            // Play E2-E4, D7-D5, then E4xD5 before saving.
             check(true, controller.movePiece(new Position(1, 4), new Position(3, 4)), "White pawn moves");
-            check(true, controller.movePiece(new Position(6, 4), new Position(4, 4)), "Black pawn moves");
-            check(true, controller.movePiece(new Position(3, 4), new Position(4, 4)), "White pawn captures");
+            check(true, controller.movePiece(new Position(6, 3), new Position(4, 3)), "Black pawn moves");
+            check(true, controller.movePiece(new Position(3, 4), new Position(4, 3)), "White pawn captures");
             check(Color.BLACK, controller.getCurrentTurn(), "Turn is Black before saving");
             check(3, controller.getHistory().size(), "Three moves recorded");
             check(1, board.getCapturedPieces().size(), "One piece captured before saving");
 
-            Piece moving = board.getPiece(new Position(4, 4));
+            Piece moving = board.getPiece(new Position(4, 3));
             check(true, moving.hasMoved(), "Moving pawn marked moved before saving");
             Piece captured = board.getCapturedPieces().get(0);
             check(true, captured.hasMoved(), "Captured pawn moved flag retained before saving");
@@ -74,11 +74,11 @@ public final class GameFileServiceTest {
                     "Captured-piece color restored");
             check(true, loaded.board().getCapturedPieces().get(0).hasMoved(),
                     "Captured-piece moved flag restored");
-            check(true, loaded.board().getPiece(new Position(4, 4)) instanceof Pawn,
+            check(true, loaded.board().getPiece(new Position(4, 3)) instanceof Pawn,
                     "Final square has saved Pawn");
             check(null, loaded.board().getPiece(new Position(1, 4)),
                     "Original pawn square remains empty");
-            check(true, loaded.board().getPiece(new Position(4, 4)).hasMoved(),
+            check(true, loaded.board().getPiece(new Position(4, 3)).hasMoved(),
                     "Active piece moved flag restored");
             check(false, loaded.board().getPiece(new Position(0, 0)).hasMoved(),
                     "Unmoved rook remains unmoved");
@@ -105,7 +105,7 @@ public final class GameFileServiceTest {
             check("Captured Black (1)",
                     ((javax.swing.JLabel) rack.getComponent(2)).getText(),
                     "Captured rack refreshes after Load");
-            check(true, controller.getBoardPanel().getSquarePanel(new Position(4, 4))
+            check(true, controller.getBoardPanel().getSquarePanel(new Position(4, 3))
                     .getPiece() instanceof Pawn, "Board panel displays loaded piece");
             check(0, captureEvents[0], "Loading does not trigger capture/endgame callbacks");
             check(false, controller.canUndo(), "Load clears prior undo records");
@@ -124,7 +124,7 @@ public final class GameFileServiceTest {
             check(true, rejected, "Malformed save file rejected");
             check(Color.BLACK, controller.getCurrentTurn(), "Invalid load preserves active turn");
             check(expectedHistory, controller.getHistory(), "Invalid load preserves history");
-            check(true, controller.getBoardPanel().getSquarePanel(new Position(4, 4))
+            check(true, controller.getBoardPanel().getSquarePanel(new Position(4, 3))
                     .getPiece() instanceof Pawn, "Invalid load preserves board");
         } catch (IOException exception) {
             throw new AssertionError("Unexpected file I/O failure", exception);
