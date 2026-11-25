@@ -348,3 +348,7 @@ Sabid asked Codex to verify his Milestone 1 work and push after his checks passe
 Sabid asked Codex to fetch the team changes and address cyber-kuro's requested changes. Codex synced the PR with dev and revised four shared test fixtures. The board-view and save/load tests use E2-E4, D7-D5, E4xD5; the Undo test uses the active player's quiet move; and the controller test checks that an attempted king capture preserves the board, turn, capture state, history, and Undo. The production implementation required no revision.
 
 Java 17 compilation with -Xlint:all succeeded with seven warnings. The full runner finished with zero failures: headless 1,267 shared + 28 utility checks; desktop 1,338 shared + 28 utility checks. In each mode, the separately compiled Dev 4 core and GUI suites passed 54 and 34 checks, and SabidM4EventTest passed 172. The Dev 4 suites were read from the fetched feature branch for verification.
+
+## 2026-11-25 — PR #38 final review corrections
+
+Sabid asked Codex to address Towsif’s follow-up review. Codex moved the status notification method’s parameter description to its own Javadoc block tag and prepared the current test totals for the PR description. Strict Javadoc generation for all production sources, including private members, passed with warnings treated as errors. The regression counts refer to the November 24 runs.

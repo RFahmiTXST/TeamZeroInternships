@@ -631,7 +631,11 @@ public final class GUIController {
         notifyStatusListeners(getStatusMessage());
     }
 
-    /** Sends feedback to the status bar. @param message text to display */
+    /**
+     * Sends feedback to the status bar.
+     *
+     * @param message text to display
+     */
     private void notifyStatusListeners(String message) {
         for (StatusListener listener : statusListeners) {
             listener.onStatusChanged(message);
