@@ -206,7 +206,8 @@ public final class GUIController {
      * Selects an occupied square matching the active player's turn and updates visual selection.
      *
      * <p>If target is null, off the board, unoccupied, or contains a piece belonging to the
-     * opponent, any existing selection and highlights are cleared.</p>
+     * opponent, any existing selection and highlights are cleared. While in check,
+     * only a piece with a legal reply can be selected.</p>
      *
      * @param target source square, or null to clear selection
      * @throws IllegalStateException if called outside the EDT
@@ -217,9 +218,14 @@ public final class GUIController {
         if (target != null && target.isOnBoard()) {
             Piece piece = board.getPiece(target);
             if (piece != null && piece.getColor() == currentTurn) {
+                List<Position> replies = board.getLegalMoves(target, currentTurn);
+                if (replies.isEmpty() && board.isCheck(currentTurn)) {
+                    selected = null;
+                    return;
+                }
                 selected = target;
                 boardPanel.getSquarePanel(selected).setSelected(true);
-                boardPanel.showMoveHints(getLegalMovesForSelected());
+                boardPanel.showMoveHints(replies);
                 return;
             }
         }
@@ -430,7 +436,8 @@ public final class GUIController {
 
         history.add(new HistoryEntry(history.size() + 1, moving.getColor().toString(),
                 moving.getClass().getSimpleName(), from.toString(), to.toString(),
-                captured == null ? "" : captured.getColor() + " " + captured.getClass().getSimpleName()));
+                captured == null ? "" : captured.getColor() + " " + captured.getClass().getSimpleName(),
+                board.isCheck(currentTurn == Color.WHITE ? Color.BLACK : Color.WHITE)));
         notifyHistoryListeners();
 
         if (captured != null) {

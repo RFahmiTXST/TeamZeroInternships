@@ -19,7 +19,7 @@ public final class HistoryPanel extends JPanel {
     public static final int PANEL_WIDTH = 360;
     /** Table cells are display-only; moves originate in the controller. */
     private final DefaultTableModel model = new DefaultTableModel(
-            new String[] {"Move", "Side", "Piece", "From", "To", "Capture"}, 0) {
+            new String[] {"#", "Side", "Piece", "From", "Move", "Capture"}, 0) {
         @Override public boolean isCellEditable(int row, int column) { return false; }
     };
     /** Scrollable move table. */
@@ -53,7 +53,7 @@ public final class HistoryPanel extends JPanel {
         model.setRowCount(0);
         for (HistoryEntry entry : entries) {
             model.addRow(new Object[] {entry.number(), entry.side(), entry.piece(),
-                    entry.from(), entry.to(), entry.captured()});
+                    entry.from(), entry.notation(), entry.captured()});
         }
         if (model.getRowCount() > 0) {
             int last = model.getRowCount() - 1;

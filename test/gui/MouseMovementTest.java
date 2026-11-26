@@ -22,6 +22,7 @@ public final class MouseMovementTest {
         catch (Exception e) { throw new AssertionError(e); }
     }
     private static void run() {
+        checkEvasion();
         Board board = new Board();
         board.initialize();
         BoardPanel panel = new BoardPanel(board);
@@ -126,6 +127,46 @@ public final class MouseMovementTest {
         controller.setBoard(replacement);
         send(label, MouseEvent.MOUSE_RELEASED, start, MouseEvent.BUTTON1);
         check(false, panel.getSquarePanel(e2).isSelected(), "Replacement cancels pending gesture");
+    }
+    private static void checkEvasion() {
+        Board board = new Board();
+        Position e1 = new Position(0, 4), e8 = new Position(7, 4), h8 = new Position(7, 7);
+        Position b5 = new Position(4, 1), a2 = new Position(1, 0);
+        board.setPiece(e1, new pieces.King(Color.WHITE, e1));
+        board.setPiece(h8, new pieces.King(Color.BLACK, h8));
+        board.setPiece(e8, new pieces.Rook(Color.BLACK, e8));
+        board.setPiece(b5, new pieces.Bishop(Color.WHITE, b5));
+        board.setPiece(a2, new pieces.Pawn(Color.WHITE, a2));
+        BoardPanel panel = new BoardPanel(board);
+        GUIController controller = new GUIController(board, panel);
+        JRootPane root = new JRootPane();
+        root.setContentPane(panel);
+        root.setSize(820, 700);
+        layout(root);
+        check(true, board.isCheck(Color.WHITE), "Rook checks the white king");
+        click(panel, b5);
+        check(b5, controller.getSelected(), "Bishop with a legal reply is selectable");
+        click(panel, a2);
+        check(null, controller.getSelected(), "Pawn unable to answer check cannot be selected");
+        Component label = panel.getSquarePanel(a2).getComponent(0);
+        Point end = SwingUtilities.convertPoint(panel.getSquarePanel(new Position(2, 0)), 10, 10, label);
+        send(label, MouseEvent.MOUSE_PRESSED, new Point(10, 10), MouseEvent.BUTTON1);
+        send(label, MouseEvent.MOUSE_DRAGGED, end, MouseEvent.NOBUTTON);
+        check(0, root.getLayeredPane().getComponentsInLayer(JLayeredPane.DRAG_LAYER).length,
+                "Rejected pawn drag shows no floating piece");
+        send(label, MouseEvent.MOUSE_RELEASED, end, MouseEvent.BUTTON1);
+        check(Color.WHITE, controller.getCurrentTurn(), "Ignoring check preserves turn");
+        check(false, controller.canUndo(), "Ignoring check creates no undo record");
+        check(0, controller.getHistory().size(), "Ignoring check creates no history");
+        for (Position[] reply : new Position[][] {
+                {e1, new Position(0, 5)}, {b5, new Position(1, 4)}, {b5, e8}}) {
+            click(panel, reply[0]);
+            click(panel, reply[1]);
+            check(false, board.isCheck(Color.WHITE), "Reply resolves check at " + reply[1]);
+            check(Color.BLACK, controller.getCurrentTurn(), "Legal reply passes turn to Black");
+            check(true, controller.undoLastMove(), "Undo returns to the checked position");
+            check(true, board.isCheck(Color.WHITE), "Original checking line restored");
+        }
     }
     private static void layout(Container c) {
         c.doLayout();

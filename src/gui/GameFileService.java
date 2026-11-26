@@ -151,7 +151,8 @@ public final class GameFileService {
         int historyCount = parseCount(required(data, "history.count"), MAX_HISTORY);
         List<HistoryEntry> history = new ArrayList<>();
         for (int i = 0; i < historyCount; i++) {
-            history.add(parseHistory(required(data, "history." + i), i + 1));
+            String key = "history." + i;
+            history.add(parseHistory(required(data, key), i + 1, "true".equals(data.getProperty(key + ".check"))));
         }
         return new GameState(board, turn, history);
     }
@@ -183,7 +184,10 @@ public final class GameFileService {
         }
         data.setProperty("history.count", Integer.toString(state.history().size()));
         for (int i = 0; i < state.history().size(); i++) {
-            data.setProperty("history." + i, encodeHistory(state.history().get(i), i + 1));
+            String key = "history." + i;
+            HistoryEntry entry = state.history().get(i);
+            data.setProperty(key, encodeHistory(entry, i + 1));
+            if (entry.givesCheck()) data.setProperty(key + ".check", "true");
         }
         return data;
     }
@@ -251,18 +255,19 @@ public final class GameFileService {
         if (value.contains("\n") || value.contains("\r") || value.contains("\t")) {
             throw new IOException("Invalid characters in history.");
         }
-        parseHistory(value, expectedNumber);
+        parseHistory(value, expectedNumber, entry.givesCheck());
         return value;
     }
 
     /**
      * Parses and validates a single history entry.
      * @param encoded serialized move fields
+     * @param givesCheck check marker, false for saves without check metadata
      * @param expectedNumber one-based move index
      * @return restored immutable move entry
      * @throws IOException if the fields are invalid
      */
-    private static HistoryEntry parseHistory(String encoded, int expectedNumber)
+    private static HistoryEntry parseHistory(String encoded, int expectedNumber, boolean givesCheck)
             throws IOException {
         String[] fields = encoded.split("\\|", -1);
         if (fields.length != 6 || parseCount(fields[0], MAX_HISTORY) != expectedNumber) {
@@ -283,7 +288,7 @@ public final class GameFileService {
             }
         }
         return new HistoryEntry(expectedNumber, fields[1], fields[2],
-                fields[3], fields[4], fields[5]);
+                fields[3], fields[4], fields[5], givesCheck);
     }
 
     /**

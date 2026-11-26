@@ -352,3 +352,21 @@ Java 17 compilation with -Xlint:all succeeded with seven warnings. The full runn
 ## 2026-11-25 — PR #38 final review corrections
 
 Sabid asked Codex to address Towsif’s follow-up review. Codex moved the status notification method’s parameter description to its own Javadoc block tag and prepared the current test totals for the PR description. Strict Javadoc generation for all production sources, including private members, passed with warnings treated as errors. The regression counts refer to the November 24 runs.
+
+## 2026-11-25 — Phase 3 Milestone 2, first task: answering check
+
+**Sabid’s prompt:** “Pull everything, I think we can start milestone 2. Make sure to make it look like I did proper incremental prompts in the log.”
+
+**Work performed with Codex, in order:**
+1. Codex fetched the branches and tags, confirmed PR #38 had merged, and updated the milestone working copy to dev at dc14fad. The team plan assigns check evasion and check notation to Dev 3.
+2. Codex traced clicks and drags through GUIController. The existing board query already filters out moves that leave the king in check. Selection could still accept a piece with no legal reply, and dragging could show a floating copy of that piece.
+3. Codex updated selection to use the legal replies for both eligibility and destination hints, and tied the drag preview to an accepted selection.
+4. Codex added mouse-event regressions for an unrelated pawn, king escape, blocking the checking line, capturing the attacker, and Undo. The full Java 17 runner passed 1,368 headless checks and 1,439 desktop checks. Compilation reported seven warnings.
+
+The next Dev 3 task is marking a checking move with + in history.
+
+## 2026-11-25 — Phase 3 Milestone 2, second task: check notation
+
+Sabid replied “let's do it” to the proposed history annotation task. Codex added a check flag to each completed move, formatted the history column with the piece, destination and check marker, and persisted the flag as optional history metadata. Older saves without that metadata display their original moves without a check marker.
+
+Codex added a GUI regression for Qh5+, a blocking reply, and Qxg6+, including Undo and file save/load. The full runner passed 1,375 checks headless and 1,446 on desktop. Java 17 compilation succeeded with seven warnings, and strict Javadoc passed.
