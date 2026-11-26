@@ -1,5 +1,6 @@
 package board;
 
+import core.AttackDetector;
 import pieces.Piece;
 import pieces.Color;
 import pieces.Bishop;
@@ -258,6 +259,27 @@ public class Board {
     }
 
     /**
+     * Locates the board coordinate of the specified side's King.
+     *
+     * @param color the color of the King to locate
+     * @return the King's {@link Position} on the board grid, or null if absent
+     */
+    private Position findKingPosition(Color color) {
+        if (color == null) {
+            return null;
+        }
+        for (int row = 0; row < SIZE; row++) {
+            for (int column = 0; column < SIZE; column++) {
+                Piece piece = squares[row][column];
+                if (piece instanceof King && piece.getColor() == color) {
+                    return new Position(row, column);
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * Checks if a given color's king is currently under attack (in check).
      * 
      * @param color The color to check.
@@ -265,43 +287,26 @@ public class Board {
      *         false when it is not targeted or the king is absent
      */
     public boolean isCheck(Color color) {
-        if (color == null) {
-            return false;
-        }
-
-        Position kingPosition = null;
-        for (Piece piece : getPieces(color)) {
-            if (piece instanceof King) {
-                kingPosition = piece.getPosition();
-                break;
-            }
-        }
-
+        Position kingPosition = findKingPosition(color);
         if (kingPosition == null) {
             return false;
         }
-
-        Color opponent = color == Color.WHITE ? Color.BLACK : Color.WHITE;
-        for (Piece opponentPiece : getPieces(opponent)) {
-            List<Position> possibleMoves = opponentPiece.possibleMoves(this);
-            if (possibleMoves != null && possibleMoves.contains(kingPosition)) {
-                return true;
-            }
-        }
-        return false;
+        Color opponent = (color == Color.WHITE) ? Color.BLACK : Color.WHITE;
+        return AttackDetector.isSquareAttacked(this, kingPosition, opponent);
     }
 
     /**
      * Checks if executing a hypothetical move would leave or expose the friendly King in check.
      *
-     * <p>Executes a trial move directly on the board grid, checks if the King of the specified
-     * color is under attack, and restores the board state in a finally block without any permanent
-     * side-effects.</p>
+     * <p>Creates a lightweight trial move directly on the board grid, evaluates King safety
+     * using {@link AttackDetector#isSquareAttacked(Board, Position, Color)}, and restores the
+     * exact pre-trial board and piece state in a {@code finally} block.</p>
      *
      * @param from the starting position of the moving piece
      * @param to the target destination position
      * @param color the color of the moving player
-     * @return true if moving from to would leave or expose the friendly King in check; false otherwise
+     * @return true if moving from {@code from} to {@code to} is invalid or leaves/exposes
+     *         the friendly King in check; false otherwise
      */
     public boolean wouldExposeKing(Position from, Position to, Color color) {
         if (from == null || to == null || !from.isOnBoard() || !to.isOnBoard() || color == null) {
@@ -312,16 +317,25 @@ public class Board {
             return true;
         }
         Piece captured = getPiece(to);
+        if (from.equals(to) || (captured != null && captured.getColor() == color)) {
+            return true;
+        }
         boolean wasMoved = movingPiece.hasMoved();
+        Position previousPosition = movingPiece.getPosition();
         try {
             squares[from.getRow()][from.getColumn()] = null;
             squares[to.getRow()][to.getColumn()] = movingPiece;
             movingPiece.move(to);
-            return isCheck(color);
+            Position targetKingPos = (movingPiece instanceof King) ? to : findKingPosition(color);
+            if (targetKingPos == null) {
+                return false;
+            }
+            Color opponentColor = (color == Color.WHITE) ? Color.BLACK : Color.WHITE;
+            return AttackDetector.isSquareAttacked(this, targetKingPos, opponentColor);
         } finally {
             squares[from.getRow()][from.getColumn()] = movingPiece;
             squares[to.getRow()][to.getColumn()] = captured;
-            movingPiece.restoreState(from, wasMoved);
+            movingPiece.restoreState(previousPosition, wasMoved);
         }
     }
 
