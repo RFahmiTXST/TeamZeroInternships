@@ -145,3 +145,8 @@ The AI confirmed that all code and architectural concepts were implemented corre
 - **Build & Quality:** Compiled cleanly on JDK 17 (`--release 17 -Xlint:all`) with zero new warnings. Strict source Javadoc audit (`-private -Xdoclint:all -Werror`) passed with **0 warnings and 0 errors**.
 - **Automated Verification:** Headless `TestRunner` passed **1,404 assertions** (1,376 shared + 28 Utils), desktop `TestRunner` passed **1,475 assertions** (1,447 shared + 28 Utils), and standalone suites passed cleanly (`Dev4M1RulesTest`: 54, `Dev4M1TurnTest`: 34, `SabidM4EventTest`: 172) with **0 failures**.
 - **Architectural Integrity & Tracking:** Confirmed 0 `java.awt.*`/`javax.swing.*` imports in domain packages (`board`, `pieces`, `core`, `utils`).
+
+**Task / Method:** Organizing industry-grade Git commits for Phase 3 Milestone 2.\
+**Prompt / Question Asked:** "Suppose you are a dev-ops expert with substantial experience managing Git repositories. Task: Create industry grade (short and reasonable) commits for the Phase 3 milestone 2 code changes for Dev 1 (Rayed). Make sure not to push the commit to the remote repository, I'll verify and push it myself."\
+**Code / Idea Used:** Applied Conventional Commits standards to structure 3 atomic, granular commits separating King safety simulation and check detection (`feat(board)`), dedicated Milestone 2 pin-protection and rollback test coverage (`test(m2)`), and Phase 3 Milestone 2 task tracking and AI usage documentation (`docs(dev1)`).\
+**Result / Modification:** Created 3 structured, traceable commits on `feature/RFahmiTXST` (`f0bc2c0`, `bf6e02e`, `79e7cea`) with descriptive multi-line messages without pushing to the remote repository, verified clean and ready for review and push.
