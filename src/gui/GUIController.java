@@ -62,6 +62,27 @@ public final class GUIController {
         void onHistoryChanged(List<HistoryEntry> entries);
     }
 
+    /** Completed game outcome; ONGOING is the default for a new game. */
+    public enum GameOutcome {
+        /** At least one legal reply remains or the position is unfinished. */
+        ONGOING,
+        /** The next player is in check with no legal reply. */
+        CHECKMATE,
+        /** The next player is not in check but has no legal reply. */
+        STALEMATE
+    }
+
+    /** Receives the terminal outcome after a completed GUI move. */
+    @FunctionalInterface
+    public interface GameEndListener {
+        /**
+         * Invoked once when a move ends the game.
+         * @param outcome completed outcome
+         * @param winner winning color on checkmate; null on stalemate
+         */
+        void onGameEnded(GameOutcome outcome, Color winner);
+    }
+
     /**
      * Reversible state retained for each successful GUI move.
      * @param from original square
@@ -93,12 +114,16 @@ public final class GUIController {
     private final BoardMouseHandler mouseHandler;
     /** Active player whose turn it is to move. */
     private Color currentTurn = Color.WHITE;
+    /** Current terminal state, cleared when a new session is started. */
+    private GameOutcome gameOutcome = GameOutcome.ONGOING;
     /** The most recently captured piece, or null if no capture has occurred yet. */
     private Piece lastCapturedPiece;
     /** Registered status listeners notified on turn and state changes. */
     private final List<StatusListener> statusListeners = new ArrayList<>();
     /** Registered capture listeners notified when an opponent piece is captured. */
     private final List<CaptureListener> captureListeners = new ArrayList<>();
+    /** Registered presenters for checkmate and stalemate. */
+    private final List<GameEndListener> gameEndListeners = new ArrayList<>();
 
     /**
      * Connects an existing board and view without resetting the supplied position.
@@ -130,6 +155,7 @@ public final class GUIController {
         cancelSelection();
         board.initialize();
         currentTurn = Color.WHITE;
+        gameOutcome = GameOutcome.ONGOING;
         lastCapturedPiece = null;
         boardPanel.clearHighlights();
         refreshBoard();
@@ -153,6 +179,7 @@ public final class GUIController {
         cancelSelection();
         this.board = board;
         this.currentTurn = Color.WHITE;
+        this.gameOutcome = GameOutcome.ONGOING;
         this.lastCapturedPiece = null;
         boardPanel.clearHighlights();
         refreshBoard();
@@ -184,6 +211,10 @@ public final class GUIController {
      */
     public void clickSquare(Position target) {
         requireEventDispatchThread();
+        if (isGameOver()) {
+            cancelSelection();
+            return;
+        }
         if (selected != null) {
             if (target != null && target.isOnBoard()) {
                 Piece pieceAtTarget = board.getPiece(target);
@@ -214,6 +245,10 @@ public final class GUIController {
     public void selectSquare(Position target) {
         requireEventDispatchThread();
         boardPanel.clearHighlights();
+        if (isGameOver()) {
+            selected = null;
+            return;
+        }
         if (target != null && target.isOnBoard()) {
             Piece piece = board.getPiece(target);
             if (piece != null && piece.getColor() == currentTurn) {
@@ -254,7 +289,7 @@ public final class GUIController {
      * @return unmodifiable list of legal destination Positions for the selected piece
      */
     public List<Position> getLegalMovesForSelected() {
-        if (selected == null) {
+        if (selected == null || isGameOver()) {
             return Collections.emptyList();
         }
         return Collections.unmodifiableList(board.getLegalMoves(selected, currentTurn));
@@ -267,7 +302,7 @@ public final class GUIController {
      * @return true if a piece is selected and target is in its legal moves; false otherwise
      */
     public boolean isLegalMoveForSelected(Position target) {
-        if (selected == null || target == null || !target.isOnBoard()) {
+        if (isGameOver() || selected == null || target == null || !target.isOnBoard()) {
             return false;
         }
         return board.getLegalMoves(selected, currentTurn).contains(target);
@@ -345,6 +380,11 @@ public final class GUIController {
      * @return status message representing active turn
      */
     public String getStatusMessage() {
+        if (gameOutcome == GameOutcome.CHECKMATE) {
+            return "Checkmate! " + (getWinner() == Color.WHITE ? "White" : "Black")
+                    + " wins by checkmate!";
+        }
+        if (gameOutcome == GameOutcome.STALEMATE) return "Stalemate! Draw!";
         return getTurnStatusText();
     }
 
@@ -355,6 +395,44 @@ public final class GUIController {
      */
     public Piece getLastCapturedPiece() {
         return lastCapturedPiece;
+    }
+
+    /** @return true after a checkmate or stalemate until a new session begins */
+    public boolean isGameOver() {
+        return gameOutcome != GameOutcome.ONGOING;
+    }
+
+    /** @return current game result without mutating the board */
+    public GameOutcome getGameOutcome() {
+        return gameOutcome;
+    }
+
+    /** @return winning side after checkmate, otherwise null */
+    public Color getWinner() {
+        if (gameOutcome != GameOutcome.CHECKMATE) return null;
+        return currentTurn == Color.WHITE ? Color.BLACK : Color.WHITE;
+    }
+
+    /**
+     * Registers a callback for a move that ends the game.
+     * @param listener callback on the Swing event dispatch thread
+     * @throws NullPointerException if listener is null
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public void addGameEndListener(GameEndListener listener) {
+        requireEventDispatchThread();
+        if (listener == null) throw new NullPointerException("Game end listener is required.");
+        if (!gameEndListeners.contains(listener)) gameEndListeners.add(listener);
+    }
+
+    /**
+     * Removes an endgame callback.
+     * @param listener callback to unregister
+     * @throws IllegalStateException if called outside the EDT
+     */
+    public void removeGameEndListener(GameEndListener listener) {
+        requireEventDispatchThread();
+        gameEndListeners.remove(listener);
     }
 
     /**
@@ -370,6 +448,7 @@ public final class GUIController {
      */
     public Piece capturePiece(Position target) {
         requireEventDispatchThread();
+        if (isGameOver()) return null;
         if (target == null || !target.isOnBoard()) {
             throw new IllegalArgumentException("Target position must be on the board: " + target);
         }
@@ -407,6 +486,10 @@ public final class GUIController {
     public boolean movePiece(Position from, Position to) {
         requireEventDispatchThread();
         cancelSelection();
+        if (isGameOver()) {
+            notifyStatusListeners();
+            return false;
+        }
         if (from == null || to == null || !from.isOnBoard() || !to.isOnBoard()
                 || from.equals(to)) {
             notifyStatusListeners("Illegal move. " + getTurnStatusText());
@@ -438,6 +521,7 @@ public final class GUIController {
         }
 
         switchTurn();
+        completeMoveIfGameOver();
         return true;
     }
 
@@ -516,7 +600,7 @@ public final class GUIController {
      */
     public boolean canUndo() {
         requireEventDispatchThread();
-        return !undoEntries.isEmpty();
+        return !isGameOver() && !undoEntries.isEmpty();
     }
 
     /**
@@ -526,7 +610,7 @@ public final class GUIController {
      */
     public boolean undoLastMove() {
         requireEventDispatchThread();
-        if (undoEntries.isEmpty()) return false;
+        if (isGameOver() || undoEntries.isEmpty()) return false;
         UndoEntry entry = undoEntries.peek();
         board.undoMove(entry.from(), entry.to(), entry.moving(), entry.captured(), entry.movedBefore());
         undoEntries.pop();
@@ -567,6 +651,7 @@ public final class GUIController {
         undoEntries.clear();
         this.board = restoredBoard;
         this.currentTurn = restoredTurn;
+        this.gameOutcome = determineOutcome();
         List<Piece> captured = restoredBoard.getCapturedPieces();
         this.lastCapturedPiece = captured.isEmpty() ? null : captured.get(captured.size() - 1);
         history.clear();
@@ -607,6 +692,40 @@ public final class GUIController {
     public void removeHistoryListener(HistoryListener listener) {
         requireEventDispatchThread();
         historyListeners.remove(listener);
+    }
+
+    /**
+     * Determines the end state without changing the current model or history.
+     * @return ongoing, checkmate, or stalemate
+     */
+    private GameOutcome determineOutcome() {
+        if (board.isCheckmate(currentTurn)) return GameOutcome.CHECKMATE;
+        if (board.isStalemate(currentTurn)) return GameOutcome.STALEMATE;
+        return GameOutcome.ONGOING;
+    }
+
+    /**
+     * Evaluates a completed move, updates notation and locks the finished game.
+     * Invokes modal presenters only after history and status observers have updated.
+     */
+    private void completeMoveIfGameOver() {
+        GameOutcome result = determineOutcome();
+        if (result == GameOutcome.ONGOING) return;
+        gameOutcome = result;
+        if (result == GameOutcome.CHECKMATE && !history.isEmpty()) {
+            int index = history.size() - 1;
+            HistoryEntry last = history.get(index);
+            if (!last.to().endsWith("#")) {
+                history.set(index, new HistoryEntry(last.number(), last.side(), last.piece(),
+                        last.from(), last.to() + "#", last.captured()));
+            }
+        }
+        notifyHistoryListeners(); // update move notation and disable Undo
+        notifyStatusListeners();
+        Color winner = getWinner();
+        for (GameEndListener listener : List.copyOf(gameEndListeners)) {
+            listener.onGameEnded(result, winner);
+        }
     }
 
     /** Clears stale history when a new board session starts. */

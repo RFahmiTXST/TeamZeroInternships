@@ -228,13 +228,13 @@ In Phase 1, we developed the domain rules (piece movement vectors, attack detect
   - [ ] When a player is in check, restrict selection and movement strictly to moves that resolve the check (evade King, block ray, or capture checking piece).
   - [ ] Update `HistoryPanel` notation: append standard chess symbol `+` to move notation when a move delivers check (e.g., `Qh5+`).
 - **Dev 4 (Towsif - Checkmate & Stalemate Engine):**
-  - [ ] Implement comprehensive `board.isCheckmate(Color color)`:
+  - [x] Implement comprehensive `board.isCheckmate(Color color)`:
     1. Verify `board.isCheck(color)` is true.
     2. Iterate over all active pieces of `color`; compute `getLegalMoves()`. If the sum of legal moves is 0, declare **Checkmate**.
-  - [ ] Implement `board.isStalemate(Color color)`:
+  - [x] Implement `board.isStalemate(Color color)`:
     1. Verify `board.isCheck(color)` is false.
     2. If total legal moves for `color` is 0, declare **Stalemate (Draw)**.
-  - [ ] Replace `KingCaptureHandler` with `CheckmateHandler`:
+  - [x] Replace `KingCaptureHandler` with `CheckmateHandler`:
     - Displays a modal dialog: *"Checkmate! [White/Black] wins by checkmate!"*.
     - Annotate history notation with `#` (e.g., `Qxf7#`).
     - Disable further board movement while allowing game review, New Game, or Save Game.
