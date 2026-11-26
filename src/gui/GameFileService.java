@@ -271,7 +271,7 @@ public final class GameFileService {
         if (!("WHITE".equals(fields[1]) || "BLACK".equals(fields[1]))
                 || !isPieceName(fields[2])
                 || !fields[3].matches("[A-H][1-8]")
-                || !fields[4].matches("[A-H][1-8]")) {
+                || !fields[4].matches("[A-H][1-8][+#]?")) {
             throw new IOException("Invalid move-history details.");
         }
         if (!fields[5].isEmpty()) {

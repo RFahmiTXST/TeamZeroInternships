@@ -107,9 +107,7 @@ public class ChessFrame extends JFrame {
         // Center: Chessboard panel
         this.boardPanel = new BoardPanel(board);
         this.controller = new GUIController(board, boardPanel);
-        // Dev 4 M2: show winner and exit only when a King is captured.
-        KingCaptureHandler kingCaptureHandler = new KingCaptureHandler(this);
-        controller.addCaptureListener(kingCaptureHandler::onPieceCaptured);
+        // Phase 3 M2: King captures are prohibited. Endgame dialog follows checkmate/stalemate.
         add(boardPanel, BorderLayout.CENTER);
         historyPanel = new HistoryPanel();
         capturedPanel = new CapturedPiecesPanel();
@@ -141,6 +139,7 @@ public class ChessFrame extends JFrame {
 
         // Register controller status updates with the frame status bar
         controller.addStatusListener(this::setStatusMessage);
+        new CheckmateHandler(this, controller);
 
         // Top: Menu bar skeleton
         setJMenuBar(createMenuBarSkeleton());
