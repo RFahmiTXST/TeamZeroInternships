@@ -213,12 +213,12 @@ In Phase 1, we developed the domain rules (piece movement vectors, attack detect
 **Goal:** Implement robust King safety validation, persistent visual check warnings, full checkmate detection, and replace Phase 2's King capture with a proper checkmate endgame modal.
 
 - **Dev 1 (Rayed - King Safety & Move Simulation):**
-  - [ ] Implement hypothetical move simulation:
+  - [x] Implement hypothetical move simulation:
     ```java
     public boolean wouldExposeKing(Position from, Position to, Color color);
     ```
     Creates a lightweight trial move on the board model, runs `AttackDetector.isSquareAttacked(targetKingPos, opponentColor)`, and rolls back the trial state.
-  - [ ] Implement pinned piece protection: ensure pinned pieces (e.g., Bishop on diagonal between friendly King and enemy Queen) cannot move off the pin vector.
+  - [x] Implement pinned piece protection: ensure pinned pieces (e.g., Bishop on diagonal between friendly King and enemy Queen) cannot move off the pin vector.
 - **Dev 2 (Abid - Check Visual Feedback & King Highlighting):**
   - [ ] Implement persistent visual Check indicator on `BoardPanel`:
     - When `board.isCheck(color)` is true, render a prominent red radial glow / danger highlight on the square of the checked King.
