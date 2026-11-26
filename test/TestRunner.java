@@ -29,9 +29,11 @@ public class TestRunner {
         core.AttackDetectorTest.main(args);
         core.CastlingTest.main(args);
 
-        // Dev 1: Milestone 1 Legal Moves & King Safety tests
+        // Dev 1: Milestone 1 & 2 Legal Moves & King Safety tests
         System.out.println("\nRunning Dev 1 M1 Legal Move tests...\n");
         core.LegalMoveTest.main(args);
+        System.out.println("\nRunning Dev 1 M2 King Safety & Pin tests...\n");
+        core.Dev1M2Test.main(args);
 
         // Dev 1: Rook, Bishop, Queen and Knight tests
         System.out.println("\nRunning other piece movement tests...\n");
