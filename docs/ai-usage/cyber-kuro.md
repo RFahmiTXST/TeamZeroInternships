@@ -299,3 +299,47 @@ teammates' production code.
 
 ### Result
 Completed Dev 4's M1 regression test implementation.
+
+## Phase 3 Milestone 2 — Checkmate, Stalemate, and Endgame Integration
+
+### Task
+Implement Dev 4's assigned Phase 3 M2 responsibilities, including checkmate detection, stalemate detection, and the replacement of the Phase 2 King-capture endgame with a proper checkmate and stalemate system.
+
+### AI Assistance
+I used ChatGPT to review the Phase 3 Milestone 2 requirements, understand the existing project architecture, and develop the checkmate and stalemate implementation.
+
+I reviewed the proposed changes and executed the verification scripts locally.
+
+### Implementation
+- Implemented `Board.isCheckmate(Color)` to detect when a player is in check and has no legal moves.
+- Implemented `Board.isStalemate(Color)` to detect when a player is not in check but has no legal moves.
+- Added `CheckmateHandler.java` for checkmate victory and stalemate draw notifications.
+- Integrated completed-game tracking into `GUIController`.
+- Prevented additional moves after checkmate or stalemate.
+- Preserved New Game, Save Game, and game-review functionality.
+- Replaced the active King-capture endgame flow with the new endgame handler.
+- Added checkmate notation (`#`) to the final move in the history.
+- Updated game persistence to support checkmate notation and completed positions.
+- Added `Dev4M2EndgameRulesTest.java` for board-level testing.
+- Added `Dev4M2EndgameTest.java` for GUI and endgame testing.
+
+### Issues Encountered and Resolved
+During implementation, compilation initially failed because the new `CheckmateHandler` and GUI tests depended on controller methods that had not yet been integrated.
+
+ChatGPT helped identify these issues and prepare corrected integration scripts. After applying the corrections, the project compiled and all executed test suites passed.
+
+### Verification
+- Java 17 compilation: PASS.
+- M2 board regression tests: PASS.
+- M2 GUI regression tests: PASS.
+- Shared TestRunner: 1,321 passed, 0 failed.
+- UtilsTest: 28 passed, 0 failed.
+- Combined shared and utility assertions: 1,349 passed, 0 failed.
+- Final regression exit code: 0.
+
+### Result
+Completed Dev 4's Phase 3 Milestone 2 implementation and local verification.
+
+The checkmate and stalemate engine, GUI endgame handling, movement restrictions, history notation, and Save/Load compatibility passed the automated tests.
+
+Final integration with the other developers' Phase 3 M2 contributions remains subject to team review and combined regression testing.
