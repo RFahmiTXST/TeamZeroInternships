@@ -22,6 +22,7 @@ public final class HistoryPanelTest {
         catch (Exception e) { throw new AssertionError(e); }
     }
     private static void run() {
+        checkNotationRoundTrip();
         Board board = new Board(); board.initialize();
         GUIController c = new GUIController(board, new BoardPanel(board));
         HistoryPanel panel = new HistoryPanel();
@@ -92,6 +93,39 @@ public final class HistoryPanelTest {
             } finally { frame.dispose(); }
         }
     }
+    private static void checkNotationRoundTrip() {
+        Board board = new Board();
+        board.initialize();
+        GUIController controller = new GUIController(board, new BoardPanel(board));
+        HistoryPanel panel = new HistoryPanel();
+        controller.addHistoryListener(panel::setHistory);
+        controller.movePiece(new Position(1,4), new Position(3,4)); // e4
+        controller.movePiece(new Position(6,5), new Position(5,5)); // f6
+        controller.movePiece(new Position(0,3), new Position(4,7)); // Qh5+
+        controller.movePiece(new Position(6,6), new Position(5,6)); // g6 blocks
+        check("Qh5+", panel.getTable().getValueAt(2,4), "Check stays on the original history row");
+        check("g6", panel.getTable().getValueAt(3,4), "Blocking reply has no check marker");
+        controller.movePiece(new Position(4,7), new Position(5,6)); // Qxg6+
+        check("Qxg6+", panel.getTable().getValueAt(4,4), "Checking capture shows both symbols");
+        try {
+            java.nio.file.Path file = java.nio.file.Files.createTempFile("check-history-", ".chess");
+            try {
+                gui.GameFileService.save(file, gui.GameFileService.snapshot(controller));
+                controller.undoLastMove();
+                check(4, panel.getTable().getRowCount(), "Undo removes only the checking capture");
+                var saved = gui.GameFileService.load(file);
+                controller.restoreSession(saved.board(), saved.turn(), saved.history());
+                check("Qh5+", panel.getTable().getValueAt(2,4), "Load restores earlier check");
+                check("Qxg6+", panel.getTable().getValueAt(4,4), "Load restores checking capture");
+                check("e4", panel.getTable().getValueAt(0,4), "Unmarked saved row stays unmarked");
+            } finally {
+                java.nio.file.Files.deleteIfExists(file);
+            }
+        } catch (java.io.IOException exception) {
+            throw new AssertionError("Could not round-trip check history", exception);
+        }
+    }
+
     private static void layout(java.awt.Container container) {
         container.doLayout();
         for (java.awt.Component child : container.getComponents()) {

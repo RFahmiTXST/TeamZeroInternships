@@ -78,7 +78,7 @@ final class BoardMouseHandler extends MouseAdapter {
         if (!dragging && pressed.distance(location) >= 5) {
             dragging = true;
             controller.selectSquare(origin);
-            if (origin != null && controller.getBoard().getPiece(origin) != null) {
+            if (controller.getSelected() != null) {
                 createGhost();
             }
         }

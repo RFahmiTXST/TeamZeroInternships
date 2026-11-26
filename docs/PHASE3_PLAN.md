@@ -225,8 +225,8 @@ In Phase 1, we developed the domain rules (piece movement vectors, attack detect
     - Update the status bar label with a bold warning: *"Check! White/Black King is under attack!"*.
   - [ ] Ensure the check highlight clears immediately when a legal move evades, blocks, or captures the checking threat.
 - **Dev 3 (Sabid - Check Evasion & History Annotation):**
-  - [ ] When a player is in check, restrict selection and movement strictly to moves that resolve the check (evade King, block ray, or capture checking piece).
-  - [ ] Update `HistoryPanel` notation: append standard chess symbol `+` to move notation when a move delivers check (e.g., `Qh5+`).
+  - [x] When a player is in check, restrict selection and movement strictly to moves that resolve the check (evade King, block ray, or capture checking piece).
+  - [x] Update `HistoryPanel` notation: append standard chess symbol `+` to move notation when a move delivers check (e.g., `Qh5+`).
 - **Dev 4 (Towsif - Checkmate & Stalemate Engine):**
   - [ ] Implement comprehensive `board.isCheckmate(Color color)`:
     1. Verify `board.isCheck(color)` is true.
