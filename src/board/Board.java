@@ -392,5 +392,56 @@ public class Board {
         }
         return getLegalMoves(position, piece.getColor());
     }
-}
 
+    /**
+     * Reports whether the given side is in check and has no legal reply.
+     * Invalid/incomplete boards without both Kings are not completed games.
+     *
+     * @param color side whose King is evaluated
+     * @return true only when in check with zero legal moves
+     */
+    public boolean isCheckmate(Color color) {
+        if (!hasBothKings(color) || !isCheck(color)) {
+            return false;
+        }
+        return !hasAnyLegalMove(color);
+    }
+
+    /**
+     * Reports whether the given side is not in check but has no legal move.
+     * Invalid/incomplete boards without both Kings are not treated as draws.
+     *
+     * @param color side to evaluate
+     * @return true when not in check and no legal move exists
+     */
+    public boolean isStalemate(Color color) {
+        if (!hasBothKings(color) || isCheck(color)) {
+            return false;
+        }
+        return !hasAnyLegalMove(color);
+    }
+
+    /** Returns whether both Kings are present in a valid nonterminal setup. */
+    private boolean hasBothKings(Color color) {
+        return hasKing(color) && hasKing(color == Color.WHITE ? Color.BLACK : Color.WHITE);
+    }
+
+    /** Returns whether the requested side has a King on the board. */
+    private boolean hasKing(Color color) {
+        if (color == null) return false;
+        for (Piece piece : getPieces(color)) {
+            if (piece instanceof King) return true;
+        }
+        return false;
+    }
+
+    /** Returns as soon as one current piece has a legal destination. */
+    private boolean hasAnyLegalMove(Color color) {
+        for (Piece piece : getPieces(color)) {
+            if (!getLegalMoves(piece.getPosition(), color).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
